@@ -74,7 +74,7 @@ class BasicLayout extends Component {
               {userName.substr(0, 1)}
             </Avatar>
             <Dropdown overlay={menu}>
-              <span style={{ color: '#ffffff' }}>
+              <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
                 {userName}
                 <Icon type="down" />
               </span>
@@ -99,7 +99,7 @@ class BasicLayout extends Component {
                         key={index + 1}
                         title={(
                           <span>
-                            <Icon type={item.icon} />
+                            <Icon type={item.icon} theme="filled" />
                             {item.name}
                           </span>
                         )}
@@ -117,7 +117,7 @@ class BasicLayout extends Component {
                   return (
                     <Menu.Item key={item.path}>
                       {
-                        item.icon ? (<Icon type={item.icon} />) : null
+                        item.icon ? (<Icon type={item.icon} theme="filled" />) : null
                       }
                       {item.name}
                     </Menu.Item>
