@@ -1,0 +1,20 @@
+.header-line{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ant-input-search{
+  input{
+    border-radius: 20px;
+    background: #f1f2f4;
+  }
+}
+
+.vmode {
+  font-size: 20px;
+  &:hover{
+    color: #2f54eb;
+    cursor: pointer;
+  }
+}

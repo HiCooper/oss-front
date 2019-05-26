@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, DatePicker, Form, InputNumber, Select, Slider, Switch } from 'antd';
+import { Button, Radio, Icon, Input } from 'antd';
+import './index.scss';
 
-const Option = Select.Option;
-
+const Search = Input.Search;
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -11,58 +11,44 @@ export default class Home extends Component {
 
   render() {
     return (
-      <Form style={{ marginTop: 32 }}>
-        <Form.Item
-          label="数字输入框"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-        >
-          <InputNumber min={1} max={10} defaultValue={3} />
-          <span className="ant-form-text"> 台机器</span>
-          <a href="https://ant.design">链接文字</a>
-        </Form.Item>
-        <Form.Item
-          label="开关"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-        >
-          <Switch defaultChecked />
-        </Form.Item>
-        <Form.Item
-          label="滑动输入条"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-        >
-          <Slider defaultValue={70} />
-        </Form.Item>
-        <Form.Item
-          label="选择器"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-        >
-          <Select defaultValue="lucy" style={{ width: 192 }}>
-            <Option value="jack">jack</Option>
-            <Option value="lucy">lucy</Option>
-            <Option value="disabled" disabled>disabled</Option>
-            <Option value="yiminghe">yiminghe</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="日期选择框"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 8 }}
-        >
-          <DatePicker />
-        </Form.Item>
-        <Form.Item wrapperCol={{ span: 8, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-                        确定
-          </Button>
-          <Button style={{ marginLeft: 8 }}>
-                        取消
-          </Button>
-        </Form.Item>
-      </Form>
+      <div className="header-line">
+        <div className="left-btn-group">
+          <Button type="primary" icon="upload" style={{ marginRight: '10px' }}>上传</Button>
+          <Button icon="folder-add" style={{ marginRight: '10px' }}>新建文件夹</Button>
+          <Radio.Group>
+            <Radio.Button>
+              <Icon type="download" />
+              <span>下载</span>
+            </Radio.Button>
+            <Radio.Button>
+              <Icon type="delete" />
+              <span>删除</span>
+            </Radio.Button>
+            <Radio.Button>
+              <Icon type="edit" />
+              <span>重命名</span>
+            </Radio.Button>
+            <Radio.Button>
+              <Icon type="copy" />
+              <span>复制到</span>
+            </Radio.Button>
+            <Radio.Button>
+              <Icon type="scissor" />
+              <span>移动到</span>
+            </Radio.Button>
+          </Radio.Group>
+        </div>
+
+        <div className="right-operate">
+          <Search
+            placeholder="搜索您的文件"
+            onSearch={value => console.log(value)}
+            style={{ width: 200, marginRight: '10px' }}
+          />
+          <Icon type="appstore" className="vmode" />
+          {/* <Icon type="bars" className="vmode" /> */}
+        </div>
+      </div>
     );
   }
 }
