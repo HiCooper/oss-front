@@ -13,44 +13,35 @@ const headMenuConfig = [
 
 const sideMenuConfig = [
   {
-    name: 'subnav1',
-    path: '',
-    icon: 'user',
+    name: '我的文件',
+    path: '/',
+    icon: 'home',
     children: [
       {
-        name: 'option1',
-        path: '',
+        name: '全部',
+        path: '/',
       }, {
-        name: 'option2',
-        path: '',
+        name: '图片',
+        path: '/pic',
       }, {
-        name: 'option3',
-        path: '',
+        name: '文档',
+        path: '/doc',
       }, {
-        name: 'option4',
-        path: '',
+        name: '视频',
+        path: '/video',
+      }, {
+        name: '音乐',
+        path: '/music',
+      }, {
+        name: '其他',
+        path: '/other',
       },
     ],
   },
   {
-    name: 'subnav2',
-    path: '',
+    name: '回收站',
+    path: '/recycle-bin',
     icon: 'notification',
-    children: [
-      {
-        name: 'option5',
-        path: '',
-      }, {
-        name: 'option6',
-        path: '',
-      }, {
-        name: 'option7',
-        path: '',
-      }, {
-        name: 'option8',
-        path: '',
-      },
-    ],
   },
 ];
 
