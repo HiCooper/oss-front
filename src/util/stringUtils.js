@@ -54,33 +54,33 @@ export function checkParams(params, ignoreKeys) {
  * @param fileName
  * @returns {string}
  */
-export function getSvgIconByFileName(fileName) {
+export function getIconByFileName(fileName) {
   fileName = fileName.toLowerCase();
   // 图片
   if (fileName.endsWith('.jpg')) {
-    return '#iconfile_img1';
+    return 'file-image';
   }
   if (fileName.endsWith('.jpeg')) {
-    return '#iconfile_img1';
+    return 'file-image';
   }
   if (fileName.endsWith('.png')) {
-    return '#iconfile_png';
+    return 'picture';
   }
   if (fileName.endsWith('.svg')) {
-    return '#iconfile_svg';
+    return 'picture';
   }
   if (fileName.endsWith('.bmg')) {
-    return '#iconfile_img1';
+    return 'picture';
   }
   if (fileName.endsWith('.gif')) {
-    return '#iconfile_img1';
+    return 'picture';
     //  办公文档
   }
   if (fileName.endsWith('.xls')) {
-    return '#iconfile_img1';
+    return 'file-excel';
   }
   if (fileName.endsWith('.xlsx')) {
-    return '#iconfile_img1';
+    return 'file-excel';
   }
   if (fileName.endsWith('.doc')) {
     return '#iconfile_img1';
@@ -89,13 +89,13 @@ export function getSvgIconByFileName(fileName) {
     return '#iconfile_img1';
   }
   if (fileName.endsWith('.ppt')) {
-    return '#iconfile_img1';
+    return 'file-ppt';
   }
   if (fileName.endsWith('.pptx')) {
-    return '#iconfile_img1';
+    return 'file-ppt';
   }
   if (fileName.endsWith('.pdf')) {
-    return '#iconfile_img1';
+    return 'file-pdf';
     // 程序文件
   }
   if (fileName.endsWith('.json')) {

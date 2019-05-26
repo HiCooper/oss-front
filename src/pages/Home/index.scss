@@ -1,7 +1,12 @@
+.home{
+  height: calc(100%);
+}
+
 .header-line{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px 0;
 }
 
 .ant-input-search{
@@ -17,4 +22,17 @@
     color: #2f54eb;
     cursor: pointer;
   }
+}
+
+.breadcrumb{
+  padding: 3px 0;
+}
+
+.list-content{
+  height: calc(100% - 43px);
+}
+
+.table {
+  max-height: calc(100% - 8px);
+  overflow-y: auto;
 }
