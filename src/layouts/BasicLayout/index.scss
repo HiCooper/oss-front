@@ -1,0 +1,37 @@
+.basic-layout{
+  height: 100%;
+}
+.logo{
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
+
+.header {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+}
+
+.main-content{
+  padding: 0 24px;
+  margin-top: 64px;
+  margin-left: 200px;
+  height: calc(100% - 64px)
+}
+
+.content{
+  background: rgb(255, 255, 255);
+  padding: 24px;
+  margin: 0;
+  min-height: 280px;
+}
+
+.side{
+  height: 100vh;
+  margin-top: 64px;
+  position: fixed;
+  z-index: 1;
+}
