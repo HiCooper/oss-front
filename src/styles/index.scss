@@ -13,6 +13,15 @@ body {
   height: 100%;
 }
 
+#frame-all{
+  background-position: center 0;
+  background-repeat: no-repeat;
+  //background-color: #3b8cff;
+  background-image: url("../asserts/images/main_bg.png");
+  //background-color: #866eb9;
+  //background-color: #106f8e;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

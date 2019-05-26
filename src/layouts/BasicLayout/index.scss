@@ -1,5 +1,7 @@
 .basic-layout {
   height: 100%;
+  background-image: url("../../asserts/images/main_bg.png");
+  transition: background 1s ease;
 }
 
 .logo {
@@ -16,6 +18,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0 24px;
+  background: transparent;
 
   .left {
     display: flex;
@@ -23,11 +26,15 @@
   }
 }
 
-.main-content {
-  padding: 0 24px;
+.main-section {
   margin-top: 64px;
+  background: transparent;
+}
+
+.main-content {
   margin-left: 200px;
-  height: calc(100% - 64px)
+  height: 100%;
+  background: #f0f2f5;
 }
 
 .content {
@@ -39,7 +46,42 @@
 
 .side {
   height: 100vh;
-  margin-top: 64px;
   position: fixed;
   z-index: 1;
+  background: transparent;
+  color: #ffffff;
+  font-weight: bold;
+  div{
+    color: #ffffff;
+    font-weight: bold;
+    background: transparent;
+    ul{
+      color: #ffffff;
+      font-weight: bold;
+      background: transparent;
+      li{
+        color: #ffffff;
+        font-weight: bold;
+        background: transparent;
+      }
+    }
+  }
+}
+
+.ant-menu-item {
+  &:hover{
+    color: #ffffff;
+    font-weight: bold;
+    background: rgba(255,255,255,.15) !important;
+  }
+}
+
+.ant-menu-item-selected{
+  color: #ffffff;
+  font-weight: bold;
+  background: rgba(255,255,255,.15) !important;
+}
+
+.ant-menu-submenu > .ant-menu{
+  background: transparent;
 }

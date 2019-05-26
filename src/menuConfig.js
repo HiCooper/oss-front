@@ -1,21 +1,15 @@
 const headMenuConfig = [
-  {
-    name: 'nav1',
-    path: '',
-  }, {
-    name: 'nav2',
-    path: '',
-  }, {
-    name: 'nav3',
-    path: '',
-  },
+  // {
+  //   name: '主页',
+  //   path: '/',
+  // },
 ];
 
 const sideMenuConfig = [
   {
     name: '我的文件',
     path: '/',
-    icon: 'home',
+    icon: 'cloud',
     children: [
       {
         name: '全部',
@@ -41,7 +35,7 @@ const sideMenuConfig = [
   {
     name: '回收站',
     path: '/recycle-bin',
-    icon: 'notification',
+    icon: 'delete',
   },
 ];
 

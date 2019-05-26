@@ -28,6 +28,7 @@ class BasicLayout extends Component {
     this.state = {
       color: colorList[0],
       userName: 'HiCooper',
+      activateMenuPath: this.props.location.pathname,
     };
   }
 
@@ -35,14 +36,21 @@ class BasicLayout extends Component {
     this.props.history.push(item.key);
   };
 
+  componentWillReceiveProps(nextProps, _) {
+    this.setState({
+      activateMenuPath: nextProps.location.pathname,
+    });
+  }
+
   render() {
-    const { color, userName } = this.state;
+    const { color, userName, activateMenuPath } = this.state;
     return (
       <Layout className="basic-layout">
         <Header className="header">
           <div className="left">
             <div className="logo">
-              <span>对象存储OSS</span>
+              <Icon type="hdd" />
+              <span style={{ marginLeft: '5px' }}>对象存储</span>
             </div>
             <Menu
               theme="dark"
@@ -51,16 +59,18 @@ class BasicLayout extends Component {
               style={{ lineHeight: '64px' }}
             >
               {
-                headMenuConfig.map((item, index) => {
+                headMenuConfig && headMenuConfig.length > 0 ? headMenuConfig.map((item, index) => {
                   return (
-                    <Menu.Item key={index + 1}>{item.name}</Menu.Item>
+                    <Menu.Item key={index + 1}>
+                      <Link to={item.path}>{item.name}</Link>
+                    </Menu.Item>
                   );
-                })
+                }) : null
               }
             </Menu>
           </div>
           <div className="right">
-            <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
+            <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
               {userName.substr(0, 1)}
             </Avatar>
             <Dropdown overlay={menu}>
@@ -71,13 +81,14 @@ class BasicLayout extends Component {
             </Dropdown>
           </div>
         </Header>
-        <Layout>
+        <Layout className="main-section">
           <Sider width={200} className="side">
             <Menu
               onSelect={this.subMenuSelect}
               mode="inline"
               defaultOpenKeys={['1']}
-              defaultSelectedKeys={['1']}
+              defaultSelectedKeys={[activateMenuPath]}
+              selectedKeys={[activateMenuPath]}
               style={{ height: '100%', borderRight: 0 }}
             >
               {
