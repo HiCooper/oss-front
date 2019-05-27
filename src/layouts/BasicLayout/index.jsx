@@ -4,24 +4,16 @@ import { Avatar, Col, Dropdown, Icon, Layout, Menu, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { headMenuConfig, sideMenuConfig } from '../../menuConfig';
 import './index.scss';
-import { getParamsFromUrl, paramsToUrl } from '../../util/stringUtils';
+import { getParamsFromUrl, getPathnameFromUrl, paramsToUrl } from '../../util/stringUtils';
 
 const { Header, Content, Sider } = Layout;
 
 const colorList = ['#00a2ae'];
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <Link to="/">
-        安全推出
-      </Link>
-    </Menu.Item>
-  </Menu>
-);
-
 class BasicLayout extends Component {
   static displayName = 'BasicLayout';
+
+  theme = localStorage.getItem('theme');
 
   constructor(props) {
     super(props);
@@ -29,29 +21,32 @@ class BasicLayout extends Component {
       color: colorList[0],
       userName: 'HiCooper',
       activateMenuPath: this.props.location.pathname,
+      currentTheme: this.theme || 'default',
     };
   }
 
   subMenuSelect = (item) => {
-    const menuItem = JSON.parse(item.key);
+    console.log(item);
+    const pathname = item.key;
+    const baseUrlParams = getParamsFromUrl(pathname);
+    const baseUrl = getPathnameFromUrl(pathname);
     const location = this.props.location;
     const params = {};
-
-    // 设置新的 type
-    if (menuItem.type) {
-      params.type = menuItem.type;
-    }
     const paramsFromUrl = getParamsFromUrl(location.search);
+    // 新的type
+    if (baseUrlParams.type) {
+      params.type = baseUrlParams.type;
+    }
     // 保留展示布局 vmode 参数
     if (paramsFromUrl.vmode) {
       params.vmode = paramsFromUrl.vmode;
     }
     // 全部文件 默认 list 布局
-    if (menuItem.path === '/all' && !paramsFromUrl.vmode) {
+    if (pathname === '/all' && !paramsFromUrl.vmode) {
       params.vmode = 'list';
     }
     const paramsStr = paramsToUrl(params);
-    const newUrl = `${menuItem.path}?${paramsStr}`;
+    const newUrl = `${baseUrl}?${paramsStr}`;
     if (newUrl !== (location.pathname + location.search)) {
       this.props.history.push(newUrl);
     }
@@ -63,11 +58,43 @@ class BasicLayout extends Component {
     });
   }
 
+  changeTheme = (type, e) => {
+    e.preventDefault();
+    console.log(type);
+    if (type !== this.state.currentTheme) {
+      this.setState({
+        currentTheme: type,
+      });
+      localStorage.setItem('theme', type);
+    }
+  };
+
+  themeSelect = () => (
+    <Menu>
+      <Menu.Item>
+        <span onClick={e => this.changeTheme('default', e)}>默认</span>
+      </Menu.Item>
+      <Menu.Item>
+        <span onClick={e => this.changeTheme('picture', e)}>图片</span>
+      </Menu.Item>
+    </Menu>
+  );
+
+  menu = () => (
+    <Menu>
+      <Menu.Item>
+        <Link to="/">
+          安全推出
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   render() {
-    const { color, userName, activateMenuPath } = this.state;
+    const { color, userName, activateMenuPath, currentTheme } = this.state;
     return (
       <Layout className="basic-layout">
-        <Header className="header">
+        <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
           <div className="left">
             <div className="logo">
               <Icon type="hdd" />
@@ -91,11 +118,16 @@ class BasicLayout extends Component {
             </Menu>
           </div>
           <div className="right">
+            <Dropdown overlay={this.themeSelect}>
+              <span style={{ fontWeight: 'bold' }}>
+                <Icon type="bg-colors" style={{ marginRight: '10px', fontSize: '20px', fontWeight: 'bold' }} />
+              </span>
+            </Dropdown>
             <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
               {userName.substr(0, 1)}
             </Avatar>
-            <Dropdown overlay={menu}>
-              <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
+            <Dropdown overlay={this.menu}>
+              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
                 {userName}
                 <Icon type="down" />
               </span>
@@ -103,7 +135,7 @@ class BasicLayout extends Component {
           </div>
         </Header>
         <Layout className="main-section">
-          <Sider width={200} className="side">
+          <Sider width={200} className={currentTheme === 'picture' ? 'picture-side' : 'default-side'}>
             <Menu
               onSelect={this.subMenuSelect}
               mode="inline"
@@ -115,7 +147,7 @@ class BasicLayout extends Component {
               {
                 sideMenuConfig.map((item) => {
                   return (
-                    <Menu.Item key={JSON.stringify(item)}>
+                    <Menu.Item key={item.path}>
                       <Row>
                         <Col span={4}>
                           {

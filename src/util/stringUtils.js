@@ -15,11 +15,11 @@ export function getParamsFromUrl(url) {
   return params;
 }
 
-export function getParamsStrFromUrl(url) {
+export function getPathnameFromUrl(url) {
   if (!url || url.length === 0 || url.indexOf('?') === -1) {
-    return '';
+    return url;
   }
-  return url.substr(url.indexOf('?') + 1);
+  return url.substr(0, url.indexOf('?'));
 }
 
 export function paramsToUrl(params) {
