@@ -12,11 +12,25 @@ export default class MainRouter extends Component {
     }
 
     /**
- * 渲染路由组件
- */
-    renderNormalRoute = (item, index) => {
-      return item.component ? (
-        <Route key={index} path={item.path} component={item.component} exact={item.exact} />) : null;
+   * 渲染路由组件
+   * @param item
+   * @returns {*}
+   */
+    renderNormalRoute = (item) => {
+      console.log(item.path);
+      if (item.component && (!item.children || item.children.length === 0)) {
+        return (
+          <Route key={item.path} path={item.path} component={item.component} exact={item.exact} />);
+      }
+      if (item.children && item.children.length > 0) {
+        return (
+          <Route key={item.path}
+            path={item.path}
+            // component={}
+            exact={item.exact}
+          />
+        );
+      }
     };
 
     render() {

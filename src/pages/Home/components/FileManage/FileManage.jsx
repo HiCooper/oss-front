@@ -3,7 +3,6 @@ import { Breadcrumb, Button, Icon, Input, Radio, Table } from 'antd';
 
 import { getIconByFileName } from '../../../../util/stringUtils';
 
-
 const Search = Input.Search;
 
 const data = [];
@@ -17,20 +16,21 @@ for (let i = 0; i < 31; i++) {
 }
 
 export default class FileManage extends Component {
-    static displayName = 'FileManage';
+  static displayName = 'FileManage';
 
-    constructor(props) {
-      super(props);
-      const pathname = this.props.location.pathname;
-      this.state = {
-        selectedRowKeys: [], // Check here to configure the default column
-        vmode: 'list',
-        basePathname: pathname,
-      };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedRowKeys: [], // Check here to configure the default column
+      vmode: 'list',
+    };
+  }
+
+  componentDidMount() {
+    console.log(this.props.match.params);
+  }
 
   onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
 
@@ -65,27 +65,22 @@ export default class FileManage extends Component {
     this.setState({
       selectedRowKeys: [record.key],
     });
-    console.log('单击', record.key);
   };
 
   onRowDoubleClick = (record, e) => {
     e.preventDefault();
-    console.log('双击', record.key);
   };
 
   onRowContextMenu = (record, e) => {
     e.preventDefault();
-    console.log('右键', record.key);
   };
 
   onRowMouseEnter = (record, e) => {
     e.preventDefault();
-    console.log('鼠标进入', record.key);
   };
 
   onRowMouseLeave =(record, e) => {
     e.preventDefault();
-    console.log('鼠标离开', record.key);
   };
 
   render() {
@@ -174,7 +169,7 @@ export default class FileManage extends Component {
                   </Table>
                 ) : (
                   <div>
-                    hh
+                    grid
                   </div>
                 )
               }

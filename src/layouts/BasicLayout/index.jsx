@@ -7,8 +7,6 @@ import './index.scss';
 
 const { Header, Content, Sider } = Layout;
 
-const colorList = ['#00a2ae'];
-
 class BasicLayout extends Component {
   static displayName = 'BasicLayout';
 
@@ -18,9 +16,8 @@ class BasicLayout extends Component {
     super(props);
     const { pathname } = this.props.location;
     const base = pathname.substr(0, pathname.lastIndexOf('/'));
-    console.log(base);
     this.state = {
-      color: colorList[0],
+      color: '#00a2ae',
       userName: 'HiCooper',
       activateMenuPath: base,
       currentTheme: this.theme || 'default',
@@ -48,7 +45,6 @@ class BasicLayout extends Component {
 
   subMenuSelect = (item) => {
     const location = this.props.location;
-    console.log(item.key);
     if (`${item.key}/overview` !== (location.pathname + location.search)) {
       this.props.history.push(`${item.key}/overview`);
     }

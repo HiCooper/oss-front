@@ -57,9 +57,7 @@ export default class Home extends Component {
             }
           </Menu>
         </div>
-        <div className="menu-content">
-dd
-        </div>
+        {this.props.children}
       </div>
     );
   }

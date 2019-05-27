@@ -31,7 +31,7 @@ const headMenuConfig = [
 const sideMenuConfig = [
   {
     name: '概览',
-    path: '/overview',
+    path: '/dashboard',
     icon: 'dashboard',
     exact: true,
   },
