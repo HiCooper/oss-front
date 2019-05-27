@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Avatar, Col, Dropdown, Icon, Layout, Menu, Row } from 'antd';
 import MainRouter from './MainRouter';
-import { headMenuConfig, sideMenuConfig } from '../../menuConfig';
+import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
-import { getParamsFromUrl, getPathnameFromUrl, paramsToUrl } from '../../util/stringUtils';
 
 const { Header, Content, Sider } = Layout;
 
@@ -17,56 +16,55 @@ class BasicLayout extends Component {
 
   constructor(props) {
     super(props);
-    const location = this.props.location;
-    let pathname = location.pathname;
-    const params = getParamsFromUrl(location.search);
-    if (params.type) {
-      pathname = `${pathname}?type=${params.type}`;
-    }
+    const { pathname } = this.props.location;
+    const base = pathname.substr(0, pathname.lastIndexOf('/'));
+    console.log(base);
     this.state = {
       color: colorList[0],
       userName: 'HiCooper',
-      activateMenuPath: pathname,
+      activateMenuPath: base,
       currentTheme: this.theme || 'default',
+      leftMenuConfig: sideMenuConfig,
     };
   }
 
+  componentDidMount() {
+    // 获取 bucket 列表
+    const { leftMenuConfig } = this.state;
+    leftMenuConfig.push(
+      {
+        name: 'hicooper',
+        path: '/bucket/hicooper',
+      },
+      {
+        name: 'newBucket',
+        path: '/bucket/newBucket',
+      }
+    );
+    this.setState({
+      leftMenuConfig,
+    });
+  }
+
   subMenuSelect = (item) => {
-    console.log(item);
-    const pathname = item.key;
-    const baseUrlParams = getParamsFromUrl(pathname);
-    const baseUrl = getPathnameFromUrl(pathname);
     const location = this.props.location;
-    const params = {};
-    const paramsFromUrl = getParamsFromUrl(location.search);
-    // 新的type
-    if (baseUrlParams.type) {
-      params.type = baseUrlParams.type;
-    }
-    // 保留展示布局 vmode 参数
-    if (paramsFromUrl.vmode) {
-      params.vmode = paramsFromUrl.vmode;
-    }
-    // 全部文件 默认 list 布局
-    if (pathname === '/all' && !paramsFromUrl.vmode) {
-      params.vmode = 'list';
-    }
-    const paramsStr = paramsToUrl(params);
-    const newUrl = `${baseUrl}?${paramsStr}`;
-    if (newUrl !== (location.pathname + location.search)) {
-      this.props.history.push(newUrl);
+    console.log(item.key);
+    if (`${item.key}/overview` !== (location.pathname + location.search)) {
+      this.props.history.push(`${item.key}/overview`);
     }
   };
 
+
   componentWillReceiveProps(nextProps, _) {
+    const pathname = nextProps.location.pathname;
+    const base = pathname.substr(0, pathname.lastIndexOf('/'));
     this.setState({
-      activateMenuPath: nextProps.location.pathname,
+      activateMenuPath: base,
     });
   }
 
   changeTheme = (type, e) => {
     e.preventDefault();
-    console.log(type);
     if (type !== this.state.currentTheme) {
       this.setState({
         currentTheme: type,
@@ -97,7 +95,7 @@ class BasicLayout extends Component {
   );
 
   render() {
-    const { color, userName, activateMenuPath, currentTheme } = this.state;
+    const { color, userName, activateMenuPath, currentTheme, leftMenuConfig } = this.state;
     return (
       <Layout className="basic-layout">
         <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
@@ -106,22 +104,6 @@ class BasicLayout extends Component {
               <Icon type="hdd" />
               <span style={{ marginLeft: '5px' }}>对象存储</span>
             </div>
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={['1']}
-              style={{ lineHeight: '64px' }}
-            >
-              {
-                headMenuConfig && headMenuConfig.length > 0 ? headMenuConfig.map((item, index) => {
-                  return (
-                    <Menu.Item key={index + 1}>
-                      <Link to={item.path}>{item.name}</Link>
-                    </Menu.Item>
-                  );
-                }) : null
-              }
-            </Menu>
           </div>
           <div className="right">
             <Dropdown overlay={this.themeSelect}>
@@ -151,7 +133,7 @@ class BasicLayout extends Component {
               style={{ height: '100%', borderRight: 0 }}
             >
               {
-                sideMenuConfig.map((item) => {
+                leftMenuConfig.map((item) => {
                   return (
                     <Menu.Item key={item.path}>
                       <Row>

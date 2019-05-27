@@ -16,7 +16,7 @@ export default class MainRouter extends Component {
  */
     renderNormalRoute = (item, index) => {
       return item.component ? (
-        <Route key={index} path={item.path} component={item.component} exact />) : null;
+        <Route key={index} path={item.path} component={item.component} exact={item.exact} />) : null;
     };
 
     render() {
