@@ -153,7 +153,6 @@ export default class Home extends Component {
                 <Table rowSelection={rowSelection}
                   dataSource={data}
                   pagination={false}
-                  scroll={{ y: '100%' }}
                   onRow={(record) => {
                     return {
                       onClick: (e) => { this.onRowClick(record, e); }, // 点击行
@@ -165,8 +164,8 @@ export default class Home extends Component {
                   }}
                 >
                   <Table.Column title="文件名" width={300} dataIndex="fileName" render={this.renderFileName} />
-                  <Table.Column title="大小" width={200} dataIndex="size" />
-                  <Table.Column title="修改日期" dataIndex="updateTime" />
+                  <Table.Column title="大小" width={100} dataIndex="size" />
+                  <Table.Column title="修改日期" width={150} dataIndex="updateTime" />
                 </Table>
               ) : (
                 <div>
