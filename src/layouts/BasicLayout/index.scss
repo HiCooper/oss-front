@@ -82,12 +82,15 @@
   }
   .ant-menu-item {
     &:hover{
-      background-color: #ddd ;
+      background-color: #ffffff ;
     }
   }
 
   .ant-menu-item-selected{
-    background-color: #ddd !important;
+    background-color: #ffffff !important;
+    &:after{
+      content: unset;
+    }
   }
 }
 
@@ -126,6 +129,9 @@
     color: #ffffff;
     font-weight: bold;
     background: rgba(255,255,255,.15) !important;
+    &:after{
+      content: unset;
+    }
   }
 
   .ant-menu-submenu > .ant-menu{

@@ -17,10 +17,16 @@ class BasicLayout extends Component {
 
   constructor(props) {
     super(props);
+    const location = this.props.location;
+    let pathname = location.pathname;
+    const params = getParamsFromUrl(location.search);
+    if (params.type) {
+      pathname = `${pathname}?type=${params.type}`;
+    }
     this.state = {
       color: colorList[0],
       userName: 'HiCooper',
-      activateMenuPath: this.props.location.pathname,
+      activateMenuPath: pathname,
       currentTheme: this.theme || 'default',
     };
   }
