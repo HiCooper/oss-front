@@ -3,7 +3,7 @@ import Test from './pages/Test';
 
 const routerConfig = [
   {
-    path: '/',
+    path: '/all',
     component: Home,
   }, {
     path: '/test',

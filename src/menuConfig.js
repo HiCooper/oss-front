@@ -7,30 +7,34 @@ const headMenuConfig = [
 
 const sideMenuConfig = [
   {
-    name: '我的文件',
-    path: '/',
+    name: '全部文件',
+    path: '/all',
     icon: 'cloud',
-    children: [
-      {
-        name: '全部',
-        path: '/',
-      }, {
-        name: '图片',
-        path: '/pic',
-      }, {
-        name: '文档',
-        path: '/doc',
-      }, {
-        name: '视频',
-        path: '/video',
-      }, {
-        name: '音乐',
-        path: '/music',
-      }, {
-        name: '其他',
-        path: '/other',
-      },
-    ],
+  },
+  {
+    name: '图片',
+    path: '/category',
+    type: 'pic',
+  },
+  {
+    name: '文档',
+    path: '/category',
+    type: 'doc',
+  },
+  {
+    name: '视频',
+    path: '/category',
+    type: 'video',
+  },
+  {
+    name: '音乐',
+    path: '/category',
+    type: 'music',
+  },
+  {
+    name: '其他',
+    path: '/category',
+    type: 'other',
   },
   {
     name: '回收站',

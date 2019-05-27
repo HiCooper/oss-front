@@ -20,21 +20,13 @@ export default class Home extends Component {
     super(props);
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
+      vmode: 'list',
     };
   }
 
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
-  };
-
-  start = () => {
-    // ajax request after empty completing
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-      });
-    }, 1000);
   };
 
   renderFileName = (val) => {
@@ -46,7 +38,24 @@ export default class Home extends Component {
     );
   };
 
-  onSelectClick = (record, e) => {
+  switchVmode = async () => {
+    await this.setState({
+      vmode: this.state.vmode === 'list' ? 'grid' : 'list',
+    });
+    const location = this.props.location;
+    let search = location.search;
+    if (!search) {
+      search = `?vmode=${this.state.vmode}`;
+    } else {
+      search = location.search.replace(/vmode=[a-zA-Z]{4}/, `vmode=${this.state.vmode}`);
+    }
+    const newUrl = location.pathname + search;
+    if (newUrl !== (location.pathname + location.search)) {
+      this.props.history.push(newUrl);
+    }
+  };
+
+  onRowClick = (record, e) => {
     e.preventDefault();
     this.setState({
       selectedRowKeys: [record.key],
@@ -54,28 +63,28 @@ export default class Home extends Component {
     console.log('单击', record.key);
   };
 
-  onDoubleClick = (record, e) => {
+  onRowDoubleClick = (record, e) => {
     e.preventDefault();
     console.log('双击', record.key);
   };
 
-  onContextMenu = (record, e) => {
+  onRowContextMenu = (record, e) => {
     e.preventDefault();
     console.log('右键', record.key);
   };
 
-  onMouseEnter = (record, e) => {
+  onRowMouseEnter = (record, e) => {
     e.preventDefault();
     console.log('鼠标进入', record.key);
   };
 
-  onMouseLeave =(record, e) => {
+  onRowMouseLeave =(record, e) => {
     e.preventDefault();
     console.log('鼠标离开', record.key);
   };
 
   render() {
-    const { selectedRowKeys } = this.state;
+    const { selectedRowKeys, vmode } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -117,8 +126,14 @@ export default class Home extends Component {
                 onSearch={value => console.log(value)}
                 style={{ width: 200, marginRight: '10px' }}
               />
-              <Icon type="appstore" className="vmode" />
-              {/* <Icon type="bars" className="vmode" /> */}
+              {
+                vmode === 'list' ? (
+                  <Icon type="appstore" className="vmode" onClick={this.switchVmode} />
+                ) : (
+                  <Icon type="bars" className="vmode" onClick={this.switchVmode} />
+                )
+              }
+
             </div>
           </div>
         </div>
@@ -133,24 +148,32 @@ export default class Home extends Component {
           </div>
 
           <div className="table">
-            <Table rowSelection={rowSelection}
-              dataSource={data}
-              pagination={false}
-              scroll={{ y: '100%' }}
-              onRow={(record) => {
-                return {
-                  onClick: (e) => { this.onSelectClick(record, e); }, // 点击行
-                  onDoubleClick: (e) => { this.onDoubleClick(record, e); },
-                  onContextMenu: (e) => { this.onContextMenu(record, e); },
-                  onMouseEnter: (e) => { this.onMouseEnter(record, e); }, // 鼠标移入行
-                  onMouseLeave: (e) => { this.onMouseLeave(record, e); },
-                };
-              }}
-            >
-              <Table.Column title="文件名" width={300} dataIndex="fileName" render={this.renderFileName} />
-              <Table.Column title="大小" width={200} dataIndex="size" />
-              <Table.Column title="修改日期" dataIndex="updateTime" />
-            </Table>
+            {
+              vmode === 'list' ? (
+                <Table rowSelection={rowSelection}
+                  dataSource={data}
+                  pagination={false}
+                  scroll={{ y: '100%' }}
+                  onRow={(record) => {
+                    return {
+                      onClick: (e) => { this.onRowClick(record, e); }, // 点击行
+                      onDoubleClick: (e) => { this.onRowDoubleClick(record, e); },
+                      onContextMenu: (e) => { this.onRowContextMenu(record, e); },
+                      onMouseEnter: (e) => { this.onRowMouseEnter(record, e); }, // 鼠标移入行
+                      onMouseLeave: (e) => { this.onRowMouseLeave(record, e); },
+                    };
+                  }}
+                >
+                  <Table.Column title="文件名" width={300} dataIndex="fileName" render={this.renderFileName} />
+                  <Table.Column title="大小" width={200} dataIndex="size" />
+                  <Table.Column title="修改日期" dataIndex="updateTime" />
+                </Table>
+              ) : (
+                <div>
+                  hh
+                </div>
+              )
+            }
           </div>
         </div>
       </div>

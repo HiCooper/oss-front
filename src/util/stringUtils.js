@@ -15,6 +15,26 @@ export function getParamsFromUrl(url) {
   return params;
 }
 
+export function getParamsStrFromUrl(url) {
+  if (!url || url.length === 0 || url.indexOf('?') === -1) {
+    return '';
+  }
+  return url.substr(url.indexOf('?') + 1);
+}
+
+export function paramsToUrl(params) {
+  let result = '';
+  const keys = Object.keys(params);
+  const length = keys.length;
+  Object.keys(params).forEach((i, index) => {
+    result += `${i}=${params[i]}`;
+    if (index < length - 1) {
+      result += '&';
+    }
+  });
+  return result;
+}
+
 /**
  * 检查参数，如果任何一个value 为零值[ undefined, '', {}, [], null ] 则返回false
  * @param params 可以是基本类型，列表 或对象

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Avatar, Dropdown, Icon, Layout, Menu } from 'antd';
+import { Avatar, Col, Dropdown, Icon, Layout, Menu, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { headMenuConfig, sideMenuConfig } from '../../menuConfig';
 import './index.scss';
+import { getParamsFromUrl, paramsToUrl } from '../../util/stringUtils';
 
-const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
 const colorList = ['#00a2ae'];
@@ -33,7 +33,28 @@ class BasicLayout extends Component {
   }
 
   subMenuSelect = (item) => {
-    this.props.history.push(item.key);
+    const menuItem = JSON.parse(item.key);
+    const location = this.props.location;
+    const params = {};
+
+    // 设置新的 type
+    if (menuItem.type) {
+      params.type = menuItem.type;
+    }
+    const paramsFromUrl = getParamsFromUrl(location.search);
+    // 保留展示布局 vmode 参数
+    if (paramsFromUrl.vmode) {
+      params.vmode = paramsFromUrl.vmode;
+    }
+    // 全部文件 默认 list 布局
+    if (menuItem.path === '/all' && !paramsFromUrl.vmode) {
+      params.vmode = 'list';
+    }
+    const paramsStr = paramsToUrl(params);
+    const newUrl = `${menuItem.path}?${paramsStr}`;
+    if (newUrl !== (location.pathname + location.search)) {
+      this.props.history.push(newUrl);
+    }
   };
 
   componentWillReceiveProps(nextProps, _) {
@@ -92,34 +113,19 @@ class BasicLayout extends Component {
               style={{ height: '100%', borderRight: 0 }}
             >
               {
-                sideMenuConfig.map((item, index) => {
-                  if (item.children && item.children.length > 0) {
-                    return (
-                      <SubMenu
-                        key={index + 1}
-                        title={(
-                          <span>
-                            <Icon type={item.icon} theme="filled" />
-                            {item.name}
-                          </span>
-                        )}
-                      >
-                        {
-                          item.children.map((i) => {
-                            return (
-                              <Menu.Item key={i.path}>{i.name}</Menu.Item>
-                            );
-                          })
-                        }
-                      </SubMenu>
-                    );
-                  }
+                sideMenuConfig.map((item) => {
                   return (
-                    <Menu.Item key={item.path}>
-                      {
-                        item.icon ? (<Icon type={item.icon} theme="filled" />) : null
-                      }
-                      {item.name}
+                    <Menu.Item key={JSON.stringify(item)}>
+                      <Row>
+                        <Col span={4}>
+                          {
+                            item.icon ? (<Icon type={item.icon} theme="filled" />) : null
+                          }
+                        </Col>
+                        <Col span={20}>
+                          {item.name}
+                        </Col>
+                      </Row>
                     </Menu.Item>
                   );
                 })
