@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Avatar, Col, Dropdown, Icon, Layout, Menu, Row } from 'antd';
+import { Avatar, Button, Col, Divider, Dropdown, Icon, Layout, Menu, Popover, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
@@ -80,55 +80,87 @@ class BasicLayout extends Component {
     </Menu>
   );
 
-  menu = () => (
-    <Menu>
-      <Menu.Item>
-        <Link to="/">
-          安全推出
-        </Link>
-      </Menu.Item>
-    </Menu>
-  );
 
-  render() {
-    const { color, userName, activateMenuPath, currentTheme, leftMenuConfig } = this.state;
-    return (
-      <Layout className="basic-layout">
-        <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
-          <div className="left">
-            <div className="logo">
-              <Icon type="hdd" />
-              <span style={{ marginLeft: '5px' }}>对象存储</span>
-            </div>
-          </div>
-          <div className="right">
-            <Dropdown overlay={this.themeSelect}>
-              <span style={{ fontWeight: 'bold' }}>
-                <Icon type="bg-colors" style={{ marginRight: '10px', fontSize: '20px', fontWeight: 'bold' }} />
-              </span>
-            </Dropdown>
-            <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
-              {userName.substr(0, 1)}
-            </Avatar>
-            <Dropdown overlay={this.menu}>
-              <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
-                {userName}
-                <Icon type="down" />
-              </span>
-            </Dropdown>
-          </div>
-        </Header>
-        <Layout className="main-section">
-          <Sider width={200} className={currentTheme === 'picture' ? 'picture-side' : 'default-side'}>
-            <Menu
-              onSelect={this.subMenuSelect}
-              mode="inline"
-              defaultOpenKeys={['1']}
-              defaultSelectedKeys={[activateMenuPath]}
-              selectedKeys={[activateMenuPath]}
-              style={{ height: '100%', borderRight: 0 }}
-            >
-              {
+   text = () => {
+     const { userName, color } = this.state;
+     return (
+       <div className="personal">
+         <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
+           {userName.substr(0, 1)}
+         </Avatar>
+         <span>{userName}</span>
+       </div>
+     );
+   };
+
+   content = () => {
+     return (
+       <div className="personal-card-content">
+         <div className="btn-group">
+           <div className="item">
+             <Icon type="user" style={{ fontSize: '20px' }} />
+             <div className="title">
+               个人信息
+             </div>
+           </div>
+           <div className="item">
+             <Icon type="key" style={{ fontSize: '20px' }} />
+             <div className="title">
+               密钥管理
+             </div>
+           </div>
+         </div>
+         <Divider style={{ margin: '10px 0' }} />
+         <div className="footer">
+           <Button type="link" style={{ color: '#ccccccc' }}>
+             <Icon type="poweroff" />
+             退出当前账户
+           </Button>
+         </div>
+       </div>
+     );
+   };
+
+   render() {
+     const { color, userName, activateMenuPath, currentTheme, leftMenuConfig } = this.state;
+     return (
+       <Layout className="basic-layout">
+         <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
+           <div className="left">
+             <div className="logo">
+               <Icon type="hdd" />
+               <span style={{ marginLeft: '5px' }}>对象存储</span>
+             </div>
+           </div>
+           <div className="right">
+             <Dropdown overlay={this.themeSelect}>
+               <span style={{ fontWeight: 'bold' }}>
+                 <Icon type="bg-colors" style={{ marginRight: '20px', fontSize: '20px', fontWeight: 'bold' }} />
+               </span>
+             </Dropdown>
+             <Popover placement="bottomRight" title={this.text()} content={this.content()} trigger="click" className="personal-info">
+               <div>
+                 <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
+                   {userName.substr(0, 1)}
+                 </Avatar>
+                 <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
+                   {userName}
+                 </span>
+               </div>
+             </Popover>
+           </div>
+         </Header>
+         <Layout className="main-section">
+           <Sider width={200} className={currentTheme === 'picture' ? 'picture-side' : 'default-side'}>
+             <Menu
+               onSelect={this.subMenuSelect}
+               mode="inline"
+               defaultOpenKeys={['1']}
+               defaultSelectedKeys={[activateMenuPath]}
+               selectedKeys={[activateMenuPath]}
+               style={{ height: '100%', borderRight: 0 }}
+             >
+               {
                 leftMenuConfig.map((item) => {
                   return (
                     <Menu.Item key={item.path}>
@@ -146,16 +178,16 @@ class BasicLayout extends Component {
                   );
                 })
               }
-            </Menu>
-          </Sider>
-          <Layout className="main-content">
-            <Content className="content">
-              <MainRouter />
-            </Content>
-          </Layout>
-        </Layout>
-      </Layout>
-    );
-  }
+             </Menu>
+           </Sider>
+           <Layout className="main-content">
+             <Content className="content">
+               <MainRouter />
+             </Content>
+           </Layout>
+         </Layout>
+       </Layout>
+     );
+   }
 }
 export default withRouter(BasicLayout);
