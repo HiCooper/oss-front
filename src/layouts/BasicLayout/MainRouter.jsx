@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import routerConfig from '../../routerConfig';
+import { routerConfig } from '../../routerConfig';
 import NotFound from '../../components/NotFound';
+import Home from '../../pages/Home';
 
 export default class MainRouter extends Component {
     static displayName = 'MainRouter';
@@ -17,26 +18,15 @@ export default class MainRouter extends Component {
    * @returns {*}
    */
     renderNormalRoute = (item) => {
-      console.log(item.path);
-      if (item.component && (!item.children || item.children.length === 0)) {
-        return (
-          <Route key={item.path} path={item.path} component={item.component} exact={item.exact} />);
-      }
-      if (item.children && item.children.length > 0) {
-        return (
-          <Route key={item.path}
-            path={item.path}
-            // component={}
-            exact={item.exact}
-          />
-        );
-      }
+      return (
+        <Route key={item.path} path={item.path} component={item.component} exact={item.exact} />);
     };
 
     render() {
       return (
         <Switch>
           {routerConfig.map(this.renderNormalRoute)}
+          <Route path="/bucket" component={Home} />
           <Route component={NotFound} />
         </Switch>
       );

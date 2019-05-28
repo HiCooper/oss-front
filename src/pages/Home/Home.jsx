@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Menu } from 'antd';
 import './index.scss';
 import { headMenuConfig } from '../../menuConfig';
+import ChildrenRouter from './ChildrenRouter';
 
 export default class Home extends Component {
   constructor(props) {
@@ -57,7 +58,7 @@ export default class Home extends Component {
             }
           </Menu>
         </div>
-        {this.props.children}
+        <ChildrenRouter />
       </div>
     );
   }
