@@ -1,6 +1,10 @@
 import Test from './pages/Test';
 import FileManage from './pages/FileManage';
 import BucketOverview from './pages/BucketOverview';
+import Setting from './pages/Setting';
+import StatsApi from './pages/StatsApi';
+import StatsFile from './pages/StatsFile';
+import StatsHot from './pages/StatsHot';
 
 const routerConfig = [];
 
@@ -13,16 +17,16 @@ const childRouterConfig = [
     component: FileManage,
   }, {
     path: '/bucket/:name/settings',
-    component: Test,
+    component: Setting,
   }, {
     path: '/bucket/:name/stats-api',
-    component: Test,
+    component: StatsApi,
   }, {
     path: '/bucket/:name/stats-file',
-    component: Test,
+    component: StatsFile,
   }, {
     path: '/bucket/:name/stats-hot',
-    component: Test,
+    component: StatsHot,
   },
   {
     path: '/test',
