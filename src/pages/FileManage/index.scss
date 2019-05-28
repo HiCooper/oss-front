@@ -1,5 +1,42 @@
 .file-home {
-  height: calc(100% - 154px);
+  height: calc(100% - 112px);
+
+
+  .header-line{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+  }
+
+  .ant-input-search{
+    input{
+      border-radius: 20px;
+    }
+  }
+
+  .vmode {
+    font-size: 20px;
+    &:hover{
+      color: #2f54eb;
+      cursor: pointer;
+    }
+  }
+
+  .breadcrumb{
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .list-content{
+    height: calc(100% - 62px);
+  }
+
+  .table {
+    max-height: calc(100% - 30px);
+    overflow-y: auto;
+  }
+
 
   .item {
     width: 120px;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Col, Icon, Input, Radio, Row, Table } from 'antd';
+import { Breadcrumb, Button, Col, Dropdown, Icon, Input, Menu, Row, Table } from 'antd';
 import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
 import './index.scss';
 
@@ -84,6 +84,52 @@ export default class FileManage extends Component {
     e.preventDefault();
   };
 
+  handleMenuClick = (e) => {
+    console.log('click', e);
+  };
+
+  menu = () => (
+    <Menu onClick={this.handleMenuClick}>
+      <Menu.Item key="1">
+      下载
+      </Menu.Item>
+      <Menu.Item key="2">
+      删除
+      </Menu.Item>
+    </Menu>
+  );
+
+  moreMenu = () => (
+    <Menu onClick={this.handleMenuClick}>
+      <Menu.Item key="1">
+        设置读写权限
+      </Menu.Item>
+      <Menu.Item key="2">
+        下载
+      </Menu.Item>
+      <Menu.Item key="3">
+        复制文件URL
+      </Menu.Item>
+      <Menu.Item key="4">
+        删除
+      </Menu.Item>
+    </Menu>
+  );
+
+  renderOperate = () => {
+    return (
+      <div>
+        <Button type="link" size="small">详情</Button>
+        <Dropdown overlay={this.moreMenu} size="small">
+          <Button type="link" size="small">
+            更多
+            <Icon type="down" />
+          </Button>
+        </Dropdown>
+      </div>
+    );
+  };
+
   render() {
     const { selectedRowKeys, vmode } = this.state;
     const rowSelection = {
@@ -96,34 +142,21 @@ export default class FileManage extends Component {
           <div className="header-line">
             <div className="left-btn-group">
               <Button type="primary" icon="upload" style={{ marginRight: '10px' }}>上传</Button>
-              <Button icon="folder-add" style={{ marginRight: '10px' }}>新建文件夹</Button>
-              <Radio.Group>
-                <Radio.Button>
-                  <Icon type="download" />
-                  <span>下载</span>
-                </Radio.Button>
-                <Radio.Button>
-                  <Icon type="delete" />
-                  <span>删除</span>
-                </Radio.Button>
-                <Radio.Button>
-                  <Icon type="edit" />
-                  <span>重命名</span>
-                </Radio.Button>
-                <Radio.Button>
-                  <Icon type="copy" />
-                  <span>复制到</span>
-                </Radio.Button>
-                <Radio.Button>
-                  <Icon type="scissor" />
-                  <span>移动到</span>
-                </Radio.Button>
-              </Radio.Group>
+              <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
+              <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
+              <Dropdown overlay={this.menu}>
+                <Button style={{ marginRight: '10px' }}>
+                  批量操作
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+
+              <Button icon="reload">刷新</Button>
             </div>
 
             <div className="right-operate">
               <Search
-                placeholder="搜索您的文件"
+                placeholder="输入文件名前缀匹配"
                 onSearch={value => console.log(value)}
                 style={{ width: 200, marginRight: '10px' }}
               />
@@ -164,9 +197,10 @@ export default class FileManage extends Component {
                       };
                     }}
                   >
-                    <Table.Column title="文件名" width={300} dataIndex="fileName" render={this.renderFileName} />
-                    <Table.Column title="大小" width={100} dataIndex="size" />
-                    <Table.Column title="修改日期" width={150} dataIndex="updateTime" />
+                    <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
+                    <Table.Column title="大小" dataIndex="size" />
+                    <Table.Column title="更新时间" dataIndex="updateTime" />
+                    <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
                   </Table>
                 ) : (
                   <div>

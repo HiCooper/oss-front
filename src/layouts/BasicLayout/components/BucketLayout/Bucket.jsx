@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Menu } from 'antd';
+import React, {Component} from 'react';
+import {Menu} from 'antd';
 import './index.scss';
 import ChildrenRouter from './ChildrenRouter';
-import { headMenuConfig } from '../../../../menuConfig';
+import {headMenuConfig} from '../../../../menuConfig';
 
 export default class Bucket extends Component {
   constructor(props) {
@@ -47,11 +47,11 @@ export default class Bucket extends Component {
             </span>
             <span className="info">
               <strong>类型</strong>
-标准存储
+              标准存储
             </span>
             <span className="info">
               <strong>区域</strong>
-华北2（北京）
+              华北2（北京）
             </span>
             <span className="info">
               <strong>创建时间</strong>
@@ -66,7 +66,7 @@ export default class Bucket extends Component {
             mode="horizontal"
             defaultSelectedKeys={[currentActivate]}
             selectedKeys={[currentActivate]}
-            style={{ lineHeight: '64px' }}
+            style={{ lineHeight: '46px' }}
           >
             {
               headMenuConfig && headMenuConfig.length > 0 ? headMenuConfig.map((item) => {
