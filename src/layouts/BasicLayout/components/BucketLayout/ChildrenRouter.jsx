@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { childRouterConfig } from '../../routerConfig';
-import NotFound from '../../components/NotFound';
+import NotFound from '../../../../components/NotFound';
+import { childRouterConfig } from '../../../../routerConfig';
 
 export default class ChildrenRouter extends Component {
     static displayName = 'ChildrenRouter';

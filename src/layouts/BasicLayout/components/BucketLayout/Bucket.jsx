@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Menu } from 'antd';
 import './index.scss';
-import { headMenuConfig } from '../../menuConfig';
 import ChildrenRouter from './ChildrenRouter';
+import { headMenuConfig } from '../../../../menuConfig';
 
-export default class Home extends Component {
+export default class Bucket extends Component {
   constructor(props) {
     super(props);
     const pathname = this.props.location.pathname;

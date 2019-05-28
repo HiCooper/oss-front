@@ -1,5 +1,5 @@
 import Test from './pages/Test';
-import FileManage from './pages/Home/components/FileManage';
+import FileManage from './pages/FileManage';
 
 const routerConfig = [];
 

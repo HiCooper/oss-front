@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { routerConfig } from '../../routerConfig';
 import NotFound from '../../components/NotFound';
-import Home from '../../pages/Home';
+import Bucket from './components/BucketLayout/index';
 
 export default class MainRouter extends Component {
     static displayName = 'MainRouter';
@@ -26,7 +26,7 @@ export default class MainRouter extends Component {
       return (
         <Switch>
           {routerConfig.map(this.renderNormalRoute)}
-          <Route path="/bucket" component={Home} />
+          <Route path="/bucket" component={Bucket} />
           <Route component={NotFound} />
         </Switch>
       );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, Icon, Input, Radio, Table } from 'antd';
+import { getIconByFileName } from '../../util/stringUtils';
 
-import { getIconByFileName } from '../../../../util/stringUtils';
 
 const Search = Input.Search;
 
