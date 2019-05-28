@@ -1,7 +1,7 @@
 /**
  * 定义应用路由
  */
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
 import BasicLayout from './layouts/BasicLayout';
 
@@ -13,6 +13,7 @@ const router = () => {
   return (
     <HashRouter>
       <Switch>
+        <Redirect exact strict from="/" to="/dashboard/overview" />
         <Route path="/" component={BasicLayout} />
       </Switch>
     </HashRouter>
