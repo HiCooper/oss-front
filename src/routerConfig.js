@@ -29,4 +29,4 @@ const childRouterConfig = [
   },
 ];
 
-export {routerConfig, childRouterConfig};
+export { routerConfig, childRouterConfig };
