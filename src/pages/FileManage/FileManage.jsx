@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Icon, Input, Radio, Table } from 'antd';
-import { getIconByFileName } from '../../util/stringUtils';
-
+import { Breadcrumb, Button, Col, Icon, Input, Radio, Row, Table } from 'antd';
+import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
+import './index.scss';
 
 const Search = Input.Search;
 
 const data = [];
-for (let i = 0; i < 31; i++) {
+for (let i = 0; i < 50; i++) {
   data.push({
     key: i,
     fileName: '1.jpg',
@@ -20,9 +20,10 @@ export default class FileManage extends Component {
 
   constructor(props) {
     super(props);
+    const params = getParamsFromUrl(this.props.location.search);
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
-      vmode: 'list',
+      vmode: params.vmode || 'list',
     };
   }
 
@@ -90,7 +91,7 @@ export default class FileManage extends Component {
       onChange: this.onSelectChange,
     };
     return (
-      <div className="home">
+      <div className="file-home">
         <div className="head">
           <div className="header-line">
             <div className="left-btn-group">
@@ -169,7 +170,20 @@ export default class FileManage extends Component {
                   </Table>
                 ) : (
                   <div>
-                    grid
+                    <Row>
+                      {
+                          data.map((i, index) => {
+                            return (
+                              <Col key={index}>
+                                <div className="item">
+                                  <div className="file-icon" />
+                                  <span className="file-name">{i.fileName}</span>
+                                </div>
+                              </Col>
+                            );
+                          })
+                        }
+                    </Row>
                   </div>
                 )
               }

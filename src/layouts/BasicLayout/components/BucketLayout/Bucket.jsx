@@ -38,6 +38,27 @@ export default class Bucket extends Component {
     const { currentActivate } = this.state;
     return (
       <div className="bucket-home">
+        <div className="bucket-header">
+          <h1>hicooper</h1>
+          <aside>
+            <span className="info">
+              <strong>读写权限</strong>
+              <span className="oss-rc-acl">私有</span>
+            </span>
+            <span className="info">
+              <strong>类型</strong>
+标准存储
+            </span>
+            <span className="info">
+              <strong>区域</strong>
+华北2（北京）
+            </span>
+            <span className="info">
+              <strong>创建时间</strong>
+              <span>2019-05-27 14:17</span>
+            </span>
+          </aside>
+        </div>
         <div className="menu">
           <Menu
             onSelect={this.subMenuSelect}

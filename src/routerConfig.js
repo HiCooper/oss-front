@@ -24,7 +24,7 @@ const childRouterConfig = [
     component: Test,
   },
   {
-    path: '/bucket/:name/test',
+    path: '/test',
     component: Test,
   },
 ];

@@ -1,0 +1,36 @@
+.file-home {
+  height: calc(100% - 154px);
+
+  .item {
+    width: 120px;
+    height: 127px;
+    float: left;
+    margin: 4px 0 0 6px;
+    text-align: center;
+    border: 1px solid #fff;
+    position: relative;
+
+    &:hover{
+      background: #eaeaea;
+      border-radius: 5px;
+    }
+
+    .file-icon {
+      position: relative;
+      margin: 9px auto 0;
+      width: 84px;
+      height: 84px;
+      overflow: hidden;
+      background: url("./images/PDF_54.png") center no-repeat;
+    }
+
+    .file-name{
+      display: block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      margin: 6px 5px 5px;
+      font-size: 12px;
+    }
+  }
+}
