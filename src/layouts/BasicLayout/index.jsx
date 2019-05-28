@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Avatar, Button, Col, Divider, Drawer, Dropdown, Icon, Input, Layout, Menu, Popover, Row } from 'antd';
+import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, Popover, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
+import AddBucketDrawer from '../../pages/AddBucketDrawer';
 
 const { Header, Content, Sider } = Layout;
 const Search = Input.Search;
@@ -152,7 +153,7 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { color, userName, activateMenuPath, currentTheme, leftMenuConfig } = this.state;
+    const { color, userName, activateMenuPath, currentTheme, leftMenuConfig, visible } = this.state;
     return (
       <Layout className="basic-layout">
         <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
@@ -206,6 +207,7 @@ class BasicLayout extends Component {
                   <Popover placement="top" content="新建Bucket" trigger="hover">
                     <Icon type="plus" style={{ cursor: 'pointer', marginRight: '8px' }} onClick={this.showDrawer} />
                   </Popover>
+                  <AddBucketDrawer onClose={this.onClose} visible={visible} />
                   <Popover placement="top" content="刷新" trigger="hover">
                     <Icon type="sync" style={{ cursor: 'pointer' }} />
                   </Popover>
@@ -222,134 +224,9 @@ class BasicLayout extends Component {
             </Content>
           </Layout>
         </Layout>
-
-        <Drawer
-          width={640}
-          placement="right"
-          closable
-          maskClosable={false}
-          onClose={this.onClose}
-          visible={this.state.visible}
-        >
-          <p style={{ ...pStyle, marginBottom: 24 }}>User Profile</p>
-          <p style={pStyle}>Personal</p>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="Full Name" content="Lily" />
-              {' '}
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Account" content="AntDesign@example.com" />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="City" content="HangZhou" />
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Country" content="China🇨🇳" />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="Birthday" content="February 2,1900" />
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Website" content="-" />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <DescriptionItem
-                title="Message"
-                content="Make things as simple as possible but no simpler."
-              />
-            </Col>
-          </Row>
-          <Divider />
-          <p style={pStyle}>Company</p>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="Position" content="Programmer" />
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Responsibilities" content="Coding" />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="Department" content="AFX" />
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Supervisor" content={<a>Lin</a>} />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <DescriptionItem
-                title="Skills"
-                content="C / C + +, data structures, software engineering, operating systems, computer networks, databases, compiler theory, computer architecture, Microcomputer Principle and Interface Technology, Computer English, Java, ASP, etc."
-              />
-            </Col>
-          </Row>
-          <Divider />
-          <p style={pStyle}>Contacts</p>
-          <Row>
-            <Col span={12}>
-              <DescriptionItem title="Email" content="AntDesign@example.com" />
-            </Col>
-            <Col span={12}>
-              <DescriptionItem title="Phone Number" content="+86 181 0000 0000" />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <DescriptionItem
-                title="Github"
-                content={(
-                  <a href="http://github.com/ant-design/ant-design/">
-                     github.com/ant-design/ant-design/
-                  </a>
-)}
-              />
-            </Col>
-          </Row>
-        </Drawer>
-
       </Layout>
     );
   }
 }
-
-const pStyle = {
-  fontSize: 16,
-  color: 'rgba(0,0,0,0.85)',
-  lineHeight: '24px',
-  display: 'block',
-  marginBottom: 16,
-};
-
-const DescriptionItem = ({ title, content }) => (
-  <div
-    style={{
-      fontSize: 14,
-      lineHeight: '22px',
-      marginBottom: 7,
-      color: 'rgba(0,0,0,0.65)',
-    }}
-  >
-    <p
-      style={{
-        marginRight: 8,
-        display: 'inline-block',
-        color: 'rgba(0,0,0,0.85)',
-      }}
-    >
-      {title}
-:
-    </p>
-    {content}
-  </div>
-);
 
 export default withRouter(BasicLayout);
