@@ -39,7 +39,6 @@ export default class AddBucketDrawer extends Component {
         visible={this.props.visible}
         className="add-bucket-drawer"
         title="新建 Bucket"
-        footer="footer"
       >
         <Form {...formItemLayout}>
           <Form.Item

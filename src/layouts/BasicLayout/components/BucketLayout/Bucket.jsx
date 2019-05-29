@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Menu} from 'antd';
+import React, { Component } from 'react';
+import { Menu } from 'antd';
 import './index.scss';
 import ChildrenRouter from './ChildrenRouter';
-import {headMenuConfig} from '../../../../menuConfig';
+import { headMenuConfig } from '../../../../menuConfig';
 
 export default class Bucket extends Component {
   constructor(props) {
