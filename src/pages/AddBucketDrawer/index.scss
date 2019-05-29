@@ -1,4 +1,5 @@
 .add-bucket-drawer {
+  top: 64px;
 
   .ant-drawer-body {
     padding: 16px 0;
@@ -18,6 +19,10 @@
     left: 0;
     background: rgb(255, 255, 255);
     border-radius: 0 0 4px 4px;
+  }
+
+  .ant-drawer-content-wrapper {
+    height: calc(100% - 64px);
   }
 }
 
