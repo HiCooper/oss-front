@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Col, Dropdown, Icon, Input, Menu, Row, Table } from 'antd';
-import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table } from 'antd';
+import { getIconByFileName } from '../../util/stringUtils';
 import './index.scss';
 
 const Search = Input.Search;
@@ -20,10 +20,8 @@ export default class FileManage extends Component {
 
   constructor(props) {
     super(props);
-    const params = getParamsFromUrl(this.props.location.search);
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
-      vmode: params.vmode || 'list',
     };
   }
 
@@ -42,23 +40,6 @@ export default class FileManage extends Component {
         {val}
       </div>
     );
-  };
-
-  switchVmode = async () => {
-    await this.setState({
-      vmode: this.state.vmode === 'list' ? 'grid' : 'list',
-    });
-    const location = this.props.location;
-    let search = location.search;
-    if (!search) {
-      search = `?vmode=${this.state.vmode}`;
-    } else {
-      search = location.search.replace(/vmode=[a-zA-Z]{4}/, `vmode=${this.state.vmode}`);
-    }
-    const newUrl = location.pathname + search;
-    if (newUrl !== (location.pathname + location.search)) {
-      this.props.history.push(newUrl);
-    }
   };
 
   onRowClick = (record, e) => {
@@ -131,7 +112,7 @@ export default class FileManage extends Component {
   };
 
   render() {
-    const { selectedRowKeys, vmode } = this.state;
+    const { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -160,14 +141,6 @@ export default class FileManage extends Component {
                 onSearch={value => console.log(value)}
                 style={{ width: 200, marginRight: '10px' }}
               />
-              {
-                  vmode === 'list' ? (
-                    <Icon type="appstore" className="vmode" onClick={this.switchVmode} />
-                  ) : (
-                    <Icon type="bars" className="vmode" onClick={this.switchVmode} />
-                  )
-                }
-
             </div>
           </div>
         </div>
@@ -182,45 +155,24 @@ export default class FileManage extends Component {
           </div>
 
           <div className="table">
-            {
-                vmode === 'list' ? (
-                  <Table rowSelection={rowSelection}
-                    dataSource={data}
-                    pagination={false}
-                    onRow={(record) => {
-                      return {
-                        onClick: (e) => { this.onRowClick(record, e); }, // 点击行
-                        onDoubleClick: (e) => { this.onRowDoubleClick(record, e); },
-                        onContextMenu: (e) => { this.onRowContextMenu(record, e); },
-                        onMouseEnter: (e) => { this.onRowMouseEnter(record, e); }, // 鼠标移入行
-                        onMouseLeave: (e) => { this.onRowMouseLeave(record, e); },
-                      };
-                    }}
-                  >
-                    <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
-                    <Table.Column title="大小" dataIndex="size" />
-                    <Table.Column title="更新时间" dataIndex="updateTime" />
-                    <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
-                  </Table>
-                ) : (
-                  <div>
-                    <Row>
-                      {
-                          data.map((i, index) => {
-                            return (
-                              <Col key={index}>
-                                <div className="item">
-                                  <div className="file-icon" />
-                                  <span className="file-name">{i.fileName}</span>
-                                </div>
-                              </Col>
-                            );
-                          })
-                        }
-                    </Row>
-                  </div>
-                )
-              }
+            <Table rowSelection={rowSelection}
+              dataSource={data}
+              pagination={false}
+              onRow={(record) => {
+                return {
+                  onClick: (e) => { this.onRowClick(record, e); }, // 点击行
+                  onDoubleClick: (e) => { this.onRowDoubleClick(record, e); },
+                  onContextMenu: (e) => { this.onRowContextMenu(record, e); },
+                  onMouseEnter: (e) => { this.onRowMouseEnter(record, e); }, // 鼠标移入行
+                  onMouseLeave: (e) => { this.onRowMouseLeave(record, e); },
+                };
+              }}
+            >
+              <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
+              <Table.Column title="大小" dataIndex="size" />
+              <Table.Column title="更新时间" dataIndex="updateTime" />
+              <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
+            </Table>
           </div>
         </div>
       </div>
