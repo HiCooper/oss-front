@@ -23,15 +23,15 @@ class BasicLayout extends Component {
       userName: 'HiCooper',
       activateMenuPath: base,
       currentTheme: this.theme || 'default',
-      leftMenuConfig: [],
+      bucketList: [],
       visible: false,
     };
   }
 
   componentDidMount() {
     // 获取 bucket 列表
-    const { leftMenuConfig } = this.state;
-    leftMenuConfig.push(
+    const { bucketList } = this.state;
+    bucketList.push(
       {
         name: 'hicooper',
         path: '/bucket/hicooper',
@@ -42,7 +42,7 @@ class BasicLayout extends Component {
       }
     );
     this.setState({
-      leftMenuConfig,
+      bucketList,
     });
   }
 
@@ -53,7 +53,7 @@ class BasicLayout extends Component {
     }
   };
 
-  componentWillReceiveProps(nextProps, _) {
+  componentWillReceiveProps(nextProps, nextContent) {
     const pathname = nextProps.location.pathname;
     const base = pathname.substr(0, pathname.lastIndexOf('/'));
     this.setState({
@@ -153,7 +153,7 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { color, userName, activateMenuPath, currentTheme, leftMenuConfig, visible } = this.state;
+    const { color, userName, activateMenuPath, currentTheme, bucketList, visible } = this.state;
     return (
       <Layout className="basic-layout">
         <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
@@ -166,7 +166,7 @@ class BasicLayout extends Component {
           <div className="right">
             <Dropdown overlay={this.themeSelect}>
               <span style={{ fontWeight: 'bold' }}>
-                <Icon type="bg-colors" style={{ marginRight: '20px', fontSize: '20px', fontWeight: 'bold' }} />
+                <Icon type="skin" style={{ marginRight: '20px', fontSize: '20px', fontWeight: 'bold' }} />
               </span>
             </Dropdown>
             <Popover placement="bottomRight" title={this.text()} content={this.content()} trigger="click" className="personal-info">
@@ -214,7 +214,7 @@ class BasicLayout extends Component {
                 </div>
               </div>
               {
-                leftMenuConfig.map(this.renderMenuItem)
+                bucketList.map(this.renderMenuItem)
                }
             </Menu>
           </Sider>
