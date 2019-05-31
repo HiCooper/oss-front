@@ -1,0 +1,51 @@
+.overview {
+
+  .oss-box {
+    border-bottom: 1px solid #d7d8d9;
+    padding-bottom: 20px;
+
+    .box-bd {
+      font-size: 36px;
+
+      .card-list {
+        display: flex;
+
+        .card {
+          flex: 1 1 auto;
+          font-size: 12px;
+          padding: 0 16px;
+          border-right: 1px dotted #d7d8d9;
+
+          &:last-child{
+            border-right: unset;
+          }
+
+          .card-hd {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .card-bd {
+
+            .info {
+              display: flex;
+              justify-content: space-between;
+
+            }
+
+            .display-value{
+              font-size: 28px;
+            }
+            .display-unit{
+              font-size: 0.5em;
+              margin-left: 0.5em;
+            }
+          }
+
+        }
+      }
+    }
+
+  }
+
+}
