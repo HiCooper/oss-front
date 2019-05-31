@@ -1,4 +1,4 @@
-import Test from './pages/Test';
+import Overview from './pages/Overview';
 import FileManage from './pages/FileManage';
 import BucketOverview from './pages/BucketOverview';
 import Setting from './pages/Setting';
@@ -6,7 +6,12 @@ import StatsApi from './pages/StatsApi';
 import StatsFile from './pages/StatsFile';
 import StatsHot from './pages/StatsHot';
 
-const routerConfig = [];
+const routerConfig = [
+  {
+    path: '/dashboard/overview',
+    component: Overview,
+  },
+];
 
 const childRouterConfig = [
   {
@@ -27,10 +32,6 @@ const childRouterConfig = [
   }, {
     path: '/bucket/:name/stats-hot',
     component: StatsHot,
-  },
-  {
-    path: '/test',
-    component: Test,
   },
 ];
 
