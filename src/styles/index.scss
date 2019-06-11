@@ -16,13 +16,63 @@ body {
 #frame-all{
   background-position: center 0;
   background-repeat: no-repeat;
-  //background-color: #3b8cff;
   background-image: url("../asserts/images/main_bg.png");
-  //background-color: #866eb9;
-  //background-color: #106f8e;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+// base-info-box
+.oss-box {
+  margin: 16px 0;
+
+  .box-hd {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    height: 30px;
+    line-height: 30px;
+
+    h3 {
+      font-size: 14px;
+      color: #373d41;
+      font-weight: bold;
+    }
+  }
+
+  .basic-setting-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: stretch;
+
+    .item {
+      display: flex;
+      flex: 0 0 50%;
+      padding: 12px;
+      position: relative;
+
+      &:hover {
+        background: #f4f4f4;
+      }
+
+      .item-key {
+        flex: 0 0 110px;
+        color: #9b9ea0;
+        margin-right: 1em
+      }
+
+      .item-value {
+        flex: 1 1 auto;
+        white-space: normal;
+        word-break: break-all;
+        word-wrap: break-word;
+      }
+    }
+  }
+
 }
