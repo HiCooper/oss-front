@@ -12,4 +12,4 @@ export const ListObjectApi = params => axios.get('/api/object/list', { params })
  * 创建 Object
  * @type {string}
  */
-export const CreateObjectUrl = `${axios.defaults.baseURL}/api/create`;
+export const CreateObjectUrl = `${axios.defaults.baseURL}/api/object/create`;

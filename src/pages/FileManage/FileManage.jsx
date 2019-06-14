@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table, Upload, message } from 'antd';
+import CryptoJS from 'crypto-js/crypto-js';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Table, Upload } from 'antd';
 import { getIconByFileName } from '../../util/stringUtils';
 import './index.scss';
 import { CreateObjectUrl, ListObjectApi } from '../../api/object';
@@ -19,6 +20,8 @@ export default class FileManage extends Component {
       bucketName: this.props.match.params.name,
       bucketInfo: getCurrentBucket(),
       filePath: '/',
+      hash: '',
+      fileSize: 0,
     };
   }
 
@@ -28,15 +31,17 @@ export default class FileManage extends Component {
   }
 
   initObjectList = () => {
-    ListObjectApi({ bucketName: this.state.bucketName }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          objectList: res.data.records,
-        });
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    ListObjectApi({ bucketName: this.state.bucketName })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            objectList: res.data.records,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -46,7 +51,14 @@ export default class FileManage extends Component {
   renderFileName = (val) => {
     return (
       <div>
-        <Icon type={getIconByFileName(val)} theme="filled" style={{ color: 'green', marginRight: '8px', fontSize: '18px' }} />
+        <Icon type={getIconByFileName(val)}
+          theme="filled"
+          style={{
+            color: 'green',
+            marginRight: '8px',
+            fontSize: '18px',
+          }}
+        />
         {val}
       </div>
     );
@@ -71,7 +83,7 @@ export default class FileManage extends Component {
     e.preventDefault();
   };
 
-  onRowMouseLeave =(record, e) => {
+  onRowMouseLeave = (record, e) => {
     e.preventDefault();
   };
 
@@ -82,10 +94,10 @@ export default class FileManage extends Component {
   menu = () => (
     <Menu onClick={this.handleMenuClick}>
       <Menu.Item key="1">
-      下载
+        下载
       </Menu.Item>
       <Menu.Item key="2">
-      删除
+        删除
       </Menu.Item>
     </Menu>
   );
@@ -127,13 +139,38 @@ export default class FileManage extends Component {
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
+      this.initObjectList();
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
   };
 
+  beforeUploadHook = async (file) => {
+    try {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = (evt) => {
+        if (evt.target.readyState === FileReader.DONE) {
+          const wordArray = CryptoJS.lib.WordArray.create(reader.result);
+          const hash = CryptoJS.SHA256(wordArray)
+            .toString()
+            .toUpperCase();
+          console.log(hash);
+          this.setState({
+            hash,
+            fileSize: file.size,
+          });
+          return true;
+        }
+      };
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  };
+
   render() {
-    const { objectList, selectedRowKeys, bucketInfo, filePath } = this.state;
+    const { objectList, selectedRowKeys, bucketInfo, filePath, hash, fileSize } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -146,8 +183,16 @@ export default class FileManage extends Component {
               <Upload
                 name="file"
                 action={CreateObjectUrl}
-                headers={{ authorization: getToken() }}
-                data={{ bucketId: bucketInfo.id, filePath }}
+                headers={{
+                  authorization: getToken(),
+                  Digest: hash,
+                  fileSize,
+                }}
+                data={{
+                  bucketId: bucketInfo.id,
+                  filePath,
+                }}
+                beforeUpload={this.beforeUploadHook}
                 onChange={this.uploadBtnOnchange}
                 style={{ marginRight: '10px' }}
               >
@@ -169,7 +214,10 @@ export default class FileManage extends Component {
               <Search
                 placeholder="输入文件名前缀匹配"
                 onSearch={value => console.log(value)}
-                style={{ width: 200, marginRight: '10px' }}
+                style={{
+                  width: 200,
+                  marginRight: '10px',
+                }}
               />
             </div>
           </div>
@@ -190,16 +238,26 @@ export default class FileManage extends Component {
               pagination={false}
               onRow={(record) => {
                 return {
-                  onClick: (e) => { this.onRowClick(record, e); }, // 点击行
-                  onDoubleClick: (e) => { this.onRowDoubleClick(record, e); },
-                  onContextMenu: (e) => { this.onRowContextMenu(record, e); },
-                  onMouseEnter: (e) => { this.onRowMouseEnter(record, e); }, // 鼠标移入行
-                  onMouseLeave: (e) => { this.onRowMouseLeave(record, e); },
+                  onClick: (e) => {
+                    this.onRowClick(record, e);
+                  }, // 点击行
+                  onDoubleClick: (e) => {
+                    this.onRowDoubleClick(record, e);
+                  },
+                  onContextMenu: (e) => {
+                    this.onRowContextMenu(record, e);
+                  },
+                  onMouseEnter: (e) => {
+                    this.onRowMouseEnter(record, e);
+                  }, // 鼠标移入行
+                  onMouseLeave: (e) => {
+                    this.onRowMouseLeave(record, e);
+                  },
                 };
               }}
             >
               <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
-              <Table.Column title="大小" dataIndex="size" />
+              <Table.Column title="大小" dataIndex="formattedSize" />
               <Table.Column title="更新时间" dataIndex="updateTime" />
               <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
             </Table>
