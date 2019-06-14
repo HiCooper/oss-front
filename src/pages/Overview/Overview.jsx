@@ -71,9 +71,7 @@ export default class Overview extends Component {
                   <Progress percent={30} size="small" />
                 </div>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>

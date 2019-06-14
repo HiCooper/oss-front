@@ -4,6 +4,7 @@
 import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
 import BasicLayout from './layouts/BasicLayout';
+import UserLayout from './layouts/UserLayout';
 
 
 // 按照 Layout 分组路由
@@ -14,6 +15,7 @@ const router = () => {
     <HashRouter>
       <Switch>
         <Redirect exact strict from="/" to="/dashboard/overview" />
+        <Route path="/user" component={UserLayout} />
         <Route path="/" component={BasicLayout} />
       </Switch>
     </HashRouter>

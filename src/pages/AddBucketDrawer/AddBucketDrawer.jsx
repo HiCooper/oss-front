@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Input, Radio } from 'antd';
+import { Button, Drawer, Form, Input, Radio, message } from 'antd';
 import './index.scss';
+import { CreateBucketApi } from '../../api/bucket';
 
 const formItemLayout = {
   labelCol: {
@@ -12,23 +13,52 @@ const formItemLayout = {
     sm: { span: 12 },
   },
 };
-export default class AddBucketDrawer extends Component {
+class AddBucketDrawer extends Component {
   static displayName = 'AddBucketDrawer';
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      acl: 'PRIVATE',
+      name: '',
+      submitLoading: false,
+    };
   }
 
   onClose = () => {
     this.props.onClose();
   };
 
-  handleSizeChange = (val) => {
-    console.log(val);
+  createBucketSubmit = (e) => {
+    this.setState({
+      submitLoading: true,
+    });
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        CreateBucketApi(values).then((res) => {
+          if (res.msg === 'SUCCESS') {
+            message.success(`创建 Bucket ${values.name}成功!`);
+            this.props.flushList();
+            this.onClose();
+          } else {
+            message.error('创建失败');
+          }
+        }).catch((error) => {
+          console.error(error);
+          message.error('创建失败');
+        });
+      }
+    });
+    this.setState({
+      submitLoading: false,
+    });
   };
 
   render() {
+    const { name, acl, submitLoading } = this.state;
+    const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
         width={640}
@@ -40,13 +70,20 @@ export default class AddBucketDrawer extends Component {
         className="add-bucket-drawer"
         title="新建 Bucket"
       >
-        <Form {...formItemLayout}>
+        <Form {...formItemLayout} onSubmit={this.createBucketSubmit}>
           <Form.Item
             label="Bucket 名称"
             validateStatus="success"
             help="最多63个字母或数字"
           >
-            <Input placeholder="Bucket" id="error" />
+            {
+              getFieldDecorator('name', {
+                rules: [{ required: true, message: '请输入用户名!' }],
+                initialValue: name,
+              })(
+                <Input placeholder="Bucket" allowClear onChange={this.inputNameChange} />
+              )
+            }
           </Form.Item>
 
           <Form.Item
@@ -54,28 +91,40 @@ export default class AddBucketDrawer extends Component {
             validateStatus="success"
             help="私有：对文件的所有访问操作需要进行身份验证。"
           >
-            <Radio.Group defaultValue="私有" onChange={this.handleSizeChange}>
-              <Radio.Button value="私有">私有</Radio.Button>
-              <Radio.Button value="公共读">公共读</Radio.Button>
-              <Radio.Button value="公共读写">公共读写</Radio.Button>
-            </Radio.Group>
+            {
+              getFieldDecorator('acl', {
+                rules: [{ required: true, message: '请选择读写权限!' }],
+                initialValue: acl,
+              })(
+                <Radio.Group>
+                  <Radio.Button value="PRIVATE">私有</Radio.Button>
+                  <Radio.Button value="PUBLIC_READ">公共读</Radio.Button>
+                  <Radio.Button value="PUBLIC">公共读写</Radio.Button>
+                </Radio.Group>
+              )
+            }
           </Form.Item>
+          <div className="form-btn">
+            <Button
+              loading={submitLoading}
+              type="primary"
+              htmlType="submit"
+              style={{
+                marginRight: 8,
+              }}
+            >
+              确认
+            </Button>
+            <Button onClick={this.onClose}>
+              取消
+            </Button>
+          </div>
         </Form>
-
-        <div className="form-btn">
-          <Button onClick={this.onClose}
-            type="primary"
-            style={{
-              marginRight: 8,
-            }}
-          >
-            确认
-          </Button>
-          <Button onClick={this.onClose}>
-            取消
-          </Button>
-        </div>
       </Drawer>
     );
   }
 }
+
+const WrappedAddBucketDrawer = Form.create({ name: 'normal_login' })(AddBucketDrawer);
+
+export default WrappedAddBucketDrawer;

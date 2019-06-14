@@ -1,35 +1,31 @@
 import axios from 'axios';
+import { message } from 'antd';
 import { getToken, removeAll } from '../util/auth';
 
-axios.defaults.baseURL = 'http://192.168.2.207:8077';
+// axios.defaults.baseURL = 'http://47.101.42.169:8077';
+axios.defaults.baseURL = 'http://192.168.2.194:8077';
 axios.defaults.timeout = 5000;
 
 axios.interceptors.request.use((config) => {
   config.headers.authorization = getToken();
   return config;
 }, (error) => {
-  console.error(error);
   return Promise.reject(error);
 },);
 
 axios.interceptors.response.use((response) => {
-  const { code, msg } = response.data;
-  if (response.data.size) {
-    return response;
-  }
-  if (code && code !== '200') {
-    console.error(msg);
-    if (code === 'TOKEN_EXPIRED') {
-      removeAll();
-      localStorage.clear();
-      window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login`);
-    }
-    return Promise.reject(code);
-  }
-  return response;
+  return Promise.resolve(response);
 }, (error) => {
-  console.error(error);
-  console.error('500,服务器出现了点问题');
+  const { status, statusText } = error.response;
+  if (status === 403 && statusText === 'Forbidden') {
+    message.error('登录过期，请重新登录');
+    removeAll();
+    localStorage.clear();
+    window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login`);
+  } else {
+    console.error(error);
+    message.error('500,服务器出现了点问题');
+  }
   return Promise.reject(error);
 },);
 

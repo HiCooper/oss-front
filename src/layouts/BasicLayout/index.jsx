@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, Popover, Row } from 'antd';
+import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, Popover, Row, message } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
 import AddBucketDrawer from '../../pages/AddBucketDrawer';
+import { ListBucketApi } from '../../api/bucket';
+import { removeAll } from '../../util/auth';
 
 const { Header, Content, Sider } = Layout;
 const Search = Input.Search;
@@ -25,33 +27,14 @@ class BasicLayout extends Component {
       currentTheme: this.theme || 'default',
       bucketList: [],
       visible: false,
+      // bucket name
+      name: '',
     };
   }
 
   componentDidMount() {
-    // 获取 bucket 列表
-    const { bucketList } = this.state;
-    bucketList.push(
-      {
-        name: 'hicooper',
-        path: '/bucket/hicooper',
-      },
-      {
-        name: 'newBucket',
-        path: '/bucket/newBucket',
-      }
-    );
-    this.setState({
-      bucketList,
-    });
+    this.initBucketList();
   }
-
-  subMenuSelect = (item) => {
-    const location = this.props.location;
-    if (`${item.key}/overview` !== (location.pathname + location.search)) {
-      this.props.history.push(`${item.key}/overview`);
-    }
-  };
 
   componentWillReceiveProps(nextProps, nextContent) {
     const pathname = nextProps.location.pathname;
@@ -60,6 +43,34 @@ class BasicLayout extends Component {
       activateMenuPath: base,
     });
   }
+
+  // 获取 bucket 列表
+  initBucketList = () => {
+    const { name } = this.state;
+    ListBucketApi({ name }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          bucketList: res.data,
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  };
+
+  searchBucket = async (value) => {
+    await this.setState({
+      name: value,
+    });
+    this.initBucketList();
+  };
+
+  subMenuSelect = (item) => {
+    const location = this.props.location;
+    if (`${item.key}/overview` !== (location.pathname + location.search)) {
+      this.props.history.push(`${item.key}/overview`);
+    }
+  };
 
   changeTheme = (type, e) => {
     e.preventDefault();
@@ -82,63 +93,81 @@ class BasicLayout extends Component {
     </Menu>
   );
 
+  text = () => {
+    const { userName, color } = this.state;
+    return (
+      <div className="personal">
+        <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
+          {userName.substr(0, 1)}
+        </Avatar>
+        <span>{userName}</span>
+      </div>
+    );
+  };
 
-   text = () => {
-     const { userName, color } = this.state;
-     return (
-       <div className="personal">
-         <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
-           {userName.substr(0, 1)}
-         </Avatar>
-         <span>{userName}</span>
-       </div>
-     );
-   };
+  logout = () => {
+    removeAll();
+    localStorage.clear();
+    this.props.history.push('/user/login');
+  };
 
-   content = () => {
-     return (
-       <div className="personal-card-content">
-         <div className="btn-group">
-           <div className="item">
-             <Icon type="user" style={{ fontSize: '20px' }} />
-             <div className="title">
-               个人信息
-             </div>
-           </div>
-           <div className="item">
-             <Icon type="key" style={{ fontSize: '20px' }} />
-             <div className="title">
-               密钥管理
-             </div>
-           </div>
-         </div>
-         <Divider style={{ margin: '10px 0' }} />
-         <div className="footer">
-           <Button type="link" style={{ color: '#ccccccc' }}>
-             <Icon type="poweroff" />
-             退出当前账户
-           </Button>
-         </div>
-       </div>
-     );
-   };
+  content = () => {
+    return (
+      <div className="personal-card-content">
+        <div className="btn-group">
+          <div className="item">
+            <Icon type="user" style={{ fontSize: '20px' }} />
+            <div className="title">
+             个人信息
+            </div>
+          </div>
+          <div className="item">
+            <Icon type="key" style={{ fontSize: '20px' }} />
+            <div className="title">
+             密钥管理
+            </div>
+          </div>
+        </div>
+        <Divider style={{ margin: '10px 0' }} />
+        <div className="footer">
+          <Button type="link" style={{ color: '#ccccccc' }} onClick={this.logout}>
+            <Icon type="poweroff" />
+           退出当前账户
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
-   renderMenuItem = (item) => {
-     return (
-       <Menu.Item key={item.path}>
-         <Row>
-           <Col span={4}>
-             {
-               item.icon ? (<Icon type={item.icon} theme="filled" />) : <span className="bucket-dot" />
-             }
-           </Col>
-           <Col span={20}>
-             {item.name}
-           </Col>
-         </Row>
-       </Menu.Item>
-     );
-   };
+  renderBucketList = (item) => {
+    return (
+      <Menu.Item key={`/bucket/${item.name}`}>
+        <Row>
+          <Col span={4}>
+            <span className="bucket-dot" />
+          </Col>
+          <Col span={20}>
+            {item.name}
+          </Col>
+        </Row>
+      </Menu.Item>
+    );
+  };
+
+  renderMenuItem = (item) => {
+    return (
+      <Menu.Item key={item.path}>
+        <Row>
+          <Col span={4}>
+            <Icon type={item.icon} theme="filled" />
+          </Col>
+          <Col span={20}>
+            {item.name}
+          </Col>
+        </Row>
+      </Menu.Item>
+    );
+  };
 
   showDrawer = () => {
     this.setState({
@@ -150,6 +179,11 @@ class BasicLayout extends Component {
     this.setState({
       visible: false,
     });
+  };
+
+  flushList = async () => {
+    message.loading('刷新中...', 0.5);
+    this.initBucketList();
   };
 
   render() {
@@ -197,7 +231,7 @@ class BasicLayout extends Component {
               <div className="operate">
                 <Search
                   placeholder="搜索存储空间"
-                  onSearch={value => console.log(value)}
+                  onSearch={value => this.searchBucket(value)}
                   style={{ width: 130 }}
                 />
               </div>
@@ -207,14 +241,14 @@ class BasicLayout extends Component {
                   <Popover placement="top" content="新建Bucket" trigger="hover">
                     <Icon type="plus" style={{ cursor: 'pointer', marginRight: '8px' }} onClick={this.showDrawer} />
                   </Popover>
-                  <AddBucketDrawer onClose={this.onClose} visible={visible} />
+                  <AddBucketDrawer onClose={this.onClose} visible={visible} flushList={this.initBucketList} />
                   <Popover placement="top" content="刷新" trigger="hover">
-                    <Icon type="sync" style={{ cursor: 'pointer' }} />
+                    <Icon type="sync" style={{ cursor: 'pointer' }} onClick={this.flushList} />
                   </Popover>
                 </div>
               </div>
               {
-                bucketList.map(this.renderMenuItem)
+                bucketList.map(this.renderBucketList)
                }
             </Menu>
           </Sider>

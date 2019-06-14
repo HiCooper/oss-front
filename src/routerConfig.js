@@ -5,11 +5,20 @@ import Setting from './pages/Setting';
 import StatsApi from './pages/StatsApi';
 import StatsFile from './pages/StatsFile';
 import StatsHot from './pages/StatsHot';
+import Login from './pages/Login';
 
 const routerConfig = [
   {
     path: '/dashboard/overview',
     component: Overview,
+  },
+];
+
+const userRouterConfig = [
+  {
+    path: '/user/login',
+    component: Login,
+    exact: true,
   },
 ];
 
@@ -35,4 +44,4 @@ const childRouterConfig = [
   },
 ];
 
-export { routerConfig, childRouterConfig };
+export { routerConfig, userRouterConfig, childRouterConfig };
