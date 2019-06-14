@@ -24,7 +24,7 @@ class Login extends Component {
             // 先清空缓存
             removeAll();
             setToken(res.token);
-            setUserInfo(res.userInfo);
+            setUserInfo(JSON.stringify(res.userInfo));
             this.props.history.push('/');
           } else {
             message.error('登录失败!');

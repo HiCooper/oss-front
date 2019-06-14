@@ -6,7 +6,13 @@ export default class BucketOverview extends Component {
 
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        bucketName: this.props.match.params.name,
+      };
+    }
+
+    componentDidMount() {
+      console.log(this.state.bucketName);
     }
 
     render() {

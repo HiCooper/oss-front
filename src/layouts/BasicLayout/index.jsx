@@ -6,7 +6,7 @@ import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
 import AddBucketDrawer from '../../pages/AddBucketDrawer';
 import { ListBucketApi } from '../../api/bucket';
-import { removeAll } from '../../util/auth';
+import { getUserInfo, removeAll } from '../../util/auth';
 
 const { Header, Content, Sider } = Layout;
 const Search = Input.Search;
@@ -16,14 +16,16 @@ class BasicLayout extends Component {
 
   theme = localStorage.getItem('theme');
 
+  userInfo = getUserInfo() ? JSON.parse(getUserInfo()) : { username: '' };
+
   constructor(props) {
     super(props);
     const { pathname } = this.props.location;
     const base = pathname.substr(0, pathname.lastIndexOf('/'));
     this.state = {
       color: '#00a2ae',
-      userName: 'HiCooper',
       activateMenuPath: base,
+      username: this.userInfo.username,
       currentTheme: this.theme || 'default',
       bucketList: [],
       visible: false,
@@ -94,13 +96,13 @@ class BasicLayout extends Component {
   );
 
   text = () => {
-    const { userName, color } = this.state;
+    const { username, color } = this.state;
     return (
       <div className="personal">
         <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
-          {userName.substr(0, 1)}
+          {username.substr(0, 1)}
         </Avatar>
-        <span>{userName}</span>
+        <span>{username}</span>
       </div>
     );
   };
@@ -187,7 +189,7 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { color, userName, activateMenuPath, currentTheme, bucketList, visible } = this.state;
+    const { color, username, activateMenuPath, currentTheme, bucketList, visible } = this.state;
     return (
       <Layout className="basic-layout">
         <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
@@ -206,10 +208,10 @@ class BasicLayout extends Component {
             <Popover placement="bottomRight" title={this.text()} content={this.content()} trigger="click" className="personal-info">
               <div>
                 <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
-                  {userName.substr(0, 1)}
+                  {username.substr(0, 1)}
                 </Avatar>
                 <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
-                  {userName}
+                  {username}
                 </span>
               </div>
             </Popover>

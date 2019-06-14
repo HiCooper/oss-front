@@ -26,7 +26,7 @@ export default class MainRouter extends Component {
       return (
         <Switch>
           {routerConfig.map(this.renderNormalRoute)}
-          <Route path="/bucket" component={Bucket} />
+          <Route path="/bucket/:name/*" exact component={Bucket} />
           <Route component={NotFound} />
         </Switch>
       );

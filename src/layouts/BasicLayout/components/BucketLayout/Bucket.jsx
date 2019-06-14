@@ -3,6 +3,8 @@ import { Menu } from 'antd';
 import './index.scss';
 import ChildrenRouter from './ChildrenRouter';
 import { headMenuConfig } from '../../../../menuConfig';
+import { GetBucketApi } from '../../../../api/bucket';
+import { getAclDesc } from '../../../../util/AclTable';
 
 export default class Bucket extends Component {
   constructor(props) {
@@ -11,7 +13,13 @@ export default class Bucket extends Component {
     const lastPath = pathname.substr(pathname.lastIndexOf('/'));
     this.state = {
       currentActivate: lastPath,
+      bucketName: this.props.match.params.name,
+      bucketInfo: '',
     };
+  }
+
+  componentDidMount() {
+    this.getBucketInfo();
   }
 
   subMenuSelect = (item) => {
@@ -26,24 +34,38 @@ export default class Bucket extends Component {
     }
   };
 
-  componentWillReceiveProps(nextProps, _) {
+  getBucketInfo = () => {
+    GetBucketApi({name: this.state.bucketName}).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          bucketInfo: res.data,
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  };
+
+  componentWillReceiveProps(nextProps, ignore) {
     const pathname = nextProps.location.pathname;
     const lastPath = pathname.substr(pathname.lastIndexOf('/'));
     this.setState({
       currentActivate: lastPath,
+      bucketName: nextProps.match.params.name,
     });
+    this.getBucketInfo();
   }
 
   render() {
-    const { currentActivate } = this.state;
+    const { bucketName, bucketInfo, currentActivate } = this.state;
     return (
       <div className="bucket-home">
         <div className="bucket-header">
-          <h1>hicooper</h1>
+          <h1>{bucketName}</h1>
           <aside>
             <span className="info">
               <strong>读写权限</strong>
-              <span className="oss-rc-acl">私有</span>
+              <span className="oss-rc-acl">{getAclDesc(bucketInfo.acl)}</span>
             </span>
             <span className="info">
               <strong>类型</strong>
@@ -55,7 +77,7 @@ export default class Bucket extends Component {
             </span>
             <span className="info">
               <strong>创建时间</strong>
-              <span>2019-05-27 14:17</span>
+              <span>{bucketInfo.createTime}</span>
             </span>
           </aside>
         </div>

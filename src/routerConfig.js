@@ -1,7 +1,6 @@
 import Overview from './pages/Overview';
 import FileManage from './pages/FileManage';
 import BucketOverview from './pages/BucketOverview';
-import Setting from './pages/Setting';
 import StatsApi from './pages/StatsApi';
 import StatsFile from './pages/StatsFile';
 import StatsHot from './pages/StatsHot';
@@ -29,9 +28,6 @@ const childRouterConfig = [
   }, {
     path: '/bucket/:name/object',
     component: FileManage,
-  }, {
-    path: '/bucket/:name/settings',
-    component: Setting,
   }, {
     path: '/bucket/:name/stats-api',
     component: StatsApi,
