@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table, Upload, message } from 'antd';
 import { getIconByFileName } from '../../util/stringUtils';
 import './index.scss';
+import { CreateObjectUrl, ListObjectApi } from '../../api/object';
+import { getToken } from '../../util/auth';
+import { getCurrentBucket } from '../../util/Bucket';
 
 const Search = Input.Search;
-
-const data = [];
-for (let i = 0; i < 50; i++) {
-  data.push({
-    key: i,
-    fileName: '1.jpg',
-    size: `${i + 20}MB`,
-    updateTime: `2019-05-${i + 1}`,
-  });
-}
 
 export default class FileManage extends Component {
   static displayName = 'FileManage';
@@ -22,12 +15,29 @@ export default class FileManage extends Component {
     super(props);
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
+      objectList: [],
+      bucketName: this.props.match.params.name,
+      bucketInfo: getCurrentBucket(),
+      filePath: '/',
     };
   }
 
   componentDidMount() {
     console.log(this.props.match.params);
+    this.initObjectList();
   }
+
+  initObjectList = () => {
+    ListObjectApi({ bucketName: this.state.bucketName }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          objectList: res.data.records,
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  };
 
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
@@ -111,8 +121,19 @@ export default class FileManage extends Component {
     );
   };
 
+  uploadBtnOnchange = (info) => {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  };
+
   render() {
-    const { selectedRowKeys } = this.state;
+    const { objectList, selectedRowKeys, bucketInfo, filePath } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -122,7 +143,16 @@ export default class FileManage extends Component {
         <div className="head">
           <div className="header-line">
             <div className="left-btn-group">
-              <Button type="primary" icon="upload" style={{ marginRight: '10px' }}>上传</Button>
+              <Upload
+                name="file"
+                action={CreateObjectUrl}
+                headers={{ authorization: getToken() }}
+                data={{ bucketId: bucketInfo.id, filePath }}
+                onChange={this.uploadBtnOnchange}
+                style={{ marginRight: '10px' }}
+              >
+                <Button type="primary" icon="upload">上传</Button>
+              </Upload>
               <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
               <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
               <Dropdown overlay={this.menu}>
@@ -156,7 +186,7 @@ export default class FileManage extends Component {
 
           <div className="table">
             <Table rowSelection={rowSelection}
-              dataSource={data}
+              dataSource={objectList}
               pagination={false}
               onRow={(record) => {
                 return {

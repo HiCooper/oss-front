@@ -7,6 +7,7 @@ import './index.scss';
 import AddBucketDrawer from '../../pages/AddBucketDrawer';
 import { ListBucketApi } from '../../api/bucket';
 import { getUserInfo, removeAll } from '../../util/auth';
+import { setCurrentBucketInfo } from '../../util/Bucket';
 
 const { Header, Content, Sider } = Layout;
 const Search = Input.Search;
@@ -68,6 +69,10 @@ class BasicLayout extends Component {
   };
 
   subMenuSelect = (item) => {
+    const bucketName = item.key.split('/')[2];
+    const { bucketList } = this.state;
+    const find = bucketList.find(i => i.name === bucketName);
+    setCurrentBucketInfo(JSON.stringify(find));
     const location = this.props.location;
     if (`${item.key}/overview` !== (location.pathname + location.search)) {
       this.props.history.push(`${item.key}/overview`);
