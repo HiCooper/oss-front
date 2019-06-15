@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import CryptoJS from 'crypto-js/crypto-js';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Table, Upload } from 'antd';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table } from 'antd';
 import { getIconByFileName } from '../../util/stringUtils';
+import { ListObjectApi } from '../../api/object';
 import './index.scss';
-import { CreateObjectUrl, ListObjectApi } from '../../api/object';
-import { getToken } from '../../util/auth';
-import { getCurrentBucket } from '../../util/Bucket';
+import UploadFileDrawer from './components/UploadFileDrawer';
 
 const Search = Input.Search;
 
@@ -18,10 +16,8 @@ export default class FileManage extends Component {
       selectedRowKeys: [], // Check here to configure the default column
       objectList: [],
       bucketName: this.props.match.params.name,
-      bucketInfo: getCurrentBucket(),
-      filePath: '/',
-      hash: '',
-      fileSize: 0,
+      // 上传抽屉显示
+      visible: false,
     };
   }
 
@@ -67,7 +63,7 @@ export default class FileManage extends Component {
   onRowClick = (record, e) => {
     e.preventDefault();
     this.setState({
-      selectedRowKeys: [record.key],
+      selectedRowKeys: [record.id],
     });
   };
 
@@ -133,44 +129,20 @@ export default class FileManage extends Component {
     );
   };
 
-  uploadBtnOnchange = (info) => {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-      this.initObjectList();
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
+  showDrawer = () => {
+    this.setState({
+      visible: true,
+    });
   };
 
-  beforeUploadHook = async (file) => {
-    try {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onload = (evt) => {
-        if (evt.target.readyState === FileReader.DONE) {
-          const wordArray = CryptoJS.lib.WordArray.create(reader.result);
-          const hash = CryptoJS.SHA256(wordArray)
-            .toString()
-            .toUpperCase();
-          console.log(hash);
-          this.setState({
-            hash,
-            fileSize: file.size,
-          });
-          return true;
-        }
-      };
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
+  closeDrawer = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
-    const { objectList, selectedRowKeys, bucketInfo, filePath, hash, fileSize } = this.state;
+    const { objectList, selectedRowKeys, visible } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -180,24 +152,8 @@ export default class FileManage extends Component {
         <div className="head">
           <div className="header-line">
             <div className="left-btn-group">
-              <Upload
-                name="file"
-                action={CreateObjectUrl}
-                headers={{
-                  authorization: getToken(),
-                  Digest: hash,
-                  fileSize,
-                }}
-                data={{
-                  bucketId: bucketInfo.id,
-                  filePath,
-                }}
-                beforeUpload={this.beforeUploadHook}
-                onChange={this.uploadBtnOnchange}
-                style={{ marginRight: '10px' }}
-              >
-                <Button type="primary" icon="upload">上传</Button>
-              </Upload>
+              <Button type="primary" icon="upload" style={{ marginRight: '10px' }} onClick={this.showDrawer}>上传</Button>
+              <UploadFileDrawer onClose={this.closeDrawer} visible={visible} onSuccess={this.initObjectList} />
               <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
               <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
               <Dropdown overlay={this.menu}>
@@ -236,6 +192,7 @@ export default class FileManage extends Component {
             <Table rowSelection={rowSelection}
               dataSource={objectList}
               pagination={false}
+              rowKey="id"
               onRow={(record) => {
                 return {
                   onClick: (e) => {

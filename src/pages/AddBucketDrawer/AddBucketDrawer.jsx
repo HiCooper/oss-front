@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Drawer, Form, Input, Radio, message } from 'antd';
-import './index.scss';
 import { CreateBucketApi } from '../../api/bucket';
 
 const formItemLayout = {
@@ -24,10 +23,6 @@ class AddBucketDrawer extends Component {
       submitLoading: false,
     };
   }
-
-  onClose = () => {
-    this.props.onClose();
-  };
 
   createBucketSubmit = (e) => {
     this.setState({
@@ -65,9 +60,9 @@ class AddBucketDrawer extends Component {
         placement="right"
         closable
         maskClosable={false}
-        onClose={this.onClose}
+        onClose={this.props.onClose}
         visible={this.props.visible}
-        className="add-bucket-drawer"
+        className="oss-drawer"
         title="新建 Bucket"
       >
         <Form {...formItemLayout} onSubmit={this.createBucketSubmit}>
@@ -81,7 +76,7 @@ class AddBucketDrawer extends Component {
                 rules: [{ required: true, message: '请输入用户名!' }],
                 initialValue: name,
               })(
-                <Input placeholder="Bucket" allowClear onChange={this.inputNameChange} />
+                <Input placeholder="Bucket" allowClear />
               )
             }
           </Form.Item>
@@ -115,7 +110,7 @@ class AddBucketDrawer extends Component {
             >
               确认
             </Button>
-            <Button onClick={this.onClose}>
+            <Button onClick={this.props.onClose}>
               取消
             </Button>
           </div>

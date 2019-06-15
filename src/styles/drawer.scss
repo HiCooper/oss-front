@@ -1,12 +1,16 @@
-.add-bucket-drawer {
+.oss-drawer {
   top: 64px;
 
   .ant-drawer-body {
-    padding: 16px 0;
+    padding: 16px;
   }
 
   .ant-divider-horizontal{
     margin: 16px 0;
+  }
+
+  .ant-form-item-with-help {
+    margin-bottom: 20px;
   }
 
   .form-btn {
