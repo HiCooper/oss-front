@@ -36,14 +36,16 @@ export default class UploadFileDrawer extends Component {
     const bucketInfoFromStore = getCurrentBucket();
     this.state = {
       bucketInfo: bucketInfoFromStore,
-      currentFilePath: '/',
+      currentFilePath: this.props.currentPath,
       hash: '',
       fileSize: 0,
       acl: 'EXTEND_BUCKET',
       aclMessage: ACLMessageTable.EXTEND_BUCKET,
-      uploadPath: '/',
-      uploadPathMessage: `oss://${bucketInfoFromStore.name}/`,
-      radioSelect: '/',
+      uploadPath: this.props.currentPath,
+      uploadPathMessage: `oss://${bucketInfoFromStore.name + this.props.currentPath}`,
+      radioSelect: this.props.currentPath,
+      // 输入指定目录错误提示信息
+      inputPathErrorMsg: '',
     };
   }
 
@@ -106,8 +108,10 @@ export default class UploadFileDrawer extends Component {
               <li>不允许使用表情符，请使用符合要求的 UTF-8 字符</li>
               <li>
                 <code>/</code>
-                用于分割路径，可快速创建子目录，但，不要以
+                用于分割路径，可快速创建子目录，但不要以
                 <code>/</code>
+                或
+                <code>\</code>
                 打头，不要出现连续的
                 <code>/</code>
               </li>
@@ -134,15 +138,16 @@ export default class UploadFileDrawer extends Component {
 
   uploadPathInputChange = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
-    const val = e.target.value.length > 254 ? e.target.value.substr(0, 254) : e.target.value;
+    const value = e.target.value;
+    const errorMsg = checkInput(value);
     this.setState({
-      uploadPath: val,
+      uploadPath: value,
+      inputPathErrorMsg: errorMsg,
     });
   };
 
   render() {
-    const { bucketInfo, currentFilePath, radioSelect, uploadPath, hash, fileSize, acl, aclMessage, uploadPathMessage } = this.state;
+    const { bucketInfo, currentFilePath, radioSelect, uploadPath, hash, fileSize, acl, aclMessage, uploadPathMessage, inputPathErrorMsg } = this.state;
     return (
       <Drawer
         width={640}
@@ -167,6 +172,13 @@ export default class UploadFileDrawer extends Component {
             {
               radioSelect !== currentFilePath ? (
                 <Input placeholder="根目录" value={uploadPath} suffix={`${uploadPath.length}/254`} onChange={this.uploadPathInputChange} />
+              ) : null
+            }
+            {
+              inputPathErrorMsg ? (
+                <div style={{ lineHeight: '18px' }}>
+                  {inputPathErrorMsg}
+                </div>
               ) : null
             }
           </Form.Item>
@@ -217,6 +229,51 @@ export default class UploadFileDrawer extends Component {
     );
   }
 }
+
+const checkInput = function (value) {
+  let errorMsg = '';
+  if (value.startsWith('//')) {
+    errorMsg = (
+      <span style={styles.errorMsg}>
+          目录路径不允许出现连续的「/」
+      </span>
+    );
+  } else if (value.startsWith('/') || value.endsWith('\\')) {
+    errorMsg = (
+      <span style={styles.errorMsg}>
+          文件名不能以
+        <code>/</code>
+          或
+        <code>\</code>
+          开头和结尾。
+      </span>
+    );
+  } else if (value.length > 254) {
+    errorMsg = (
+      <span>
+          目录长度不超过 254 个字符
+      </span>
+    );
+  } else if (value.indexOf('..') !== -1) {
+    errorMsg = (
+      <span style={styles.errorMsg}>
+          不允许出现名为
+        <code>..</code>
+          的子目录
+      </span>
+    );
+  } else {
+    errorMsg = '';
+  }
+  return errorMsg;
+};
+
+const styles = {
+  errorMsg: {
+    color: 'red',
+    fontSize: '12px',
+  },
+};
 
 const uploadHelpMessage = (
   <div className="upload-help-info">

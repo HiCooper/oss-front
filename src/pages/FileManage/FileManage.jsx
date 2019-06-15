@@ -18,6 +18,7 @@ export default class FileManage extends Component {
       bucketName: this.props.match.params.name,
       // 上传抽屉显示
       visible: false,
+      currentPath: '/',
     };
   }
 
@@ -142,7 +143,7 @@ export default class FileManage extends Component {
   };
 
   render() {
-    const { objectList, selectedRowKeys, visible } = this.state;
+    const { objectList, selectedRowKeys, visible, currentPath } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -153,7 +154,7 @@ export default class FileManage extends Component {
           <div className="header-line">
             <div className="left-btn-group">
               <Button type="primary" icon="upload" style={{ marginRight: '10px' }} onClick={this.showDrawer}>上传</Button>
-              <UploadFileDrawer onClose={this.closeDrawer} visible={visible} onSuccess={this.initObjectList} />
+              <UploadFileDrawer currentPath={currentPath} onClose={this.closeDrawer} visible={visible} onSuccess={this.initObjectList} />
               <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
               <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
               <Dropdown overlay={this.menu}>
