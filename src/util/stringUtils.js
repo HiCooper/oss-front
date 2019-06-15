@@ -76,76 +76,41 @@ export function checkParams(params, ignoreKeys) {
  */
 export function getIconByFileName(fileName) {
   fileName = fileName.toLowerCase();
+  if (fileName.indexOf('.') === -1) {
+    return 'folder';
+  }
   // 图片
-  if (fileName.endsWith('.jpg')) {
+  if (fileName.endsWith('.jpg')
+    || fileName.endsWith('.jpeg')
+    || fileName.endsWith('.svg')
+    || fileName.endsWith('.png')
+    || fileName.endsWith('.bmg')
+  || fileName.endsWith('.gif')) {
     return 'file-image';
   }
-  if (fileName.endsWith('.jpeg')) {
-    return 'file-image';
-  }
-  if (fileName.endsWith('.png')) {
-    return 'picture';
-  }
-  if (fileName.endsWith('.svg')) {
-    return 'picture';
-  }
-  if (fileName.endsWith('.bmg')) {
-    return 'picture';
-  }
-  if (fileName.endsWith('.gif')) {
-    return 'picture';
-    //  办公文档
-  }
-  if (fileName.endsWith('.xls')) {
+  //  办公文档
+  if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
     return 'file-excel';
   }
-  if (fileName.endsWith('.xlsx')) {
-    return 'file-excel';
+  if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+    return 'file-word';
   }
-  if (fileName.endsWith('.doc')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.docx')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.ppt')) {
-    return 'file-ppt';
-  }
-  if (fileName.endsWith('.pptx')) {
+  if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) {
     return 'file-ppt';
   }
   if (fileName.endsWith('.pdf')) {
     return 'file-pdf';
-    // 程序文件
-  }
-  if (fileName.endsWith('.json')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.yml')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.js')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.html')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.css')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.scss')) {
-    return '#iconfile_img1';
-  }
-  if (fileName.endsWith('.less')) {
-    return '#iconfile_img1';
   }
   if (fileName.endsWith('.md')) {
-    return '#iconfile_img1';
+    return 'file-markdown';
   }
-  if (fileName.endsWith('.jsx')) {
-    return '#iconfile_img1';
+  if (fileName.endsWith('.zip')) {
+    return 'file-zip';
   }
-  return '#iconfile-b-3';
+  if (fileName.endsWith('.txt')) {
+    return 'file-text';
+  }
+  return 'folder';
 }
 
 /**

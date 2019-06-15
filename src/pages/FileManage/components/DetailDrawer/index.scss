@@ -1,0 +1,46 @@
+.oss-op-file-preview {
+
+  .preview-con {
+    position: relative;
+    margin-bottom: 12px;
+
+    .the-previewer-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 360px;
+      background-color: #f5f5f6;
+      color: #9b9ea0;
+
+
+      img{
+        max-width: 100%;
+        max-height: 360px;
+        display: block;
+      }
+    }
+  }
+
+  .detail-form {
+
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+
+    .ant-form-item-label , .ant-form-item-control{
+      line-height: normal;
+    }
+
+    .object-url {
+      font-size: 12px;
+      padding: 8px;
+      line-height: 1.4;
+      color: #262626;
+      border: 1px solid #d7d8d9;
+      white-space: normal;
+      word-break: break-all;
+      word-wrap: break-word;
+    }
+  }
+
+}

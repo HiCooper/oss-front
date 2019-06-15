@@ -4,6 +4,7 @@ import { getIconByFileName } from '../../util/stringUtils';
 import { ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
+import DetailDrawer from './components/DetailDrawer';
 
 const Search = Input.Search;
 
@@ -19,6 +20,8 @@ export default class FileManage extends Component {
       // 上传抽屉显示
       visible: false,
       currentPath: '/',
+      // 详情抽屉显示
+      detailVisible: false,
     };
   }
 
@@ -116,10 +119,25 @@ export default class FileManage extends Component {
     </Menu>
   );
 
-  renderOperate = () => {
+  detailDrawerClose = () => {
+    this.setState({
+      detailVisible: false,
+    });
+  };
+
+  detailDrawerShow = () => {
+    this.setState({
+      detailVisible: true,
+    });
+  };
+
+  renderOperate = (text, record) => {
+    const { detailVisible } = this.state;
+    console.log(record);
     return (
       <div>
-        <Button type="link" size="small">详情</Button>
+        <Button type="link" size="small" onClick={this.detailDrawerShow}>详情</Button>
+        <DetailDrawer info={record} onClose={this.detailDrawerClose} visible={detailVisible} />
         <Dropdown overlay={this.moreMenu} size="small">
           <Button type="link" size="small">
             更多
@@ -154,7 +172,11 @@ export default class FileManage extends Component {
           <div className="header-line">
             <div className="left-btn-group">
               <Button type="primary" icon="upload" style={{ marginRight: '10px' }} onClick={this.showDrawer}>上传</Button>
-              <UploadFileDrawer currentPath={currentPath} onClose={this.closeDrawer} visible={visible} onSuccess={this.initObjectList} />
+              <UploadFileDrawer currentPath={currentPath}
+                onClose={this.closeDrawer}
+                visible={visible}
+                onSuccess={this.initObjectList}
+              />
               <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
               <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
               <Dropdown overlay={this.menu}>

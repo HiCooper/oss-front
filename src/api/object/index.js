@@ -13,3 +13,9 @@ export const ListObjectApi = params => axios.get('/api/object/list', { params })
  * @type {string}
  */
 export const CreateObjectUrl = `${axios.defaults.baseURL}/api/object/create`;
+
+/**
+ * 查看图片类 对象
+ * @type {string}
+ */
+export const GetPicUrl = `${axios.defaults.baseURL}/api/object`;
