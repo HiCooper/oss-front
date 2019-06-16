@@ -71,14 +71,14 @@ export function checkParams(params, ignoreKeys) {
 
 /**
  * 根据文件名，获取svg图标名
- * @param fileName
+ * @param record
  * @returns {string}
  */
-export function getIconByFileName(fileName) {
-  fileName = fileName.toLowerCase();
-  if (fileName.indexOf('.') === -1) {
+export function getIconByFileName(record) {
+  if (record.isDir) {
     return 'folder';
   }
+  const fileName = record.fileName.toLowerCase();
   // 图片
   if (fileName.endsWith('.jpg')
     || fileName.endsWith('.jpeg')
@@ -110,7 +110,7 @@ export function getIconByFileName(fileName) {
   if (fileName.endsWith('.txt')) {
     return 'file-text';
   }
-  return 'folder';
+  return 'file-unknown';
 }
 
 /**

@@ -24,12 +24,6 @@ export const GetObjectHeadApi = params => axios.get('/api/object/head_object', {
 export const CreateObjectUrl = `${axios.defaults.baseURL}/api/object/create`;
 
 /**
- * 查看图片类 对象 部分url
- * @type {string}
- */
-export const GetPicUrl = `${axios.defaults.baseURL}/api/object`;
-
-/**
  * 生成临时访问对象 url
  * @param params
  * @returns {Promise<AxiosResponse<any> | never>}

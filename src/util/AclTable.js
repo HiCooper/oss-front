@@ -1,4 +1,5 @@
 const AclTable = {
+  EXTEND_BUCKET: '继承 Bucket',
   PRIVATE: '私有',
   PUBLIC_READ: '公开读',
   PUBLIC: '公开',

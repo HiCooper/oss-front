@@ -213,7 +213,7 @@ class BasicLayout extends Component {
             <Popover placement="bottomRight" title={this.text()} content={this.content()} trigger="click" className="personal-info">
               <div>
                 <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
-                  {username.substr(0, 1)}
+                  {username.substr(0, 1).toLocaleUpperCase()}
                 </Avatar>
                 <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
                   {username}

@@ -54,34 +54,41 @@ export default class UploadFileDrawer extends Component {
       console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
+      message.success(`${info.file.name} ${info.file.response.data && info.file.response.data}`);
       this.props.onSuccess();
+      this.props.onClose();
     } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
+      message.error(`${info.file.name} 上传失败，${info.file.response.msg}`);
     }
   };
 
   beforeUploadHook = async (file) => {
+    console.log(file);
+    // 检查 目录
+    const { uploadPath } = this.state;
+    if (!uploadPath || !uploadPath.trim()) {
+      await this.setState({
+        inputPathErrorMsg: <span style={styles.errorMsg}>指定目录不能为空</span>,
+      });
+      message.warning('指定目录不能为空');
+      return Promise.reject('指定目录不能为空');
+    }
     try {
       const reader = new FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onload = (evt) => {
+      await reader.readAsArrayBuffer(file);
+      reader.onload = async (evt) => {
         if (evt.target.readyState === FileReader.DONE) {
           const wordArray = CryptoJS.lib.WordArray.create(reader.result);
-          const hash = CryptoJS.SHA256(wordArray)
-            .toString()
-            .toUpperCase();
-          console.log(hash);
-          this.setState({
+          const hash = CryptoJS.SHA256(wordArray).toString().toUpperCase();
+          await this.setState({
             hash,
             fileSize: file.size,
           });
-          return true;
         }
+        return Promise.resolve();
       };
     } catch (e) {
-      console.error(e);
-      return false;
+      return Promise.reject(e);
     }
   };
 
@@ -95,9 +102,10 @@ export default class UploadFileDrawer extends Component {
 
   currentFilePathChange = (e) => {
     e.preventDefault();
-    const { uploadPath, uploadPathMessage, bucketInfo, currentFilePath } = this.state;
+    const { uploadPath, uploadPathMessage, bucketInfo, currentFilePath, inputPathErrorMsg } = this.state;
     let msg = uploadPathMessage;
     let path = uploadPath;
+    let inputErrorMsg = inputPathErrorMsg;
     if (e.target.value !== currentFilePath) {
       path = '';
       msg = (
@@ -128,11 +136,13 @@ export default class UploadFileDrawer extends Component {
     } else {
       path = currentFilePath;
       msg = `oss://${bucketInfo.name}/`;
+      inputErrorMsg = '';
     }
     this.setState({
       radioSelect: e.target.value,
       uploadPathMessage: msg,
       uploadPath: path,
+      inputPathErrorMsg: inputErrorMsg,
     });
   };
 
@@ -200,6 +210,7 @@ export default class UploadFileDrawer extends Component {
             help={uploadHelpMessage}
           >
             <Dragger
+              accept="image/*,audio/*,video/*,.pdf,.doc,.docx,xls,.xlsx,.ppt,.pptx"
               name="file"
               action={CreateObjectUrl}
               multiple
@@ -210,7 +221,8 @@ export default class UploadFileDrawer extends Component {
               }}
               data={{
                 bucketId: bucketInfo.id,
-                currentFilePath,
+                filePath: uploadPath,
+                acl,
               }}
               beforeUpload={this.beforeUploadHook}
               onChange={this.uploadBtnOnchange}

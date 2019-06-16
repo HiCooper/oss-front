@@ -4,6 +4,7 @@ import './index.scss';
 import { GenerateUrlWithSignedApi, GetObjectHeadApi } from '../../../../api/object';
 import { getAclDesc } from '../../../../util/AclTable';
 import { getCurrentBucket } from '../../../../util/Bucket';
+import { getIconByFileName } from '../../../../util/stringUtils';
 
 const formItemLayout = {
   labelCol: {
@@ -100,57 +101,102 @@ class DetailDrawer extends Component {
           <div className="preview-con">
             <div className="the-previewer-wrapper">
               {
-                pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1 ? (
+                !detailInfo.isDir && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1 ? (
                   <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
-                ) : <span>文件无法预览。</span>
+                ) : (
+                  <div style={{ textAlign: 'center' }}>
+                    <Icon type={getIconByFileName(detailInfo)}
+                      theme="filled"
+                      style={{
+                        color: '#ffeb3b',
+                        marginRight: '8px',
+                        fontSize: '200px',
+                      }}
+                    />
+                    <p>{detailInfo.fileName}</p>
+                  </div>
+                )
               }
             </div>
           </div>
           <Form {...formItemLayout} className="detail-form">
-            <Form.Item
-              label="文件名"
-              validateStatus="success"
-            >
-              {detailInfo.fileName}
-            </Form.Item>
-            <Form.Item
-              label="ETag"
-              validateStatus="success"
-            >
-              {objectHeadInfo.eTag}
-            </Form.Item>
-            <Form.Item
-              label={(
-                <span>
+            {
+              !detailInfo.isDir ? (
+                <div>
+                  <Form.Item
+                    label="文件名"
+                    validateStatus="success"
+                  >
+                    {detailInfo.fileName}
+                  </Form.Item>
+                  <Form.Item
+                    label="ETag"
+                    validateStatus="success"
+                  >
+                    {objectHeadInfo.eTag}
+                  </Form.Item>
+                  <Form.Item
+                    label={(
+                      <span>
                 链接有效时间
-                  <Tooltip autoAdjustOverflow arrowPointAtCenter placement="topLeft" title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件">
-                    <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
-                  </Tooltip>
-                </span>
-              )}
-              validateStatus="success"
-            >
-              <InputNumber min={60} max={64800} defaultValue={3600} onChange={this.onChange} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item
-              label="URL"
-              validateStatus="success"
-            >
-              <div className="object-url">
-                {`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`}
-              </div>
-            </Form.Item>
-            <Form.Item
-              label="类型"
-              validateStatus="success"
-            >
-              {detailInfo.category}
-            </Form.Item>
+                        <Tooltip autoAdjustOverflow arrowPointAtCenter placement="topLeft" title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件">
+                          <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
+                        </Tooltip>
+                      </span>
+                    )}
+                    validateStatus="success"
+                  >
+                    <InputNumber min={60} max={64800} defaultValue={3600} onChange={this.onChange} style={{ width: '100%' }} />
+                  </Form.Item>
+                  <Form.Item
+                    label="URL"
+                    validateStatus="success"
+                  >
+                    <div className="object-url">
+                      {`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`}
+                    </div>
+                  </Form.Item>
+                  <Form.Item
+                    label="类型"
+                    validateStatus="success"
+                  >
+                    {detailInfo.category}
+                  </Form.Item>
+                </div>
+              ) : (
+                <div>
+                  <Form.Item
+                    label="文件类型"
+                    validateStatus="success"
+                  >
+                    文件夹
+                  </Form.Item>
+                  <Form.Item
+                    label="大小"
+                    validateStatus="success"
+                  >
+                    100M
+                  </Form.Item>
+                  <Form.Item
+                    label="子文件"
+                    validateStatus="success"
+                  >
+                    11项
+                  </Form.Item>
+                </div>
+              )
+            }
             <Form.Item
               label="文件ACL"
               validateStatus="success"
             >
               {getAclDesc(detailInfo.acl)}
+            </Form.Item>
+            <Form.Item
+              label="上次修改时间"
+              validateStatus="success"
+            >
+              {detailInfo.updateTime}
             </Form.Item>
           </Form>
         </div>
