@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { Drawer, Form } from 'antd';
+import { Drawer, Form, Icon, InputNumber, Tooltip } from 'antd';
 import './index.scss';
-import { GetPicUrl } from '../../../../api/object';
+import { GenerateUrlWithSignedApi, GetObjectHeadApi } from '../../../../api/object';
 import { getAclDesc } from '../../../../util/AclTable';
+import { getCurrentBucket } from '../../../../util/Bucket';
 
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
     s: { span: 5 },
-    sm: { span: 4 },
+    sm: { span: 5 },
   },
   wrapperCol: {
     xs: { span: 24 },
     s: { span: 19 },
-    sm: { span: 20 },
+    sm: { span: 19 },
   },
 };
+const bucketInfo = getCurrentBucket();
 const pictureShowType = 'png, jpg, jpeg, bmg, gif, svg';
 class DetailDrawer extends Component {
   static displayName = 'DetailDrawer';
@@ -24,11 +26,65 @@ class DetailDrawer extends Component {
     super(props);
     this.state = {
       detailInfo: this.props.info,
+      timeout: 3600,
+      genTempUrlInfo: {},
+      objectHeadInfo: {},
     };
   }
 
-  render() {
+  onChange = async (value) => {
+    console.log('changed', value);
+    await this.setState({
+      timeout: value,
+    });
+    if (value >= 60 && value <= 64800) {
+      this.generateUrlWithSigned();
+    }
+  };
+
+  componentDidMount() {
+    this.generateUrlWithSigned();
+    this.getObjectHeadInfo();
+  }
+
+  getObjectHeadInfo = () => {
     const { detailInfo } = this.state;
+    const params = {
+      path: detailInfo.filePath,
+      bucket: bucketInfo.name,
+      objectName: detailInfo.fileName,
+    };
+    GetObjectHeadApi(params).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          objectHeadInfo: res.data,
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  };
+
+  generateUrlWithSigned = () => {
+    const { detailInfo, timeout } = this.state;
+    const params = {
+      bucket: bucketInfo.name,
+      objectName: detailInfo.fileName,
+      timeout,
+    };
+    GenerateUrlWithSignedApi(params).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          genTempUrlInfo: res.data,
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  };
+
+  render() {
+    const { detailInfo, genTempUrlInfo, objectHeadInfo } = this.state;
     return (
       <Drawer
         width={640}
@@ -45,7 +101,7 @@ class DetailDrawer extends Component {
             <div className="the-previewer-wrapper">
               {
                 pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1 ? (
-                  <img src={`${GetPicUrl}/${detailInfo.fileName}`} alt="文件无法预览。" />
+                  <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
                 ) : <span>文件无法预览。</span>
               }
             </div>
@@ -61,14 +117,27 @@ class DetailDrawer extends Component {
               label="ETag"
               validateStatus="success"
             >
-              未获取
+              {objectHeadInfo.eTag}
+            </Form.Item>
+            <Form.Item
+              label={(
+                <span>
+                链接有效时间
+                  <Tooltip autoAdjustOverflow arrowPointAtCenter placement="topLeft" title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件">
+                    <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
+                  </Tooltip>
+                </span>
+              )}
+              validateStatus="success"
+            >
+              <InputNumber min={60} max={64800} defaultValue={3600} onChange={this.onChange} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item
               label="URL"
               validateStatus="success"
             >
               <div className="object-url">
-                {`${GetPicUrl}/${detailInfo.fileName}`}
+                {`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`}
               </div>
             </Form.Item>
             <Form.Item

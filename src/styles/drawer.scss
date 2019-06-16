@@ -1,8 +1,14 @@
 .oss-drawer {
   top: 64px;
 
+  .ant-drawer-wrapper-body {
+    overflow: hidden !important;
+  }
+
   .ant-drawer-body {
     padding: 16px;
+    overflow: auto;
+    height: 100%;
   }
 
   .ant-divider-horizontal{

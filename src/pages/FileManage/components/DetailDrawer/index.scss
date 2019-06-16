@@ -28,19 +28,26 @@
     }
 
     .ant-form-item-label , .ant-form-item-control{
-      line-height: normal;
+      line-height: 30px;
+    }
+
+    label, span {
+      font-size: 12px;
+      color: #060606;
+      line-height: 30px;
     }
 
     .object-url {
       font-size: 12px;
       padding: 8px;
       line-height: 1.4;
-      color: #262626;
+      color: #060606;
       border: 1px solid #d7d8d9;
       white-space: normal;
       word-break: break-all;
       word-wrap: break-word;
     }
+
   }
 
 }
