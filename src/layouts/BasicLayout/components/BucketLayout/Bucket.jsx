@@ -35,7 +35,7 @@ export default class Bucket extends Component {
   };
 
   getBucketInfo = () => {
-    GetBucketApi({name: this.state.bucketName}).then((res) => {
+    GetBucketApi({ name: this.state.bucketName }).then((res) => {
       if (res.msg === 'SUCCESS') {
         this.setState({
           bucketInfo: res.data,

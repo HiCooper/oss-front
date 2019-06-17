@@ -18,14 +18,16 @@ const formItemLayout = {
     sm: { span: 19 },
   },
 };
-const bucketInfo = getCurrentBucket();
 const pictureShowType = 'png, jpg, jpeg, bmg, gif, svg';
+
 class DetailDrawer extends Component {
   static displayName = 'DetailDrawer';
 
   constructor(props) {
     super(props);
+    const bucketInfo = getCurrentBucket();
     this.state = {
+      bucketInfo,
       detailInfo: this.props.info,
       timeout: 3600,
       genTempUrlInfo: {},
@@ -49,39 +51,65 @@ class DetailDrawer extends Component {
   }
 
   getObjectHeadInfo = () => {
-    const { detailInfo } = this.state;
+    const { detailInfo, bucketInfo } = this.state;
     const params = {
       path: detailInfo.filePath,
       bucket: bucketInfo.name,
       objectName: detailInfo.fileName,
     };
-    GetObjectHeadApi(params).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          objectHeadInfo: res.data,
-        });
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    GetObjectHeadApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            objectHeadInfo: res.data,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   generateUrlWithSigned = () => {
-    const { detailInfo, timeout } = this.state;
+    const { detailInfo, timeout, bucketInfo } = this.state;
     const params = {
       bucket: bucketInfo.name,
       objectName: detailInfo.fileName,
       timeout,
     };
-    GenerateUrlWithSignedApi(params).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          genTempUrlInfo: res.data,
-        });
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    GenerateUrlWithSignedApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            genTempUrlInfo: res.data,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  renderFilePreview = () => {
+    const { detailInfo, genTempUrlInfo } = this.state;
+    if (!detailInfo.isDir && detailInfo.category && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+      return (
+        <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
+      );
+    }
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <Icon type={getIconByFileName(detailInfo)}
+          theme="filled"
+          style={{
+            color: '#ffeb3b',
+            marginRight: '8px',
+            fontSize: '200px',
+          }}
+        />
+        <p>{detailInfo.fileName}</p>
+      </div>
+    );
   };
 
   render() {
@@ -101,21 +129,7 @@ class DetailDrawer extends Component {
           <div className="preview-con">
             <div className="the-previewer-wrapper">
               {
-                !detailInfo.isDir && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1 ? (
-                  <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
-                ) : (
-                  <div style={{ textAlign: 'center' }}>
-                    <Icon type={getIconByFileName(detailInfo)}
-                      theme="filled"
-                      style={{
-                        color: '#ffeb3b',
-                        marginRight: '8px',
-                        fontSize: '200px',
-                      }}
-                    />
-                    <p>{detailInfo.fileName}</p>
-                  </div>
-                )
+                this.renderFilePreview()
               }
             </div>
           </div>
@@ -139,14 +153,23 @@ class DetailDrawer extends Component {
                     label={(
                       <span>
                 链接有效时间
-                        <Tooltip autoAdjustOverflow arrowPointAtCenter placement="topLeft" title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件">
+                        <Tooltip autoAdjustOverflow
+                          arrowPointAtCenter
+                          placement="topLeft"
+                          title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件"
+                        >
                           <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
                         </Tooltip>
                       </span>
                     )}
                     validateStatus="success"
                   >
-                    <InputNumber min={60} max={64800} defaultValue={3600} onChange={this.onChange} style={{ width: '100%' }} />
+                    <InputNumber min={60}
+                      max={64800}
+                      defaultValue={3600}
+                      onChange={this.onChange}
+                      style={{ width: '100%' }}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="URL"

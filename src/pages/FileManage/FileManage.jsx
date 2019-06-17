@@ -263,6 +263,11 @@ export default class FileManage extends Component {
             <Breadcrumb separator=">">
               {
                 pathQueue.map((item, index) => {
+                  if (index === pathQueue.length - 1) {
+                    return (
+                      <Breadcrumb.Item key={index} style={{ margin: '0 9px', cursor: 'point', lineHeight: '32px' }}>{item.name}</Breadcrumb.Item>
+                    );
+                  }
                   return (
                     <Breadcrumb.Item key={index} onClick={e => this.goPath(item.path, e)}>
                       <Button type="link">{item.name}</Button>

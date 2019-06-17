@@ -5,6 +5,7 @@ export function getCurrentBucket() {
   if (bucket) {
     return JSON.parse(bucket);
   }
+  window.location.replace(`${window.location.protocol}//${window.location.host}/#/`);
   return null;
 }
 

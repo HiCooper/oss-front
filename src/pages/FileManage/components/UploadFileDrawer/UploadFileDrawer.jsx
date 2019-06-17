@@ -210,7 +210,7 @@ export default class UploadFileDrawer extends Component {
             help={uploadHelpMessage}
           >
             <Dragger
-              accept="image/*,audio/*,video/*,.pdf,.doc,.docx,xls,.xlsx,.ppt,.pptx"
+              accept="image/*,audio/*,video/*,.pdf,.doc,.docx,xls,.xlsx,.ppt,.pptx,.md,.xml,.json"
               name="file"
               action={CreateObjectUrl}
               multiple

@@ -26,6 +26,17 @@
 
   .list-content{
     height: calc(100% - 62px);
+
+    .ant-breadcrumb {
+      border-left: 3px solid #2f54eb;
+    }
+
+    .breadcrumb .ant-btn{
+      padding: 0 8px;
+    }
+    .ant-breadcrumb-separator {
+      margin: 0;
+    }
   }
 
   .table {
