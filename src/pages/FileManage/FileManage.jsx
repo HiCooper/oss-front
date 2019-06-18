@@ -27,6 +27,8 @@ export default class FileManage extends Component {
         name: '我的文件',
         path: '/',
       }],
+      // 文件列表加载状态
+      tableLoading: false,
     };
   }
 
@@ -34,9 +36,15 @@ export default class FileManage extends Component {
     this.initObjectList();
   }
 
-  initObjectList = () => {
+  initObjectList = async () => {
     const { currentPath } = this.state;
-    ListObjectApi({ bucketName: this.state.bucketName, path: currentPath })
+    await this.setState({
+      tableLoading: true,
+    });
+    await ListObjectApi({
+      bucketName: this.state.bucketName,
+      path: currentPath,
+    })
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           this.setState({
@@ -47,6 +55,9 @@ export default class FileManage extends Component {
       .catch((e) => {
         console.error(e);
       });
+    this.setState({
+      tableLoading: false,
+    });
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -217,7 +228,7 @@ export default class FileManage extends Component {
   };
 
   render() {
-    const { pathQueue, objectList, selectedRowKeys, visible, currentPath, detailVisible, currentRecord } = this.state;
+    const { pathQueue, tableLoading, objectList, selectedRowKeys, visible, currentPath, detailVisible, currentRecord } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -265,7 +276,15 @@ export default class FileManage extends Component {
                 pathQueue.map((item, index) => {
                   if (index === pathQueue.length - 1) {
                     return (
-                      <Breadcrumb.Item key={index} style={{ margin: '0 9px', cursor: 'point', lineHeight: '32px' }}>{item.name}</Breadcrumb.Item>
+                      <Breadcrumb.Item key={index}
+                        style={{
+                          margin: '0 9px',
+                          cursor: 'point',
+                          lineHeight: '32px',
+                        }}
+                      >
+                        {item.name}
+                      </Breadcrumb.Item>
                     );
                   }
                   return (
@@ -283,6 +302,7 @@ export default class FileManage extends Component {
               dataSource={objectList}
               pagination={false}
               rowKey="id"
+              loading={tableLoading}
               onRow={(record) => {
                 return {
                   onClick: (e) => {

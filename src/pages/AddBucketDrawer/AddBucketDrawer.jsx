@@ -14,6 +14,13 @@ const formItemLayout = {
     sm: { span: 20 },
   },
 };
+
+
+const ACLMessageTable = {
+  PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
+  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
+  PUBLIC: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
+};
 class AddBucketDrawer extends Component {
   static displayName = 'AddBucketDrawer';
 
@@ -23,6 +30,7 @@ class AddBucketDrawer extends Component {
       acl: 'PRIVATE',
       name: '',
       submitLoading: false,
+      aclMessage: ACLMessageTable.PRIVATE,
     };
   }
 
@@ -33,14 +41,13 @@ class AddBucketDrawer extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         CreateBucketApi(values).then((res) => {
           if (res.msg === 'SUCCESS') {
             message.success(`创建 Bucket ${values.name}成功!`);
             this.props.flushList();
-            this.onClose();
+            this.props.onClose();
           } else {
-            message.error('创建失败');
+            message.error(res.msg);
           }
         }).catch((error) => {
           console.error(error);
@@ -53,8 +60,27 @@ class AddBucketDrawer extends Component {
     });
   };
 
+  aclChange = (e) => {
+    e.preventDefault();
+    this.setState({
+      aclMessage: ACLMessageTable[e.target.value],
+    });
+  };
+
+  checkBucketName = (rule, value, callback) => {
+    if (!value || value.trim().length < 3 || value.trim().length > 63) {
+      callback(<span style={{ fontSize: '12px' }}>请输入 Bucket 名称，3-63个字符长度</span>);
+      return;
+    }
+    if (!/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/.test(value)) {
+      callback(<span style={{ fontSize: '12px' }}>只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾</span>);
+      return;
+    }
+    callback();
+  };
+
   render() {
-    const { name, acl, submitLoading } = this.state;
+    const { name, acl, submitLoading, aclMessage } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
@@ -68,14 +94,14 @@ class AddBucketDrawer extends Component {
         title="新建 Bucket"
       >
         <Form {...formItemLayout} onSubmit={this.createBucketSubmit}>
-          <Form.Item
-            label="Bucket 名称"
-            validateStatus="success"
-            help="最多63个字母或数字"
-          >
+          <Form.Item label="Bucket 名称" extra={<span style={{ fontSize: '12px' }}>Bucket 名称，3-63 个字符</span>}>
             {
               getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入用户名!' }],
+                rules: [
+                  { required: true, message: '请输入 Bucket 名称' },
+                  { min: 3, max: 63, message: <span style={{ fontSize: '12px' }}>3-63个字符长度,</span> },
+                  { pattern: /^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/, message: <span style={{ fontSize: '12px' }}>只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾</span> },
+                ],
                 initialValue: name,
               })(
                 <Input placeholder="Bucket" allowClear />
@@ -86,14 +112,14 @@ class AddBucketDrawer extends Component {
           <Form.Item
             label="读写权限"
             validateStatus="success"
-            help="私有：对文件的所有访问操作需要进行身份验证。"
+            help={aclMessage}
           >
             {
               getFieldDecorator('acl', {
                 rules: [{ required: true, message: '请选择读写权限!' }],
                 initialValue: acl,
               })(
-                <Radio.Group>
+                <Radio.Group onChange={this.aclChange}>
                   <Radio.Button value="PRIVATE">私有</Radio.Button>
                   <Radio.Button value="PUBLIC_READ">公共读</Radio.Button>
                   <Radio.Button value="PUBLIC">公共读写</Radio.Button>
