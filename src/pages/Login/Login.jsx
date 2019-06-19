@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import { Button, Checkbox, Form, Icon, Input, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { UserLoginApi } from '../../api/user';
 import { removeAll, setToken, setUserInfo } from '../../util/auth';

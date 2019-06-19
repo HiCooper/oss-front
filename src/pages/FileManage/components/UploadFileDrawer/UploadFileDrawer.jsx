@@ -212,7 +212,7 @@ export default class UploadFileDrawer extends Component {
             <Dragger
               accept="image/*,audio/*,video/*,.pdf,.doc,.docx,xls,.xlsx,.ppt,.pptx,.md,.xml,.json"
               name="file"
-              action={CreateObjectUrl}
+              action={CreateObjectUrl({ bucket: bucketInfo.name })}
               multiple
               headers={{
                 authorization: getToken(),
@@ -220,7 +220,7 @@ export default class UploadFileDrawer extends Component {
                 fileSize,
               }}
               data={{
-                bucketId: bucketInfo.id,
+                bucket: bucketInfo.name,
                 filePath: uploadPath,
                 acl,
               }}

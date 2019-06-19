@@ -42,7 +42,7 @@ export default class FileManage extends Component {
       tableLoading: true,
     });
     await ListObjectApi({
-      bucketName: this.state.bucketName,
+      bucket: this.state.bucketName,
       path: currentPath,
     })
       .then((res) => {

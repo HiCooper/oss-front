@@ -5,7 +5,7 @@ import axios from '../config';
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const ListObjectApi = params => axios.get('/api/object/list', { params })
+export const ListObjectApi = params => axios.get(`/api/${params.bucket}/list_objects.json`, { params })
   .then(res => res.data);
 
 /**
@@ -14,14 +14,16 @@ export const ListObjectApi = params => axios.get('/api/object/list', { params })
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GetObjectHeadApi = params => axios.get('/api/object/head_object', { params })
+export const GetObjectHeadApi = params => axios.get(`/api/${params.bucket}/head_object.json`, { params })
   .then(res => res.data);
 
 /**
  * 创建 Object
- * @type {string}
+ * @param params
+ * @returns {string}
+ * @constructor
  */
-export const CreateObjectUrl = `${axios.defaults.baseURL}/api/object/create`;
+export const CreateObjectUrl = params => `${axios.defaults.baseURL}/api/${params.bucket}/create`;
 
 /**
  * 生成临时访问对象 url
@@ -29,4 +31,4 @@ export const CreateObjectUrl = `${axios.defaults.baseURL}/api/object/create`;
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GenerateUrlWithSignedApi = params => axios.post('/api/object/generate_url_with_signed', params).then(res => res.data);
+export const GenerateUrlWithSignedApi = params => axios.post(`/api/${params.bucket}/generate_url_with_signed.json`, params).then(res => res.data);
