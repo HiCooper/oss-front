@@ -27,6 +27,15 @@ export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delet
   .then(res => res.data);
 
 /**
+ * 新建目录
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_folder.json', params )
+  .then(res => res.data);
+
+/**
  * 设置 对象的ACL权限
  * @param params
  * @returns {Promise<AxiosResponse<any> | never>}

@@ -35,16 +35,16 @@ class AddBucketDrawer extends Component {
   }
 
   createBucketSubmit = (e) => {
+    e.preventDefault();
     this.setState({
       submitLoading: true,
     });
-    e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         CreateBucketApi(values).then((res) => {
           if (res.msg === 'SUCCESS') {
             message.success(`创建 Bucket ${values.name}成功!`);
-            this.props.flushList();
+            this.props.onSuccess();
             this.props.onClose();
           } else {
             message.error(res.msg);
@@ -76,12 +76,15 @@ class AddBucketDrawer extends Component {
       callback(<span style={{ fontSize: '12px' }}>只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾</span>);
       return;
     }
+    this.setState({
+      name: value,
+    });
     callback();
   };
 
   render() {
     const { name, acl, submitLoading, aclMessage } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, getFieldError } = this.props.form;
     return (
       <Drawer
         width={640}
@@ -98,13 +101,11 @@ class AddBucketDrawer extends Component {
             {
               getFieldDecorator('name', {
                 rules: [
-                  { required: true, message: '请输入 Bucket 名称' },
-                  { min: 3, max: 63, message: <span style={{ fontSize: '12px' }}>3-63个字符长度,</span> },
-                  { pattern: /^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/, message: <span style={{ fontSize: '12px' }}>只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾</span> },
+                  { validator: this.checkBucketName},
                 ],
                 initialValue: name,
               })(
-                <Input placeholder="Bucket" allowClear />
+                <Input placeholder="Bucket" suffix={`${name.length}/254`} />
               )
             }
           </Form.Item>
@@ -135,6 +136,7 @@ class AddBucketDrawer extends Component {
               style={{
                 marginRight: 8,
               }}
+              disabled={!!getFieldError('name') || !name}
             >
               确认
             </Button>

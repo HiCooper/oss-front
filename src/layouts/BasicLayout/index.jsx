@@ -248,7 +248,7 @@ class BasicLayout extends Component {
                   <Popover placement="top" content="新建Bucket" trigger="hover">
                     <Icon type="plus" style={{ cursor: 'pointer', marginRight: '8px' }} onClick={this.showDrawer} />
                   </Popover>
-                  <AddBucketDrawer onClose={this.onClose} visible={visible} flushList={this.initBucketList} />
+                  <AddBucketDrawer onClose={this.onClose} visible={visible} onSuccess={this.initBucketList} />
                   <Popover placement="top" content="刷新" trigger="hover">
                     <Icon type="sync" style={{ cursor: 'pointer' }} onClick={this.flushList} />
                   </Popover>

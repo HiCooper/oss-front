@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Modal, Table } from 'antd';
 import { getIconByFileName } from '../../util/stringUtils';
 import { DeleteObjectHeadApi, ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
+import AddFolderDrawer from './components/AddFolderDrawer';
 
 const Search = Input.Search;
+
+const confirm = Modal.confirm;
 
 export default class FileManage extends Component {
   static displayName = 'FileManage';
@@ -29,6 +32,9 @@ export default class FileManage extends Component {
       }],
       // 文件列表加载状态
       tableLoading: false,
+
+      // 新建目录抽屉显示
+      addFolderVisible: false,
     };
   }
 
@@ -126,14 +132,13 @@ export default class FileManage extends Component {
     console.log('click', e);
   };
 
-  deleteObject = async (record, e) => {
-    console.log(record);
+  deleteObject = (record) => {
     const fullPath = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
     const params = {
       bucket: this.state.bucketName,
       objects: fullPath,
     };
-    await DeleteObjectHeadApi(params)
+    DeleteObjectHeadApi(params)
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           message.success('操作成功');
@@ -158,18 +163,6 @@ export default class FileManage extends Component {
   );
 
   moreMenu = (record) => {
-    if (record.isDir) {
-      return (
-        <Menu onClick={this.handleMenuClick}>
-          <Menu.Item key="1">
-            设置读写权限
-          </Menu.Item>
-          <Menu.Item key="4" onClick={e => this.deleteObject(record, e)}>
-            删除
-          </Menu.Item>
-        </Menu>
-      );
-    }
     return (
       <Menu onClick={this.handleMenuClick}>
         <Menu.Item key="1">
@@ -203,16 +196,40 @@ export default class FileManage extends Component {
     });
   };
 
+  showDeleteConfirm = (record, e) => {
+    e.preventDefault();
+    const thisAlias = this;
+    confirm({
+      title: `即将删除${record.filePath + record.fileName}?`,
+      content: '删除后无法恢复，确定删除吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        console.log('OK');
+        thisAlias.deleteObject(record);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
   renderOperate = (text, record) => {
     return (
       <div>
         <Button type="link" size="small" onClick={e => this.detailDrawerShow(record, e)}>详情</Button>
-        <Dropdown overlay={this.moreMenu(record)} size="small">
-          <Button type="link" size="small">
-            更多
-            <Icon type="down" />
-          </Button>
-        </Dropdown>
+        {
+          record.isDir ? (
+            <Button type="link" size="small" onClick={e => this.showDeleteConfirm(record, e)}>删除</Button>
+          ) : (
+            <Dropdown overlay={this.moreMenu(record)} size="small">
+              <Button type="link" size="small">
+                更多
+                <Icon type="down" />
+              </Button>
+            </Dropdown>
+          )
+        }
       </div>
     );
   };
@@ -223,9 +240,21 @@ export default class FileManage extends Component {
     });
   };
 
+  showAddFolderDrawer = () => {
+    this.setState({
+      addFolderVisible: true,
+    });
+  };
+
   closeDrawer = () => {
     this.setState({
       visible: false,
+    });
+  };
+
+  closeAddFolderDrawer = () => {
+    this.setState({
+      addFolderVisible: false,
     });
   };
 
@@ -248,7 +277,7 @@ export default class FileManage extends Component {
   };
 
   render() {
-    const { pathQueue, tableLoading, objectList, selectedRowKeys, visible, currentPath, detailVisible, currentRecord } = this.state;
+    const { pathQueue, tableLoading, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -264,7 +293,12 @@ export default class FileManage extends Component {
                 visible={visible}
                 onSuccess={this.initObjectList}
               />
-              <Button icon="folder-add" style={{ marginRight: '10px' }}>新建目录</Button>
+              <Button icon="folder-add" style={{ marginRight: '10px' }} onClick={this.showAddFolderDrawer}>新建目录</Button>
+              <AddFolderDrawer currentPath={currentPath}
+                onClose={this.closeAddFolderDrawer}
+                visible={addFolderVisible}
+                onSuccess={this.initObjectList}
+              />
               <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
               <Dropdown overlay={this.menu}>
                 <Button style={{ marginRight: '10px' }}>
