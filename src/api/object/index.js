@@ -5,7 +5,7 @@ import axios from '../config';
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const ListObjectApi = params => axios.get(`/api/${params.bucket}/list_objects.json`, { params })
+export const ListObjectApi = params => axios.get('/ajax/bucket/file/list_objects.json', { params })
   .then(res => res.data);
 
 /**
@@ -14,7 +14,25 @@ export const ListObjectApi = params => axios.get(`/api/${params.bucket}/list_obj
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GetObjectHeadApi = params => axios.get(`/api/${params.bucket}/head_object.json`, { params })
+export const GetObjectHeadApi = params => axios.get('/ajax/bucket/file/head_object.json', { params })
+  .then(res => res.data);
+
+/**
+ * 删除对象
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delete_objects.json', params )
+  .then(res => res.data);
+
+/**
+ * 设置 对象的ACL权限
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const SetObjectAclApi = params => axios.post('/ajax/bucket/file/set_object_acl.json', { params })
   .then(res => res.data);
 
 /**
@@ -23,7 +41,7 @@ export const GetObjectHeadApi = params => axios.get(`/api/${params.bucket}/head_
  * @returns {string}
  * @constructor
  */
-export const CreateObjectUrl = params => `${axios.defaults.baseURL}/api/${params.bucket}/create`;
+export const CreateObjectUrl = `${axios.defaults.baseURL}/ajax/bucket/file/create`;
 
 /**
  * 生成临时访问对象 url
@@ -31,4 +49,5 @@ export const CreateObjectUrl = params => `${axios.defaults.baseURL}/api/${params
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GenerateUrlWithSignedApi = params => axios.post(`/api/${params.bucket}/generate_url_with_signed.json`, params).then(res => res.data);
+export const GenerateUrlWithSignedApi = params => axios.post('/ajax/bucket/file/generate_url_with_signed.json', params)
+  .then(res => res.data);

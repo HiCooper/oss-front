@@ -143,7 +143,7 @@
 .default-side {
   height: 100vh;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   font-weight: bold;
   ul {
     background: #f7f7f7;
@@ -168,7 +168,7 @@
 .picture-side {
   height: 100vh;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   background: transparent;
   color: #ffffff;
   font-weight: bold;

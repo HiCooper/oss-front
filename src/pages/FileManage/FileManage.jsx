@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Table } from 'antd';
 import { getIconByFileName } from '../../util/stringUtils';
-import { ListObjectApi } from '../../api/object';
+import { DeleteObjectHeadApi, ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
@@ -126,6 +126,26 @@ export default class FileManage extends Component {
     console.log('click', e);
   };
 
+  deleteObject = async (record, e) => {
+    console.log(record);
+    const fullPath = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+    const params = {
+      bucket: this.state.bucketName,
+      objects: fullPath,
+    };
+    await DeleteObjectHeadApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('操作成功');
+          this.initObjectList();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        message.error('操作失败');
+      });
+  };
+
   menu = () => (
     <Menu onClick={this.handleMenuClick}>
       <Menu.Item key="1">
@@ -137,14 +157,14 @@ export default class FileManage extends Component {
     </Menu>
   );
 
-  moreMenu = (isDir) => {
-    if (isDir) {
+  moreMenu = (record) => {
+    if (record.isDir) {
       return (
         <Menu onClick={this.handleMenuClick}>
           <Menu.Item key="1">
             设置读写权限
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="4" onClick={e => this.deleteObject(record, e)}>
             删除
           </Menu.Item>
         </Menu>
@@ -161,7 +181,7 @@ export default class FileManage extends Component {
         <Menu.Item key="3">
           复制文件URL
         </Menu.Item>
-        <Menu.Item key="4">
+        <Menu.Item key="4" onClick={e => this.deleteObject(record, e)}>
           删除
         </Menu.Item>
       </Menu>
@@ -187,7 +207,7 @@ export default class FileManage extends Component {
     return (
       <div>
         <Button type="link" size="small" onClick={e => this.detailDrawerShow(record, e)}>详情</Button>
-        <Dropdown overlay={this.moreMenu(record.isDir)} size="small">
+        <Dropdown overlay={this.moreMenu(record)} size="small">
           <Button type="link" size="small">
             更多
             <Icon type="down" />
