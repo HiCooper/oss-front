@@ -74,7 +74,7 @@ class DetailDrawer extends Component {
     const { detailInfo, timeout, bucketInfo } = this.state;
     const params = {
       bucket: bucketInfo.name,
-      objectName: detailInfo.fileName,
+      objectPath: detailInfo.fileName,
       timeout,
     };
     GenerateUrlWithSignedApi(params)

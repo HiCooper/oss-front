@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Icon } from 'antd';
 import Footer from './components/Footer';
 import { userRouterConfig } from '../../routerConfig';

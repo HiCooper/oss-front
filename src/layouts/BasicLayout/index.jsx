@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, Popover, Row, message } from 'antd';
+import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, message, Popover, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';

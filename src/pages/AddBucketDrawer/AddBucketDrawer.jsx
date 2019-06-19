@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Input, Radio, message } from 'antd';
+import { Button, Drawer, Form, Input, message, Radio } from 'antd';
 import { CreateBucketApi } from '../../api/bucket';
 
 const formItemLayout = {
