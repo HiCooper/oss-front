@@ -342,7 +342,7 @@ export default class FileManage extends Component {
                 </Button>
               </Dropdown>
 
-              <Button icon="reload">刷新</Button>
+              <Button icon="reload" onClick={this.initObjectList}>刷新</Button>
             </div>
 
             <div className="right-operate">
