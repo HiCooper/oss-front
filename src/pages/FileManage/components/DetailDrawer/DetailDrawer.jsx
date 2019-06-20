@@ -92,7 +92,7 @@ class DetailDrawer extends Component {
 
   renderFilePreview = () => {
     const { detailInfo, genTempUrlInfo } = this.state;
-    if (!detailInfo.isDir && detailInfo.category && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+    if (!detailInfo.isDir && detailInfo.category && genTempUrlInfo.url && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
       return (
         <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
       );
