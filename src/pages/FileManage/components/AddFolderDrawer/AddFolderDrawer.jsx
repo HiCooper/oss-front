@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Input } from 'antd';
+import { Alert, Button, Drawer, Form, Input } from 'antd';
 import './index.scss';
 import { getCurrentBucket } from '../../../../util/Bucket';
 import { CreateFolderApi } from '../../../../api/object';
@@ -96,10 +96,9 @@ class AddFolderDrawer extends Component {
     const { bucketInfo } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
         values.bucket = bucketInfo.name;
         CreateFolderApi(values).then((res) => {
-          if (res.msg === 'SUCCESS'){
+          if (res.msg === 'SUCCESS') {
             this.props.onSuccess();
             this.props.onClose();
           }
@@ -141,7 +140,7 @@ class AddFolderDrawer extends Component {
                 ],
                 initialValue: objectName,
               })(
-                <Input placeholder="根目录" suffix={`${objectName.length}/254`} />,
+                <Input placeholder="相对根目录" suffix={`${objectName.length}/254`} />,
               )
             }
           </Form.Item>
@@ -190,6 +189,7 @@ const folderHelpMessage = (
         <li>总长度控制在 1-254 个字符</li>
       </ol>
     </div>
+    <Alert message="注意，Bucket 下若存在同名目录，将会忽略。" type="warning" showIcon />
   </div>
 );
 

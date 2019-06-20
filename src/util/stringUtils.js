@@ -4,7 +4,7 @@
  */
 export function getParamsFromUrl(url) {
   if (!url || url.length === 0 || url.indexOf('?') === -1) {
-    return {};
+    return null;
   }
   const paramsStr = url.substr(url.indexOf('?') + 1).split('&');
   const params = {};

@@ -101,7 +101,7 @@ class AddBucketDrawer extends Component {
             {
               getFieldDecorator('name', {
                 rules: [
-                  { validator: this.checkBucketName},
+                  { validator: this.checkBucketName },
                 ],
                 initialValue: name,
               })(

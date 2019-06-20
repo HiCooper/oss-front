@@ -23,7 +23,7 @@ export const GetObjectHeadApi = params => axios.get('/ajax/bucket/file/head_obje
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delete_objects.json', params )
+export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delete_objects.json', params)
   .then(res => res.data);
 
 /**
@@ -32,7 +32,7 @@ export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delet
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_folder.json', params )
+export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_folder.json', params)
   .then(res => res.data);
 
 /**

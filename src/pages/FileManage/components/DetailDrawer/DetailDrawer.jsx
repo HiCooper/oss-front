@@ -36,7 +36,6 @@ class DetailDrawer extends Component {
   }
 
   onChange = async (value) => {
-    console.log('changed', value);
     await this.setState({
       timeout: value,
     });
@@ -72,9 +71,10 @@ class DetailDrawer extends Component {
 
   generateUrlWithSigned = () => {
     const { detailInfo, timeout, bucketInfo } = this.state;
+    const path = detailInfo.filePath === '/' ? `/${detailInfo.fileName}` : `${detailInfo.filePath}/${detailInfo.fileName}`;
     const params = {
       bucket: bucketInfo.name,
-      objectPath: detailInfo.fileName,
+      objectPath: path,
       timeout,
     };
     GenerateUrlWithSignedApi(params)
@@ -152,7 +152,7 @@ class DetailDrawer extends Component {
                   <Form.Item
                     label={(
                       <span>
-                链接有效时间
+                        链接有效时间
                         <Tooltip autoAdjustOverflow
                           arrowPointAtCenter
                           placement="topLeft"
@@ -171,12 +171,11 @@ class DetailDrawer extends Component {
                       style={{ width: '100%' }}
                     />
                   </Form.Item>
-                  <Form.Item
-                    label="URL"
-                    validateStatus="success"
-                  >
+                  <Form.Item label="URL">
                     <div className="object-url">
-                      {`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`}
+                      {
+                        detailInfo.acl.startsWith('PUBLIC') ? genTempUrlInfo.url : `${genTempUrlInfo.url}?${genTempUrlInfo.signature}`
+                      }
                     </div>
                   </Form.Item>
                   <Form.Item
