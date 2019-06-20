@@ -5,7 +5,7 @@ import axios from '../config';
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const ListBucketApi = params => axios.get('/api/bucket/list', { params })
+export const ListBucketApi = params => axios.get('/ajax/bucket/list.json', { params })
   .then(res => res.data);
 
 /**
@@ -14,7 +14,7 @@ export const ListBucketApi = params => axios.get('/api/bucket/list', { params })
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GetBucketApi = params => axios.get('/api/bucket/detail', { params })
+export const GetBucketApi = params => axios.get('/ajax/bucket/detail.json', { params })
   .then(res => res.data);
 
 /**
@@ -22,5 +22,5 @@ export const GetBucketApi = params => axios.get('/api/bucket/detail', { params }
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const CreateBucketApi = params => axios.post('/api/bucket/create', params)
+export const CreateBucketApi = params => axios.post('/ajax/bucket/new_create_bucket.json', params)
   .then(res => res.data);

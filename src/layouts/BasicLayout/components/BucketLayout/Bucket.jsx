@@ -19,7 +19,8 @@ export default class Bucket extends Component {
   }
 
   componentDidMount() {
-    this.getBucketInfo();
+    const { bucketName } = this.state;
+    this.getBucketInfo(bucketName);
   }
 
   subMenuSelect = (item) => {
@@ -34,15 +35,18 @@ export default class Bucket extends Component {
     }
   };
 
-  getBucketInfo = () => {
-    GetBucketApi({ name: this.state.bucketName }).then((res) => {
+  getBucketInfo = (bucketName) => {
+    GetBucketApi({ name: bucketName }).then((res) => {
       if (res.msg === 'SUCCESS') {
         this.setState({
           bucketInfo: res.data,
         });
+      } else {
+        this.props.history.push('/');
       }
     }).catch((e) => {
       console.error(e);
+      this.props.history.push('/');
     });
   };
 
@@ -53,7 +57,7 @@ export default class Bucket extends Component {
       currentActivate: lastPath,
       bucketName: nextProps.match.params.name,
     });
-    this.getBucketInfo();
+    this.getBucketInfo(nextProps.match.params.name);
   }
 
   render() {
