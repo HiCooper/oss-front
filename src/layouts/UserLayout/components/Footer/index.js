@@ -10,7 +10,11 @@ export default () => {
         <span style={styles.link}>
           隐私
         </span>
-        <span style={{ ...styles.link, marginRight: '0' }}>
+        <span style={{
+          ...styles.link,
+          marginRight: '0',
+        }}
+        >
           条款
         </span>
       </div>

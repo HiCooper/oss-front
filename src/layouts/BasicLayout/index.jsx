@@ -50,15 +50,17 @@ class BasicLayout extends Component {
   // 获取 bucket 列表
   initBucketList = () => {
     const { name } = this.state;
-    ListBucketApi({ name }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          bucketList: res.data,
-        });
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    ListBucketApi({ name })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            bucketList: res.data,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   searchBucket = async (value) => {
@@ -104,7 +106,13 @@ class BasicLayout extends Component {
     const { username, color } = this.state;
     return (
       <div className="personal">
-        <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }} size="large">
+        <Avatar style={{
+          backgroundColor: color,
+          verticalAlign: 'middle',
+          marginRight: '5px',
+        }}
+          size="large"
+        >
           {username.substr(0, 1)}
         </Avatar>
         <span>{username}</span>
@@ -125,13 +133,13 @@ class BasicLayout extends Component {
           <div className="item">
             <Icon type="user" style={{ fontSize: '20px' }} />
             <div className="title">
-             个人信息
+              个人信息
             </div>
           </div>
           <div className="item">
             <Icon type="key" style={{ fontSize: '20px' }} />
             <div className="title">
-             密钥管理
+              密钥管理
             </div>
           </div>
         </div>
@@ -139,7 +147,7 @@ class BasicLayout extends Component {
         <div className="footer">
           <Button type="link" style={{ color: '#ccccccc' }} onClick={this.logout}>
             <Icon type="poweroff" />
-           退出当前账户
+            退出当前账户
           </Button>
         </div>
       </div>
@@ -207,15 +215,36 @@ class BasicLayout extends Component {
           <div className="right">
             <Dropdown overlay={this.themeSelect}>
               <span style={{ fontWeight: 'bold' }}>
-                <Icon type="skin" style={{ marginRight: '20px', fontSize: '20px', fontWeight: 'bold' }} />
+                <Icon type="skin"
+                  style={{
+                    marginRight: '20px',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                />
               </span>
             </Dropdown>
-            <Popover placement="bottomRight" title={this.text()} content={this.content()} trigger="click" className="personal-info">
+            <Popover placement="bottomRight"
+              title={this.text()}
+              content={this.content()}
+              trigger="click"
+              className="personal-info"
+            >
               <div>
-                <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: '5px' }}>
-                  {username.substr(0, 1).toLocaleUpperCase()}
+                <Avatar style={{
+                  backgroundColor: color,
+                  verticalAlign: 'middle',
+                  marginRight: '5px',
+                }}
+                >
+                  {username.substr(0, 1)
+                    .toLocaleUpperCase()}
                 </Avatar>
-                <span style={{ fontWeight: 'bold', marginRight: '5px' }}>
+                <span style={{
+                  fontWeight: 'bold',
+                  marginRight: '5px',
+                }}
+                >
                   {username}
                 </span>
               </div>
@@ -230,11 +259,14 @@ class BasicLayout extends Component {
               defaultOpenKeys={['1']}
               defaultSelectedKeys={[activateMenuPath]}
               selectedKeys={[activateMenuPath]}
-              style={{ height: '100%', borderRight: 0 }}
+              style={{
+                height: '100%',
+                borderRight: 0,
+              }}
             >
               {
-                 sideMenuConfig.map(this.renderMenuItem)
-               }
+                sideMenuConfig.map(this.renderMenuItem)
+              }
               <div className="operate">
                 <Search
                   placeholder="搜索存储空间"
@@ -246,7 +278,13 @@ class BasicLayout extends Component {
                 <span>存储空间</span>
                 <div>
                   <Popover placement="top" content="新建Bucket" trigger="hover">
-                    <Icon type="plus" style={{ cursor: 'pointer', marginRight: '8px' }} onClick={this.showDrawer} />
+                    <Icon type="plus"
+                      style={{
+                        cursor: 'pointer',
+                        marginRight: '8px',
+                      }}
+                      onClick={this.showDrawer}
+                    />
                   </Popover>
                   <AddBucketDrawer onClose={this.onClose} visible={visible} onSuccess={this.initBucketList} />
                   <Popover placement="top" content="刷新" trigger="hover">
@@ -256,7 +294,7 @@ class BasicLayout extends Component {
               </div>
               {
                 bucketList.map(this.renderBucketList)
-               }
+              }
             </Menu>
           </Sider>
           <Layout className="main-content">

@@ -16,7 +16,7 @@
           padding: 0 16px;
           border-right: 1px dotted #d7d8d9;
 
-          &:last-child{
+          &:last-child {
             border-right: unset;
           }
 
@@ -33,10 +33,11 @@
 
             }
 
-            .display-value{
+            .display-value {
               font-size: 28px;
             }
-            .display-unit{
+
+            .display-unit {
               font-size: 0.5em;
               margin-left: 0.5em;
             }

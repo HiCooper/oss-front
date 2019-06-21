@@ -39,7 +39,7 @@ class AddFolderDrawer extends Component {
         }}
         >
         1-254个字符长度
-        </span>
+        </span>,
       );
       return;
     }
@@ -51,7 +51,7 @@ class AddFolderDrawer extends Component {
         }}
         >
         目录路径不允许出现连续的「/」
-        </span>
+        </span>,
       );
       return;
     }
@@ -97,14 +97,16 @@ class AddFolderDrawer extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         values.bucket = bucketInfo.name;
-        CreateFolderApi(values).then((res) => {
-          if (res.msg === 'SUCCESS') {
-            this.props.onSuccess();
-            this.props.onClose();
-          }
-        }).catch((error) => {
-          console.error(error);
-        });
+        CreateFolderApi(values)
+          .then((res) => {
+            if (res.msg === 'SUCCESS') {
+              this.props.onSuccess();
+              this.props.onClose();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     });
     this.setState({

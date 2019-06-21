@@ -36,18 +36,20 @@ export default class Bucket extends Component {
   };
 
   getBucketInfo = (bucketName) => {
-    GetBucketApi({ name: bucketName }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          bucketInfo: res.data,
-        });
-      } else {
+    GetBucketApi({ name: bucketName })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            bucketInfo: res.data,
+          });
+        } else {
+          this.props.history.push('/');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
         this.props.history.push('/');
-      }
-    }).catch((e) => {
-      console.error(e);
-      this.props.history.push('/');
-    });
+      });
   };
 
   componentWillReceiveProps(nextProps, ignore) {

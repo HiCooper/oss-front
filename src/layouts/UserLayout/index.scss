@@ -10,12 +10,13 @@
   .header-banner {
     text-align: center;
     padding: 20px 0;
+
     h1 {
       color: #ffffff;
     }
   }
 
-  .login-body{
+  .login-body {
     padding: 60px 0;
     background: rgba(204, 204, 204, 0.2);
 
@@ -46,7 +47,7 @@
         }
       }
 
-      .login-form{
+      .login-form {
         margin: 0 auto;
         height: 100%;
         padding: 20px;
@@ -64,9 +65,11 @@
           max-width: 330px;
           min-width: 300px;
         }
+
         .login-form-forgot {
           float: right;
         }
+
         .login-form-button {
           width: 100%;
         }

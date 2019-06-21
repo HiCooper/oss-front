@@ -22,10 +22,10 @@
     color: #ffffff;
     font-size: 24px;
     font-weight: bold;
-    text-shadow: 0 0 0 #574ab7, 1px 1px 0 rgba(0,0,0,0.15);
+    text-shadow: 0 0 0 #574ab7, 1px 1px 0 rgba(0, 0, 0, 0.15);
   }
 
-  .left , .right{
+  .left, .right {
     display: flex;
     align-items: center;
     color: #ffffff;
@@ -40,7 +40,7 @@
   justify-content: space-between;
   padding: 0 24px;
   background: #ffffff;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,.08);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .08);
 
   .logo {
     width: 200px;
@@ -50,7 +50,7 @@
     font-weight: bold;
   }
 
-  .left , .right{
+  .left, .right {
     display: flex;
     align-items: center;
   }
@@ -75,7 +75,7 @@
       padding: 8px;
       cursor: pointer;
 
-      &:hover{
+      &:hover {
         background: #f5f5f5;
         border-radius: 5px;
       }
@@ -83,7 +83,7 @@
 
   }
 
-  .footer{
+  .footer {
     text-align: center;
   }
 }
@@ -145,20 +145,24 @@
   position: fixed;
   z-index: 2;
   font-weight: bold;
+
   ul {
     background: #f7f7f7;
   }
+
   .ant-menu-item {
-    &:hover{
-      background-color: #ffffff ;
+    &:hover {
+      background-color: #ffffff;
     }
   }
 
-  .ant-menu-item-selected{
+  .ant-menu-item-selected {
     background-color: #ffffff !important;
-    &:after{
+
+    &:after {
       content: unset;
     }
+
     .bucket-dot {
       background-color: #2f54eb;
     }
@@ -172,15 +176,18 @@
   background: transparent;
   color: #ffffff;
   font-weight: bold;
-  div{
+
+  div {
     color: #ffffff;
     font-weight: bold;
     background: transparent;
-    ul{
+
+    ul {
       color: #ffffff;
       font-weight: bold;
       background: transparent;
-      li{
+
+      li {
         color: #ffffff;
         font-weight: bold;
         background: transparent;
@@ -189,26 +196,28 @@
   }
 
   .ant-menu-item {
-    &:hover{
+    &:hover {
       color: #ffffff;
       font-weight: bold;
-      background: rgba(255,255,255,.15) !important;
+      background: rgba(255, 255, 255, .15) !important;
     }
   }
 
-  .ant-menu-item-selected{
+  .ant-menu-item-selected {
     color: #ffffff;
     font-weight: bold;
-    background: rgba(255,255,255,.15) !important;
-    &:after{
+    background: rgba(255, 255, 255, .15) !important;
+
+    &:after {
       content: unset;
     }
+
     .bucket-dot {
       background-color: #2f54eb;
     }
   }
 
-  .ant-menu-submenu > .ant-menu{
+  .ant-menu-submenu > .ant-menu {
     background: transparent;
   }
 

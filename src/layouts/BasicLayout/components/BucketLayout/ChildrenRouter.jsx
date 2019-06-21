@@ -4,12 +4,12 @@ import NotFound from '../../../../components/NotFound';
 import { childRouterConfig } from '../../../../routerConfig';
 
 export default class ChildrenRouter extends Component {
-    static displayName = 'ChildrenRouter';
+  static displayName = 'ChildrenRouter';
 
-    constructor(props) {
-      super(props);
-      this.state = {};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   /**
    * 渲染路由组件

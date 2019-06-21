@@ -23,8 +23,20 @@ const formItemLayout = {
 const ACLMessageTable = {
   EXTEND_BUCKET: <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
   PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
-  PUBLIC: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
+  PUBLIC_READ: <span style={{
+    color: 'red',
+    fontSize: '12px',
+  }}
+  >
+公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
+  </span>,
+  PUBLIC: <span style={{
+    color: 'red',
+    fontSize: '12px',
+  }}
+  >
+公共读写：所有人都可以对文件进行读写操作。
+  </span>,
 };
 
 const Dragger = Upload.Dragger;
@@ -79,7 +91,9 @@ export default class UploadFileDrawer extends Component {
       reader.onload = async (evt) => {
         if (evt.target.readyState === FileReader.DONE) {
           const wordArray = CryptoJS.lib.WordArray.create(reader.result);
-          const hash = CryptoJS.SHA256(wordArray).toString().toUpperCase();
+          const hash = CryptoJS.SHA256(wordArray)
+            .toString()
+            .toUpperCase();
           await this.setState({
             hash,
             fileSize: file.size,
@@ -181,7 +195,11 @@ export default class UploadFileDrawer extends Component {
             </Radio.Group>
             {
               radioSelect !== currentFilePath ? (
-                <Input placeholder="根目录" value={uploadPath} suffix={`${uploadPath.length}/254`} onChange={this.uploadPathInputChange} />
+                <Input placeholder="根目录"
+                  value={uploadPath}
+                  suffix={`${uploadPath.length}/254`}
+                  onChange={this.uploadPathInputChange}
+                />
               ) : null
             }
             {

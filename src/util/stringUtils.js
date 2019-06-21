@@ -6,7 +6,8 @@ export function getParamsFromUrl(url) {
   if (!url || url.length === 0 || url.indexOf('?') === -1) {
     return null;
   }
-  const paramsStr = url.substr(url.indexOf('?') + 1).split('&');
+  const paramsStr = url.substr(url.indexOf('?') + 1)
+    .split('&');
   const params = {};
   paramsStr.forEach((i) => {
     const strings = i.split('=');
@@ -26,12 +27,13 @@ export function paramsToUrl(params) {
   let result = '';
   const keys = Object.keys(params);
   const length = keys.length;
-  Object.keys(params).forEach((i, index) => {
-    result += `${i}=${params[i]}`;
-    if (index < length - 1) {
-      result += '&';
-    }
-  });
+  Object.keys(params)
+    .forEach((i, index) => {
+      result += `${i}=${params[i]}`;
+      if (index < length - 1) {
+        result += '&';
+      }
+    });
   return result;
 }
 
@@ -45,7 +47,8 @@ export function checkParams(params, ignoreKeys) {
   let result = true;
   if (typeof params === 'string' || (typeof params === 'number' && params !== 0) || (typeof params === 'boolean' && params !== false)) {
     return !!params;
-  } if (params === undefined || JSON.stringify(params) === '{}') {
+  }
+  if (params === undefined || JSON.stringify(params) === '{}') {
     result = false;
   } else if (Array.isArray(params)) {
     if (params.length === 0) {
@@ -85,7 +88,7 @@ export function getIconByFileName(record) {
     || fileName.endsWith('.svg')
     || fileName.endsWith('.png')
     || fileName.endsWith('.bmg')
-  || fileName.endsWith('.gif')) {
+    || fileName.endsWith('.gif')) {
     return 'file-image';
   }
   //  办公文档
@@ -119,10 +122,11 @@ export function getIconByFileName(record) {
  */
 export function filterNonNullValue(object) {
   const temp = {};
-  Object.keys(object).forEach((v) => {
-    if (object[v] !== undefined && object[v] !== '' && object[v] !== null) {
-      temp[v] = object[v];
-    }
-  });
+  Object.keys(object)
+    .forEach((v) => {
+      if (object[v] !== undefined && object[v] !== '' && object[v] !== null) {
+        temp[v] = object[v];
+      }
+    });
   return temp;
 }

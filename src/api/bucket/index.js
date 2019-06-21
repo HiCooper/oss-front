@@ -24,3 +24,12 @@ export const GetBucketApi = params => axios.get('/ajax/bucket/detail.json', { pa
  */
 export const CreateBucketApi = params => axios.post('/ajax/bucket/new_create_bucket.json', params)
   .then(res => res.data);
+
+/**
+ * 设置 Bucket ACL
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const SetAclApi = params => axios.post('/ajax/bucket/set_acl.json', params)
+  .then(res => res.data);

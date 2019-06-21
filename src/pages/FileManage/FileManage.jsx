@@ -217,8 +217,15 @@ export default class FileManage extends Component {
     confirm({
       title: (
         <div>
-        即将删除
-          <span style={{ color: 'red', margin: '0 5px', fontWeight: 'bold' }}>{`${record.filePath}/${record.fileName}`}</span>
+          即将删除
+          <span style={{
+            color: 'red',
+            margin: '0 5px',
+            fontWeight: 'bold',
+          }}
+          >
+            {`${record.filePath}/${record.fileName}`}
+          </span>
           请确认!
         </div>
       ),
@@ -282,7 +289,8 @@ export default class FileManage extends Component {
   goPath = async (index, e) => {
     e.preventDefault();
     const { currentPath } = this.state;
-    const pathQueue = currentPath.length > 1 ? currentPath.substr(1).split('/') : null;
+    const pathQueue = currentPath.length > 1 ? currentPath.substr(1)
+      .split('/') : null;
     let path = '/';
     if (pathQueue) {
       for (let i = 0; i < index; i++) {
@@ -303,7 +311,8 @@ export default class FileManage extends Component {
 
   render() {
     const { tableLoading, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord, search } = this.state;
-    const pathQueue = currentPath.length > 1 ? currentPath.substr(1).split('/') : null;
+    const pathQueue = currentPath.length > 1 ? currentPath.substr(1)
+      .split('/') : null;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
