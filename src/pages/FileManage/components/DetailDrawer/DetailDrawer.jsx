@@ -149,28 +149,32 @@ class DetailDrawer extends Component {
                   >
                     {objectHeadInfo.eTag}
                   </Form.Item>
-                  <Form.Item
-                    label={(
-                      <span>
+                  {
+                    detailInfo.acl.startsWith('PRIVATE') ? (
+                      <Form.Item
+                        label={(
+                          <span>
                         链接有效时间
-                        <Tooltip autoAdjustOverflow
-                          arrowPointAtCenter
-                          placement="topLeft"
-                          title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件"
-                        >
-                          <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
-                        </Tooltip>
-                      </span>
-                    )}
-                    validateStatus="success"
-                  >
-                    <InputNumber min={60}
-                      max={64800}
-                      defaultValue={3600}
-                      onChange={this.onChange}
-                      style={{ width: '100%' }}
-                    />
-                  </Form.Item>
+                            <Tooltip autoAdjustOverflow
+                              arrowPointAtCenter
+                              placement="topLeft"
+                              title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件"
+                            >
+                              <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
+                            </Tooltip>
+                          </span>
+                        )}
+                        validateStatus="success"
+                      >
+                        <InputNumber min={60}
+                          max={64800}
+                          defaultValue={3600}
+                          onChange={this.onChange}
+                          style={{ width: '100%' }}
+                        />
+                      </Form.Item>
+                    ) : null
+                  }
                   <Form.Item label="URL">
                     <div className="object-url">
                       {
