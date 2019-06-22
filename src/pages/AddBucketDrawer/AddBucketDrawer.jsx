@@ -17,15 +17,18 @@ const formItemLayout = {
 
 
 const ACLMessageTable = {
-  PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ: <span style={{
+  PRIVATE:
+  <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
+  PUBLIC_READ:
+  <span style={{
     color: 'red',
     fontSize: '12px',
   }}
   >
 公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
   </span>,
-  PUBLIC: <span style={{
+  PUBLIC:
+  <span style={{
     color: 'red',
     fontSize: '12px',
   }}

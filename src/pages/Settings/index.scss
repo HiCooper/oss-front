@@ -1,0 +1,30 @@
+.oss-pg-bucket-setting {
+
+  .a-section {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #d7d8d9;
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    .help-msg {
+      color: #262626;
+      font-size: 12px;
+    }
+
+    header.section-header {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .ant-form-item, .ant-form-item-with-help {
+      margin-bottom: 12px;
+    }
+
+    .ant-btn{
+      border-radius: unset !important;
+    }
+  }
+}

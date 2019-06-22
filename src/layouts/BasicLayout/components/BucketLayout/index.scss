@@ -35,4 +35,10 @@
       }
     }
   }
+
+  .oss-bucket-content{
+    padding: 12px;
+    height: calc(100% - 112px);
+    overflow-y: auto;
+  }
 }

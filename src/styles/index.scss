@@ -1,4 +1,5 @@
 @import "drawer";
+@import "button";
 
 body {
   margin: 0;
@@ -52,6 +53,7 @@ code {
     flex-wrap: wrap;
     align-items: stretch;
     align-content: stretch;
+    font-size: 12px;
 
     .item {
       display: flex;
@@ -59,7 +61,7 @@ code {
       padding: 12px;
       position: relative;
       align-items: center;
-      line-height: 24px;
+      line-height: 15px;
 
       &:hover {
         background: #f4f4f4;

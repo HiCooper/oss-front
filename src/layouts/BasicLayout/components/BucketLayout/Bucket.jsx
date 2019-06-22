@@ -3,24 +3,19 @@ import { Menu } from 'antd';
 import './index.scss';
 import ChildrenRouter from './ChildrenRouter';
 import { headMenuConfig } from '../../../../menuConfig';
-import { GetBucketApi } from '../../../../api/bucket';
 import { getAclDesc } from '../../../../util/AclTable';
+import { getCurrentBucket } from '../../../../util/Bucket';
 
 export default class Bucket extends Component {
   constructor(props) {
     super(props);
     const pathname = this.props.location.pathname;
     const lastPath = pathname.substr(pathname.lastIndexOf('/'));
+    const bucketInfo = getCurrentBucket();
     this.state = {
       currentActivate: lastPath,
-      bucketName: this.props.match.params.name,
-      bucketInfo: '',
+      bucketInfo,
     };
-  }
-
-  componentDidMount() {
-    const { bucketName } = this.state;
-    this.getBucketInfo(bucketName);
   }
 
   subMenuSelect = (item) => {
@@ -35,39 +30,21 @@ export default class Bucket extends Component {
     }
   };
 
-  getBucketInfo = (bucketName) => {
-    GetBucketApi({ name: bucketName })
-      .then((res) => {
-        if (res.msg === 'SUCCESS') {
-          this.setState({
-            bucketInfo: res.data,
-          });
-        } else {
-          this.props.history.push('/');
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        this.props.history.push('/');
-      });
-  };
-
   componentWillReceiveProps(nextProps, ignore) {
     const pathname = nextProps.location.pathname;
     const lastPath = pathname.substr(pathname.lastIndexOf('/'));
     this.setState({
       currentActivate: lastPath,
-      bucketName: nextProps.match.params.name,
+      bucketInfo: getCurrentBucket(),
     });
-    this.getBucketInfo(nextProps.match.params.name);
   }
 
   render() {
-    const { bucketName, bucketInfo, currentActivate } = this.state;
+    const { bucketInfo, currentActivate } = this.state;
     return (
       <div className="bucket-home">
         <div className="bucket-header">
-          <h1>{bucketName}</h1>
+          <h1>{bucketInfo.name}</h1>
           <aside>
             <span className="info">
               <strong>读写权限</strong>
@@ -107,7 +84,9 @@ export default class Bucket extends Component {
             }
           </Menu>
         </div>
-        <ChildrenRouter />
+        <div className="oss-bucket-content">
+          <ChildrenRouter />
+        </div>
       </div>
     );
   }

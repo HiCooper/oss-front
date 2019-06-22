@@ -1,8 +1,8 @@
 const AclTable = {
   EXTEND_BUCKET: '继承 Bucket',
   PRIVATE: '私有',
-  PUBLIC_READ: '公开读',
-  PUBLIC: '公开',
+  PUBLIC_READ: '公共读',
+  PUBLIC_READ_WRITE: '公共读写',
 };
 
 /**

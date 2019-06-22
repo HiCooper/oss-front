@@ -1,0 +1,43 @@
+.next-btn {
+  position: relative;
+  display: inline-block;
+  box-shadow: none;
+  text-decoration: none;
+  text-align: center;
+  text-transform: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: all .3s ease-out;
+  cursor: pointer;
+}
+
+.next-btn, .next-btn:active, .next-btn:focus, .next-btn:hover {
+  outline: 0;
+}
+
+.next-btn, .next-btn *, .next-btn :after, .next-btn :before {
+  box-sizing: border-box;
+}
+
+.next-btn.next-btn-normal, .next-btn.next-btn-normal.visited, .next-btn.next-btn-normal:link, .next-btn.next-btn-normal:visited {
+  color: #262626;
+}
+
+.next-btn.next-btn-normal {
+  border-style: solid;
+  background-color: #fafafa;
+  border-color: #e5e5e5;
+}
+
+.next-btn.next-small {
+  border-radius: 0;
+  padding: 0 8px;
+  height: 24px;
+  line-height: 22px;
+  font-size: 12px;
+  border-width: 1px;
+}

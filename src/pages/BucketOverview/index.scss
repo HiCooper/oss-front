@@ -1,4 +1,20 @@
 .bucket-overview {
 
+  .basic-settings-item {
+    &:hover {
+      .go-setting {
+        display: block;
+      }
+    }
+  }
+
+
+  .basic-settings-item .go-setting {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+
 
 }

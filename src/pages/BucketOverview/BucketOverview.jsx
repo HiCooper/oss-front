@@ -1,31 +1,21 @@
 import React, { Component } from 'react';
 import './index.scss';
-import { Button } from 'antd';
+import { getCurrentBucket } from '../../util/Bucket';
+import { getAclDesc } from '../../util/AclTable';
 
 export default class BucketOverview extends Component {
   static displayName = 'BucketOverview';
 
   constructor(props) {
     super(props);
+    const bucketInfo = getCurrentBucket();
     this.state = {
-      bucketName: this.props.match.params.name,
-      showAclSettingBtn: false,
+      bucketInfo,
     };
   }
 
-  componentDidMount() {
-    console.log(this.state.bucketName);
-  }
-
-  showAclSettingBtn = () => {
-    const { showAclSettingBtn } = this.state;
-    this.setState({
-      showAclSettingBtn: !showAclSettingBtn,
-    });
-  };
-
   render() {
-    const { showAclSettingBtn } = this.state;
+    const { bucketInfo } = this.state;
     return (
       <div className="bucket-overview">
         <div className="oss-box">
@@ -33,25 +23,26 @@ export default class BucketOverview extends Component {
             <h3>基础设置</h3>
           </div>
           <div className="basic-setting-box">
-            <div className="item" onMouseEnter={this.showAclSettingBtn} onMouseLeave={this.showAclSettingBtn}>
+            <div className="item basic-settings-item">
               <div className="item-key">
                 读写权限
               </div>
               <div className="item-value">
-                私有
+                <div className="value-and-setting">
+                  <span>{getAclDesc(bucketInfo.acl)}</span>
+                  <a className="next-btn next-small next-btn-normal go-setting" href="/#/bucket/berry/settings">设置</a>
+                </div>
               </div>
-              {
-                showAclSettingBtn ? (
-                  <Button size="small" onClick={this.showAclSelect}>设置</Button>
-                ) : null
-              }
             </div>
-            <div className="item">
+            <div className="item basic-settings-item">
               <div className="item-key">
                 防盗链
               </div>
               <div className="item-value">
-                未开启
+                <div className="value-and-setting">
+                  <span>未开启</span>
+                  <a className="next-btn next-small next-btn-normal go-setting" href="/#/bucket/berry/settings">设置</a>
+                </div>
               </div>
             </div>
           </div>

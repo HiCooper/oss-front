@@ -18,6 +18,15 @@ export const GetBucketApi = params => axios.get('/ajax/bucket/detail.json', { pa
   .then(res => res.data);
 
 /**
+ * 获取 Bucket 防盗链设置
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const GetBucketRefererApi = params => axios.get('/ajax/bucket/get_referer.json', { params })
+  .then(res => res.data);
+
+/**
  * 创建 Bucket
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
@@ -31,5 +40,14 @@ export const CreateBucketApi = params => axios.post('/ajax/bucket/new_create_buc
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const SetAclApi = params => axios.post('/ajax/bucket/set_acl.json', params)
+export const SetBucketAclApi = params => axios.post('/ajax/bucket/set_acl.json', params)
+  .then(res => res.data);
+
+/**
+ * 删除 Bucket
+ * @param params
+ * @returns {Promise<AxiosResponse<any> | never>}
+ * @constructor
+ */
+export const DeleteBucketApi = params => axios.post('/ajax/bucket/delete_bucket.json', params)
   .then(res => res.data);
