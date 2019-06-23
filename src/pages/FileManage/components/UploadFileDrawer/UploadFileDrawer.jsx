@@ -23,14 +23,16 @@ const formItemLayout = {
 const ACLMessageTable = {
   EXTEND_BUCKET: <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
   PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ: <span style={{
+  PUBLIC_READ:
+  <span style={{
     color: 'red',
     fontSize: '12px',
   }}
   >
 公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
   </span>,
-  PUBLIC: <span style={{
+  PUBLIC:
+  <span style={{
     color: 'red',
     fontSize: '12px',
   }}
@@ -74,8 +76,11 @@ export default class UploadFileDrawer extends Component {
     }
   };
 
-  beforeUploadHook = async (file) => {
-    console.log(file);
+  beforeUploadHook = async (file, fileList) => {
+    if (fileList.length > 100) {
+      message.warning('最多同时上传数量为100');
+      return Promise.reject('最多同时上传数量为100');
+    }
     // 检查 目录
     const { uploadPath } = this.state;
     if (!uploadPath || !uploadPath.trim()) {
@@ -250,7 +255,7 @@ export default class UploadFileDrawer extends Component {
               </p>
               <p className="ant-upload-text">单击或拖拽上传</p>
               <p className="ant-upload-hint">
-                支持单个或批量上传
+                支持单个或批量上传,最多同时上传100个
               </p>
             </Dragger>
           </Form.Item>
