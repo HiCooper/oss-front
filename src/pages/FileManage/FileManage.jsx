@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Modal, Table } from 'antd';
+import copyToClipboard from 'copy-to-clipboard';
 import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
 import { DeleteObjectHeadApi, GenerateUrlWithSignedApi, ListObjectApi } from '../../api/object';
 import './index.scss';
@@ -137,10 +138,21 @@ export default class FileManage extends Component {
   };
 
   beginDownload = async (record) => {
+    message.info('稍后将自动下载...');
     const url = await this.getObjectUrl(record);
     if (url) {
-      window.location.assign(url);
+      if (url.indexOf('&') !== -1) {
+        window.location.assign(`${url}&Download=true`);
+      } else {
+        window.location.assign(`${url}?Download=true`);
+      }
     }
+  };
+
+  copyUrlToClipboard = async (record) => {
+    const url = await this.getObjectUrl(record);
+    copyToClipboard(url);
+    message.success('复制成功');
   };
 
   getObjectUrl = async (record) => {
@@ -157,9 +169,9 @@ export default class FileManage extends Component {
         if (res.msg === 'SUCCESS') {
           const genTempUrlInfo = res.data;
           if (record.acl.startsWith('PRIVATE') || (record.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE'))) {
-            url = `${genTempUrlInfo.url}?${genTempUrlInfo.signature}&Download=true`;
+            url = `${genTempUrlInfo.url}?${genTempUrlInfo.signature}`;
           } else {
-            url = `${genTempUrlInfo.url}?Download=true`;
+            url = `${genTempUrlInfo.url}`;
           }
         }
       })
@@ -180,13 +192,17 @@ export default class FileManage extends Component {
       this.beginDownload(record);
       return;
     }
+    // 复制到剪切板
+    if (item.key === '3') {
+      this.copyUrlToClipboard(record);
+      return;
+    }
     if (item.key === '4') {
       this.showDeleteConfirm(record);
     }
   };
 
-  deleteObject = (record) => {
-    const fullPath = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+  deleteObject = (record, fullPath) => {
     const params = {
       bucket: this.state.bucketName,
       objects: fullPath,
@@ -277,6 +293,7 @@ export default class FileManage extends Component {
         </div>
       );
     }
+    const fullPath = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
     confirm({
       title: (
         <div>
@@ -287,7 +304,7 @@ export default class FileManage extends Component {
             fontWeight: 'bold',
           }}
           >
-            {`${record.filePath}/${record.fileName}`}
+            {fullPath}
           </span>
           请确认!
         </div>
@@ -297,7 +314,7 @@ export default class FileManage extends Component {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        thisAlias.deleteObject(record);
+        thisAlias.deleteObject(record, fullPath);
       },
       onCancel() {
         message.info('取消删除');
@@ -498,7 +515,11 @@ export default class FileManage extends Component {
             }
             {
               setObjectAclVisible ? (
-                <SetObjectAclDrawer info={currentRecord} onClose={this.setObjectAclDrawerClose} onSuccess={this.initObjectList} visible={setObjectAclVisible} />
+                <SetObjectAclDrawer info={currentRecord}
+                  onClose={this.setObjectAclDrawerClose}
+                  onSuccess={this.initObjectList}
+                  visible={setObjectAclVisible}
+                />
               ) : null
             }
           </div>
