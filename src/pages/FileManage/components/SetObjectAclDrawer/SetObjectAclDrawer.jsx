@@ -56,10 +56,6 @@ class SetObjectAclDrawer extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.state.objectInfo);
-  }
-
   aclChange = (e) => {
     e.preventDefault();
     this.setState({
@@ -74,8 +70,6 @@ class SetObjectAclDrawer extends Component {
       submitLoading: true,
     });
     const { bucketInfo, objectInfo, acl } = this.state;
-    console.log(bucketInfo);
-    console.log(objectInfo);
     const params = {
       bucket: bucketInfo.name,
       objectPath: objectInfo.filePath,
@@ -98,8 +92,6 @@ class SetObjectAclDrawer extends Component {
 
   render() {
     const { defaultAcl, acl, submitLoading, aclMessage } = this.state;
-    console.log(defaultAcl);
-    console.log(acl);
     return (
       <Drawer
         width={640}

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Modal, Table } from 'antd';
 import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
-import { DeleteObjectHeadApi, ListObjectApi } from '../../api/object';
+import { DeleteObjectHeadApi, GenerateUrlWithSignedApi, ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
 import SetObjectAclDrawer from './components/SetObjectAclDrawer';
 import AddFolderDrawer from './components/AddFolderDrawer';
+import { getCurrentBucket } from '../../util/Bucket';
 
 const Search = Input.Search;
 
@@ -17,8 +18,10 @@ export default class FileManage extends Component {
 
   constructor(props) {
     super(props);
+    const bucketInfo = getCurrentBucket();
     const paramsFromUrl = getParamsFromUrl(this.props.location.search);
     this.state = {
+      bucketInfo,
       selectedRowKeys: [], // Check here to configure the default column
       objectList: [],
       bucketName: this.props.match.params.name,
@@ -133,9 +136,39 @@ export default class FileManage extends Component {
     e.preventDefault();
   };
 
+  beginDownload = (record) => {
+    const { bucketInfo } = this.state;
+    const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
+    const params = {
+      bucket: bucketInfo.name,
+      objectPath: path,
+      timeout: 60,
+    };
+    GenerateUrlWithSignedApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          const genTempUrlInfo = res.data;
+          if (record.acl.startsWith('PRIVATE') || (record.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE'))) {
+            window.location.assign(`${genTempUrlInfo.url}?${genTempUrlInfo.signature}&Download=true`);
+          } else {
+            window.location.assign(`${genTempUrlInfo.url}?Download=true`);
+          }
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   handleMenuClick = (record, item) => {
-    if (item.key === '1'){
+    // 设置读写权限
+    if (item.key === '1') {
       this.showSetObjectAclDrawer(record);
+      return;
+    }
+    // 下载
+    if (item.key === '2') {
+      this.beginDownload(record);
       return;
     }
     if (item.key === '4') {
@@ -258,7 +291,7 @@ export default class FileManage extends Component {
         thisAlias.deleteObject(record);
       },
       onCancel() {
-        console.log('Cancel');
+        message.info('取消删除');
       },
     });
   };
