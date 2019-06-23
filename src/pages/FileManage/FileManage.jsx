@@ -136,7 +136,14 @@ export default class FileManage extends Component {
     e.preventDefault();
   };
 
-  beginDownload = (record) => {
+  beginDownload = async (record) => {
+    const url = await this.getObjectUrl(record);
+    if (url) {
+      window.location.assign(url);
+    }
+  };
+
+  getObjectUrl = async (record) => {
     const { bucketInfo } = this.state;
     const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
     const params = {
@@ -144,20 +151,22 @@ export default class FileManage extends Component {
       objectPath: path,
       timeout: 60,
     };
-    GenerateUrlWithSignedApi(params)
+    let url = '';
+    await GenerateUrlWithSignedApi(params)
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           const genTempUrlInfo = res.data;
           if (record.acl.startsWith('PRIVATE') || (record.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE'))) {
-            window.location.assign(`${genTempUrlInfo.url}?${genTempUrlInfo.signature}&Download=true`);
+            url = `${genTempUrlInfo.url}?${genTempUrlInfo.signature}&Download=true`;
           } else {
-            window.location.assign(`${genTempUrlInfo.url}?Download=true`);
+            url = `${genTempUrlInfo.url}?Download=true`;
           }
         }
       })
       .catch((e) => {
         console.error(e);
       });
+    return url;
   };
 
   handleMenuClick = (record, item) => {
