@@ -5,6 +5,7 @@ import { DeleteObjectHeadApi, ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
+import SetObjectAclDrawer from './components/SetObjectAclDrawer';
 import AddFolderDrawer from './components/AddFolderDrawer';
 
 const Search = Input.Search;
@@ -32,6 +33,8 @@ export default class FileManage extends Component {
 
       // 新建目录抽屉显示
       addFolderVisible: false,
+      // 设置对象acl 抽屉显示
+      setObjectAclVisible: false,
       search: '',
     };
   }
@@ -131,6 +134,10 @@ export default class FileManage extends Component {
   };
 
   handleMenuClick = (record, item) => {
+    if (item.key === '1'){
+      this.showSetObjectAclDrawer(record);
+      return;
+    }
     if (item.key === '4') {
       this.showDeleteConfirm(record);
     }
@@ -185,9 +192,23 @@ export default class FileManage extends Component {
     );
   };
 
+  showSetObjectAclDrawer = (record) => {
+    this.setState({
+      setObjectAclVisible: true,
+      currentRecord: record,
+    });
+  };
+
   detailDrawerClose = () => {
     this.setState({
       detailVisible: false,
+      currentRecord: undefined,
+    });
+  };
+
+  setObjectAclDrawerClose = () => {
+    this.setState({
+      setObjectAclVisible: false,
       currentRecord: undefined,
     });
   };
@@ -310,7 +331,7 @@ export default class FileManage extends Component {
   };
 
   render() {
-    const { tableLoading, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord, search } = this.state;
+    const { tableLoading, setObjectAclVisible, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord, search } = this.state;
     const pathQueue = currentPath.length > 1 ? currentPath.substr(1)
       .split('/') : null;
     const rowSelection = {
@@ -431,6 +452,11 @@ export default class FileManage extends Component {
             {
               currentRecord ? (
                 <DetailDrawer info={currentRecord} onClose={this.detailDrawerClose} visible={detailVisible} />
+              ) : null
+            }
+            {
+              setObjectAclVisible ? (
+                <SetObjectAclDrawer info={currentRecord} onClose={this.setObjectAclDrawerClose} onSuccess={this.initObjectList} visible={setObjectAclVisible} />
               ) : null
             }
           </div>

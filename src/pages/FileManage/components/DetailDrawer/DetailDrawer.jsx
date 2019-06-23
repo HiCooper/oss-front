@@ -113,7 +113,7 @@ class DetailDrawer extends Component {
   };
 
   render() {
-    const { detailInfo, genTempUrlInfo, objectHeadInfo } = this.state;
+    const { detailInfo, genTempUrlInfo, objectHeadInfo, bucketInfo } = this.state;
     return (
       <Drawer
         width={640}
@@ -150,11 +150,11 @@ class DetailDrawer extends Component {
                     {objectHeadInfo.eTag}
                   </Form.Item>
                   {
-                    detailInfo.acl.startsWith('PRIVATE') ? (
+                    detailInfo.acl.startsWith('PRIVATE') || (detailInfo.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE')) ? (
                       <Form.Item
                         label={(
                           <span>
-                        链接有效时间
+                        链接有效时间(s)
                             <Tooltip autoAdjustOverflow
                               arrowPointAtCenter
                               placement="topLeft"
@@ -178,7 +178,7 @@ class DetailDrawer extends Component {
                   <Form.Item label="URL">
                     <div className="object-url">
                       {
-                        detailInfo.acl.startsWith('PUBLIC') ? genTempUrlInfo.url : `${genTempUrlInfo.url}?${genTempUrlInfo.signature}`
+                        detailInfo.acl.startsWith('PUBLIC') || (detailInfo.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PUBLIC')) ? genTempUrlInfo.url : `${genTempUrlInfo.url}?${genTempUrlInfo.signature}`
                       }
                     </div>
                   </Form.Item>

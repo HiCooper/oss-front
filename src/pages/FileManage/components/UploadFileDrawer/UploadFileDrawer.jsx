@@ -64,6 +64,7 @@ export default class UploadFileDrawer extends Component {
   }
 
   uploadBtnOnchange = (info) => {
+    console.log(info);
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
     }
@@ -225,7 +226,7 @@ export default class UploadFileDrawer extends Component {
               <Radio.Button value="EXTEND_BUCKET">继承 Bucket</Radio.Button>
               <Radio.Button value="PRIVATE">私有</Radio.Button>
               <Radio.Button value="PUBLIC_READ">公共读</Radio.Button>
-              <Radio.Button value="PUBLIC">公共读写</Radio.Button>
+              <Radio.Button value="PUBLIC_READ_WRITE">公共读写</Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item

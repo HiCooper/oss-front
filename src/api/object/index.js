@@ -41,7 +41,7 @@ export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_fo
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const SetObjectAclApi = params => axios.post('/ajax/bucket/file/set_object_acl.json', { params })
+export const SetObjectAclApi = params => axios.post('/ajax/bucket/file/set_object_acl.json', params )
   .then(res => res.data);
 
 /**
