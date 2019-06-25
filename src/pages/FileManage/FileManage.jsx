@@ -298,7 +298,6 @@ export default class FileManage extends Component {
             fullPaths += ',';
           }
         }
-        console.log(fullPaths);
         thisAlias.deleteObject(fullPaths);
       },
       onCancel() {
