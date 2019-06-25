@@ -4,6 +4,7 @@
     margin-bottom: 16px;
     padding-bottom: 8px;
     border-bottom: 1px dashed #d7d8d9;
+
     &:last-child {
       border-bottom: 0;
     }
@@ -23,7 +24,7 @@
       margin-bottom: 12px;
     }
 
-    .ant-btn{
+    .ant-btn {
       border-radius: unset !important;
     }
   }

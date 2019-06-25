@@ -6,6 +6,8 @@ import StatsFile from './pages/StatsFile';
 import Settings from './pages/Settings';
 import StatsHot from './pages/StatsHot';
 import Login from './pages/Login';
+import PersonInfo from './pages/PersonInfo';
+import SecretKey from './pages/SecretKey';
 
 const routerConfig = [
   {
@@ -18,6 +20,19 @@ const userRouterConfig = [
   {
     path: '/user/login',
     component: Login,
+    exact: true,
+  },
+];
+
+const loginUserRouterConfig = [
+  {
+    path: '/home/person',
+    component: PersonInfo,
+    exact: true,
+  },
+  {
+    path: '/home/secret',
+    component: SecretKey,
     exact: true,
   },
 ];
@@ -44,4 +59,4 @@ const childRouterConfig = [
   },
 ];
 
-export { routerConfig, userRouterConfig, childRouterConfig };
+export { routerConfig, userRouterConfig, loginUserRouterConfig, childRouterConfig };

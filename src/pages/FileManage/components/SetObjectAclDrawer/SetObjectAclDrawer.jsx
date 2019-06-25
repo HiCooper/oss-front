@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Radio, message } from 'antd';
+import { Button, Drawer, Form, message, Radio } from 'antd';
 import { SetObjectAclApi } from '../../../../api/object';
 import { getCurrentBucket } from '../../../../util/Bucket';
 
@@ -76,15 +76,17 @@ class SetObjectAclDrawer extends Component {
       objectName: objectInfo.fileName,
       acl,
     };
-    SetObjectAclApi(params).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('操作成功');
-        this.props.onSuccess();
-        this.props.onClose();
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+    SetObjectAclApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('操作成功');
+          this.props.onSuccess();
+          this.props.onClose();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     this.setState({
       submitLoading: false,
     });

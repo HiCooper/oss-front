@@ -82,7 +82,10 @@ export default class FileManage extends Component {
   };
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows });
+    this.setState({
+      selectedRowKeys,
+      selectedRows,
+    });
   };
 
   renderFileName = (val, record) => {

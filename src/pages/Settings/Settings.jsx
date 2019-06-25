@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './index.scss';
-import { Button, Form, Input, Modal, Radio, Switch, message, Popconfirm } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm, Radio, Switch } from 'antd';
 import { getAclDesc } from '../../util/AclTable';
 import { DeleteBucketApi, SetBucketAclApi } from '../../api/bucket';
 import { getCurrentBucket, setCurrentBucketInfo } from '../../util/Bucket';
@@ -69,21 +69,26 @@ class Settings extends Component {
     e.preventDefault();
     const { acl, aclDefault, bucketInfo, editStatus } = this.state;
     if (acl !== aclDefault) {
-      SetBucketAclApi({ acl, bucket: bucketInfo.name }).then((res) => {
-        if (res.msg === 'SUCCESS') {
-          message.success('操作成功');
-          editStatus.acl = false;
-          bucketInfo.acl = acl;
-          setCurrentBucketInfo(JSON.stringify(bucketInfo));
-          this.setState({
-            editStatus,
-            bucketInfo,
-            aclDefault: acl,
-          });
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
+      SetBucketAclApi({
+        acl,
+        bucket: bucketInfo.name,
+      })
+        .then((res) => {
+          if (res.msg === 'SUCCESS') {
+            message.success('操作成功');
+            editStatus.acl = false;
+            bucketInfo.acl = acl;
+            setCurrentBucketInfo(JSON.stringify(bucketInfo));
+            this.setState({
+              editStatus,
+              bucketInfo,
+              aclDefault: acl,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -151,14 +156,16 @@ class Settings extends Component {
 
   confirmDelete = () => {
     const { bucketInfo } = this.state;
-    DeleteBucketApi({ bucket: bucketInfo.name }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('删除成功');
-        this.props.history.push('/');
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    DeleteBucketApi({ bucket: bucketInfo.name })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('删除成功');
+          this.props.history.push('/');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   cancelDelete = () => {

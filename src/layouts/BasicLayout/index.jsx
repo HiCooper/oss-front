@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Avatar, Button, Col, Divider, Dropdown, Icon, Input, Layout, Menu, message, Popover, Row } from 'antd';
+import { Col, Icon, Input, Layout, Menu, message, Popover, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
 import AddBucketDrawer from '../../pages/AddBucketDrawer';
+import LoginHeader from '../components/LoginHeader';
 import { ListBucketApi } from '../../api/bucket';
-import { getUserInfo, removeAll } from '../../util/auth';
+import { getUserInfo } from '../../util/auth';
 import { setCurrentBucketInfo } from '../../util/Bucket';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 const Search = Input.Search;
 
 class BasicLayout extends Component {
   static displayName = 'BasicLayout';
-
-  theme = localStorage.getItem('theme');
 
   userInfo = getUserInfo() ? JSON.parse(getUserInfo()) : { username: '' };
 
@@ -24,10 +23,7 @@ class BasicLayout extends Component {
     const { pathname } = this.props.location;
     const base = pathname.substr(0, pathname.lastIndexOf('/'));
     this.state = {
-      color: '#00a2ae',
       activateMenuPath: base,
-      username: this.userInfo.username,
-      currentTheme: this.theme || 'default',
       bucketList: [],
       visible: false,
       // bucket name
@@ -81,79 +77,6 @@ class BasicLayout extends Component {
     }
   };
 
-  changeTheme = (type, e) => {
-    e.preventDefault();
-    if (type !== this.state.currentTheme) {
-      this.setState({
-        currentTheme: type,
-      });
-      localStorage.setItem('theme', type);
-    }
-  };
-
-  themeSelect = () => (
-    <Menu>
-      <Menu.Item>
-        <span onClick={e => this.changeTheme('default', e)}>默认</span>
-      </Menu.Item>
-      <Menu.Item>
-        <span onClick={e => this.changeTheme('picture', e)}>图片</span>
-      </Menu.Item>
-    </Menu>
-  );
-
-  text = () => {
-    const { username, color } = this.state;
-    return (
-      <div className="personal">
-        <Avatar style={{
-          backgroundColor: color,
-          verticalAlign: 'middle',
-          marginRight: '5px',
-        }}
-          size="large"
-        >
-          {username.substr(0, 1)}
-        </Avatar>
-        <span>{username}</span>
-      </div>
-    );
-  };
-
-  logout = () => {
-    removeAll();
-    localStorage.clear();
-    this.props.history.push('/user/login');
-  };
-
-  content = () => {
-    return (
-      <div className="personal-card-content">
-        <div className="btn-group">
-          <div className="item">
-            <Icon type="user" style={{ fontSize: '20px' }} />
-            <div className="title">
-              个人信息
-            </div>
-          </div>
-          <div className="item">
-            <Icon type="key" style={{ fontSize: '20px' }} />
-            <div className="title">
-              密钥管理
-            </div>
-          </div>
-        </div>
-        <Divider style={{ margin: '10px 0' }} />
-        <div className="footer">
-          <Button type="link" style={{ color: '#ccccccc' }} onClick={this.logout}>
-            <Icon type="poweroff" />
-            退出当前账户
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
   renderBucketList = (item) => {
     return (
       <Menu.Item key={`/bucket/${item.name}`}>
@@ -202,57 +125,12 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { color, username, activateMenuPath, currentTheme, bucketList, visible } = this.state;
+    const { activateMenuPath, bucketList, visible } = this.state;
     return (
       <Layout className="basic-layout">
-        <Header className={currentTheme === 'default' ? 'default-header' : 'picture-header'}>
-          <div className="left">
-            <div className="logo">
-              <Icon type="hdd" />
-              <span style={{ marginLeft: '5px' }}>对象存储OSS</span>
-            </div>
-          </div>
-          <div className="right">
-            <Dropdown overlay={this.themeSelect}>
-              <span style={{ fontWeight: 'bold' }}>
-                <Icon type="skin"
-                  style={{
-                    marginRight: '20px',
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                  }}
-                />
-              </span>
-            </Dropdown>
-            <Popover placement="bottomRight"
-              title={this.text()}
-              content={this.content()}
-              trigger="click"
-              className="personal-info"
-            >
-              <div>
-                <Avatar style={{
-                  backgroundColor: color,
-                  verticalAlign: 'middle',
-                  marginRight: '5px',
-                }}
-                >
-                  {username.substr(0, 1)
-                    .toLocaleUpperCase()}
-                </Avatar>
-                <span style={{
-                  fontWeight: 'bold',
-                  marginRight: '5px',
-                }}
-                >
-                  {username}
-                </span>
-              </div>
-            </Popover>
-          </div>
-        </Header>
+        <LoginHeader />
         <Layout className="main-section">
-          <Sider width={200} className={currentTheme === 'picture' ? 'picture-side' : 'default-side'}>
+          <Sider width={200} className="default-side">
             <Menu
               onSelect={this.subMenuSelect}
               mode="inline"
