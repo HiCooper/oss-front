@@ -8,7 +8,7 @@ const headMenuConfig = [
     name: '文件管理',
     path: '/object',
     exact: false,
-  },{
+  }, {
     name: '基础设置',
     path: '/settings',
     exact: false,

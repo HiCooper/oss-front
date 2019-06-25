@@ -151,12 +151,12 @@ class Settings extends Component {
 
   confirmDelete = () => {
     const { bucketInfo } = this.state;
-    DeleteBucketApi({bucket: bucketInfo.name}).then(res => {
+    DeleteBucketApi({ bucket: bucketInfo.name }).then((res) => {
       if (res.msg === 'SUCCESS') {
         message.success('删除成功');
         this.props.history.push('/');
       }
-    }).catch(e => {
+    }).catch((e) => {
       console.error(e);
     });
   };

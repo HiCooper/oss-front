@@ -24,6 +24,7 @@ export default class FileManage extends Component {
     this.state = {
       bucketInfo,
       selectedRowKeys: [], // Check here to configure the default column
+      selectedRows: [], // Check here to configure the default column
       objectList: [],
       bucketName: this.props.match.params.name,
       // 上传抽屉显示
@@ -80,8 +81,8 @@ export default class FileManage extends Component {
     this.initObjectList();
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows });
   };
 
   renderFileName = (val, record) => {
@@ -106,8 +107,18 @@ export default class FileManage extends Component {
 
   onRowClick = (record, e) => {
     e.preventDefault();
+    const { selectedRowKeys, selectedRows } = this.state;
+    const filterRowKeys = selectedRowKeys.filter(i => i !== record.id);
+    const filterRows = selectedRows.filter(i => i.id !== record.id);
+    if (filterRowKeys.length === selectedRowKeys.length) {
+      filterRowKeys.push(record.id);
+    }
+    if (filterRows.length === selectedRows.length) {
+      filterRows.push(record);
+    }
     this.setState({
-      selectedRowKeys: [record.id],
+      selectedRows: filterRows,
+      selectedRowKeys: filterRowKeys,
     });
   };
 
@@ -168,7 +179,7 @@ export default class FileManage extends Component {
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           const genTempUrlInfo = res.data;
-          if (record.acl.startsWith('PRIVATE') || (record.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE'))) {
+          if (!record.acl || record.acl.startsWith('PRIVATE') || (record.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE'))) {
             url = `${genTempUrlInfo.url}?${genTempUrlInfo.signature}`;
           } else {
             url = `${genTempUrlInfo.url}`;
@@ -181,33 +192,39 @@ export default class FileManage extends Component {
     return url;
   };
 
-  handleMenuClick = (record, item) => {
+  handleMoreMenuClick = async (record, item) => {
     // 设置读写权限
     if (item.key === '1') {
-      this.showSetObjectAclDrawer(record);
+      await this.showSetObjectAclDrawer(record);
       return;
     }
     // 下载
     if (item.key === '2') {
-      this.beginDownload(record);
+      await this.beginDownload(record);
       return;
     }
     // 复制到剪切板
     if (item.key === '3') {
-      this.copyUrlToClipboard(record);
+      await this.copyUrlToClipboard(record);
       return;
     }
+    // 删除
     if (item.key === '4') {
       this.showDeleteConfirm(record);
     }
   };
 
-  deleteObject = (record, fullPath) => {
+  /**
+   *  fullPath 对象全路径，多个用逗号隔开
+   * @param fullPath
+   * @returns {Promise<void>}
+   */
+  deleteObject = async (fullPath) => {
     const params = {
       bucket: this.state.bucketName,
       objects: fullPath,
     };
-    DeleteObjectHeadApi(params)
+    await DeleteObjectHeadApi(params)
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           message.success('操作成功');
@@ -220,20 +237,79 @@ export default class FileManage extends Component {
       });
   };
 
-  menu = () => (
-    <Menu onClick={this.handleMenuClick}>
-      <Menu.Item key="1">
-        下载
-      </Menu.Item>
-      <Menu.Item key="2">
-        删除
-      </Menu.Item>
-    </Menu>
-  );
+  // 检查已选择的不包含文件夹,且已选择不为空
+  checkSelect = () => {
+    const { selectedRows } = this.state;
+    const dirRow = selectedRows.filter(item => item.isDir === true);
+    return dirRow.length > 0 || selectedRows.length < 1;
+  };
+
+  // 检查当前是否有选择
+  checkSelectForDelete = () => {
+    return this.state.selectedRows.length < 1;
+  };
+
+  menu = () => {
+    return (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="1" disabled={this.checkSelect()}>
+          下载
+        </Menu.Item>
+        <Menu.Item key="2" disabled={this.checkSelectForDelete()}>
+          删除
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
+  handleMenuClick = async (item) => {
+    // 下载
+    if (item.key === '1') {
+      const { selectedRows } = this.state;
+      console.log(selectedRows);
+      return;
+    }
+    // 删除
+    if (item.key === '2') {
+      this.showBatchDeleteWarning();
+    }
+  };
+
+  showBatchDeleteWarning = () => {
+    const thisAlias = this;
+    confirm({
+      title: '批量删除',
+      centered: true,
+      content: (
+        <div style={{ color: 'red' }}>
+          批量删除对象，该操作不可恢复，请慎重操作!
+        </div>
+      ),
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        const { selectedRows } = thisAlias.state;
+        let fullPaths = '';
+        for (let i = 0; i < selectedRows.length; i++) {
+          const record = selectedRows[i];
+          const path = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+          fullPaths += path;
+          if (i < selectedRows.length - 1) {
+            fullPaths += ',';
+          }
+        }
+        console.log(fullPaths);
+        thisAlias.deleteObject(fullPaths);
+      },
+      onCancel() {
+        message.info('批量取消删除');
+      },
+    });
+  };
 
   moreMenu = (record) => {
     return (
-      <Menu onClick={item => this.handleMenuClick(record, item)}>
+      <Menu onClick={item => this.handleMoreMenuClick(record, item)}>
         <Menu.Item key="1">
           设置读写权限
         </Menu.Item>
@@ -250,8 +326,8 @@ export default class FileManage extends Component {
     );
   };
 
-  showSetObjectAclDrawer = (record) => {
-    this.setState({
+  showSetObjectAclDrawer = async (record) => {
+    await this.setState({
       setObjectAclVisible: true,
       currentRecord: record,
     });
@@ -314,7 +390,7 @@ export default class FileManage extends Component {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        thisAlias.deleteObject(record, fullPath);
+        thisAlias.deleteObject(fullPath);
       },
       onCancel() {
         message.info('取消删除');
