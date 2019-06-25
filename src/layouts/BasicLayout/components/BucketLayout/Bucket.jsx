@@ -56,7 +56,7 @@ export default class Bucket extends Component {
             </span>
             <span className="info">
               <strong>区域</strong>
-              华北2（北京）
+              {bucketInfo.regionName}
             </span>
             <span className="info">
               <strong>创建时间</strong>

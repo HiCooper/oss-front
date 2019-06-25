@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Input, message, Radio } from 'antd';
+import { Button, Drawer, Form, Input, message, Radio, Select } from 'antd';
 import { CreateBucketApi } from '../../api/bucket';
 
 const formItemLayout = {
@@ -15,6 +15,7 @@ const formItemLayout = {
   },
 };
 
+const { Option } = Select;
 
 const ACLMessageTable = {
   PRIVATE:
@@ -47,6 +48,7 @@ class AddBucketDrawer extends Component {
       name: '',
       submitLoading: false,
       aclMessage: ACLMessageTable.PRIVATE,
+      region: 'oss-shanghai-1',
     };
   }
 
@@ -101,7 +103,7 @@ class AddBucketDrawer extends Component {
   };
 
   render() {
-    const { name, acl, submitLoading, aclMessage } = this.state;
+    const { name, acl, submitLoading, aclMessage, region } = this.state;
     const { getFieldDecorator, getFieldError } = this.props.form;
     return (
       <Drawer
@@ -124,6 +126,25 @@ class AddBucketDrawer extends Component {
                 initialValue: name,
               })(
                 <Input placeholder="Bucket" suffix={`${name.length}/254`} />,
+              )
+            }
+          </Form.Item>
+
+          <Form.Item
+            label="所属区域"
+            validateStatus="success"
+          >
+            {
+              getFieldDecorator('region', {
+                rules: [{
+                  required: true,
+                  message: '请选择所属区域!',
+                }],
+                initialValue: region,
+              })(
+                <Select placeholder="请选择所属区域">
+                  <Option value="oss-shanghai-1">华东1 上海</Option>
+                </Select>,
               )
             }
           </Form.Item>
