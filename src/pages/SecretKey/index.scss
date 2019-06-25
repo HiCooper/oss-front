@@ -1,0 +1,28 @@
+.secret-key{
+
+  .bread {
+    border-left: 3px solid #574ab7;
+    line-height: 40px;
+    padding: 0 10px;
+    font-weight: bold;
+  }
+
+  .table-viewer-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    margin-top: 10px;
+    height: 40px;
+    background: #F5f6FA;
+    line-height: 38px;
+    border: 1px solid #e1e6eb;
+    position: relative;
+    border-left: 4px solid #6d7781;
+  }
+
+  .secret-table{
+    border-left: 1px solid #e1e6eb;
+    border-right: 1px solid #e1e6eb;
+  }
+
+}

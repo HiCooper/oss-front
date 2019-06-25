@@ -3,27 +3,21 @@ const headMenuConfig = [
   {
     name: '概览',
     path: '/overview',
-    exact: false,
   }, {
     name: '文件管理',
     path: '/object',
-    exact: false,
   }, {
     name: '基础设置',
     path: '/settings',
-    exact: false,
   }, {
     name: 'API统计',
     path: '/stats-api',
-    exact: false,
   }, {
     name: '文件访问统计',
     path: '/stats-file',
-    exact: false,
   }, {
     name: '热点数据',
     path: '/stats-hot',
-    exact: false,
   },
 ];
 
@@ -33,19 +27,37 @@ const sideMenuConfig = [
     name: '概览',
     path: '/dashboard',
     icon: 'dashboard',
-    exact: true,
   },
 ];
 
 const homeUserMenuConfig = [
   {
-    name: '个人信息',
-    path: '/person',
-    exact: false,
+    name: '个人中心',
+    icon: 'user',
+    children: [
+      {
+        name: '个人信息',
+        path: '/profile',
+      }, {
+        name: '密钥管理',
+        path: '/secret',
+      }, {
+        name: '操作日志',
+        path: '/oplog',
+      },
+    ],
   }, {
-    name: '密钥管理',
-    path: '/secret',
-    exact: false,
+    name: '系统设置',
+    icon: 'setting',
+    children: [
+      {
+        name: '系统信息',
+        path: '/notice',
+      }, {
+        name: '通知设置',
+        path: '/notice-setting',
+      },
+    ],
   },
 ];
 

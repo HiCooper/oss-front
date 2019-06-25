@@ -36,17 +36,29 @@ export default class LoginHeader extends Component {
     );
   };
 
+  logout = (e) => {
+    e.preventDefault();
+    removeAll();
+    localStorage.clear();
+    window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login`);
+  };
+
+  goPage = (route, e) => {
+    e.preventDefault();
+    window.location.replace(`${window.location.protocol}//${window.location.host}/#${route}`);
+  };
+
   content = () => {
     return (
       <div className="personal-card-content">
         <div className="btn-group">
-          <div className="item" onClick={e => this.props.goPage('/home/person', e)}>
+          <div className="item" onClick={e => this.goPage('/home/profile', e)}>
             <Icon type="user" style={{ fontSize: '20px' }} />
             <div className="title">
-              个人信息
+              个人中心
             </div>
           </div>
-          <div className="item" onClick={e => this.props.goPage('/home/secret', e)}>
+          <div className="item" onClick={e => this.goPage('/home/secret', e)}>
             <Icon type="key" style={{ fontSize: '20px' }} />
             <div className="title">
               密钥管理
@@ -63,13 +75,6 @@ export default class LoginHeader extends Component {
       </div>
     );
   };
-
-  logout = () => {
-    removeAll();
-    localStorage.clear();
-    this.props.history.push('/user/login');
-  };
-
 
   render() {
     const { color, username } = this.state;

@@ -8,6 +8,8 @@ import StatsHot from './pages/StatsHot';
 import Login from './pages/Login';
 import PersonInfo from './pages/PersonInfo';
 import SecretKey from './pages/SecretKey';
+import SysNotice from './pages/SysNotice';
+import OpLog from './pages/OpLog';
 
 const routerConfig = [
   {
@@ -26,13 +28,23 @@ const userRouterConfig = [
 
 const loginUserRouterConfig = [
   {
-    path: '/home/person',
+    path: '/home/profile',
     component: PersonInfo,
     exact: true,
   },
   {
     path: '/home/secret',
     component: SecretKey,
+    exact: true,
+  },
+  {
+    path: '/home/notice',
+    component: SysNotice,
+    exact: true,
+  },
+  {
+    path: '/home/oplog',
+    component: OpLog,
     exact: true,
   },
 ];
