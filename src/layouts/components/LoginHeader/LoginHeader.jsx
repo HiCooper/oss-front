@@ -36,22 +36,17 @@ export default class LoginHeader extends Component {
     );
   };
 
-  goPage = (route, e) => {
-    e.preventDefault();
-    window.location.replace(`${window.location.protocol}//${window.location.host}/#${route}`);
-  };
-
   content = () => {
     return (
       <div className="personal-card-content">
         <div className="btn-group">
-          <div className="item" onClick={e => this.goPage('/home/person', e)}>
+          <div className="item" onClick={e => this.props.goPage('/home/person', e)}>
             <Icon type="user" style={{ fontSize: '20px' }} />
             <div className="title">
               个人信息
             </div>
           </div>
-          <div className="item" onClick={e => this.goPage('/home/secret', e)}>
+          <div className="item" onClick={e => this.props.goPage('/home/secret', e)}>
             <Icon type="key" style={{ fontSize: '20px' }} />
             <div className="title">
               密钥管理

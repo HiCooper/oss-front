@@ -37,6 +37,18 @@ const sideMenuConfig = [
   },
 ];
 
+const homeUserMenuConfig = [
+  {
+    name: '个人信息',
+    path: '/person',
+    exact: false,
+  }, {
+    name: '密钥管理',
+    path: '/secret',
+    exact: false,
+  },
+];
+
 // 文件管理分类
 const fileManage = [
   {
@@ -69,4 +81,4 @@ const fileManage = [
   },
 ];
 
-export { headMenuConfig, sideMenuConfig, fileManage };
+export { headMenuConfig, sideMenuConfig, homeUserMenuConfig, fileManage };
