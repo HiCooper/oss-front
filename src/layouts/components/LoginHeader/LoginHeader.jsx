@@ -148,7 +148,7 @@ export default class LoginHeader extends Component {
         </div>
         <div className="right">
           <Popover placement="bottomRight"
-            title="系统通知"
+            title={<span>系统通知(5未读)</span>}
             content={this.noticePopContent()}
             trigger="click"
             visible={noticePopShow}

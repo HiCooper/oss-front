@@ -1,41 +1,79 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon, Divider } from 'antd';
+import { Avatar, Button, Divider, List, Skeleton } from 'antd';
 import './index.scss';
 
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `系统通知信息 ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.' +
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+const count = 3;
 
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
 export default class SysNotice extends Component {
   static displayName = 'SysNotice';
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      initLoading: true,
+      loading: false,
+      data: [],
+      list: [],
+    };
   }
 
+  componentDidMount() {
+    this.initData();
+  }
+
+  initData = () => {
+    this.setState({
+      initLoading: false,
+      data: [
+        {
+          loading: false,
+          name: 'kakaxi 2019-08-08',
+        },
+      ],
+      list: [
+        {
+          loading: false,
+          name: 'kakaxi 2019-08-08',
+        },
+      ],
+    });
+  };
+
+  onLoadMore = () => {
+    const { data } = this.state;
+    const temp = data.concat([...new Array(count)].map(() => ({ loading: true, name: {} })));
+    this.setState({
+      loading: true,
+      list: temp,
+    });
+    for (let i = 0; i < count; i++) {
+      data.push({
+        name: `hello${i}  2019-08-08`,
+      });
+    }
+    this.setState(
+      {
+        data,
+        list: data,
+        loading: false,
+      },
+    );
+  };
+
   render() {
+    const { initLoading, loading, list } = this.state;
+    const loadMore = !initLoading && !loading ? (
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: 12,
+          height: 32,
+          lineHeight: '32px',
+        }}
+      >
+        <Button onClick={this.onLoadMore}>loading more</Button>
+      </div>
+    ) : null;
     return (
       <div className="sys-setting-home">
         <div className="bread">
@@ -44,35 +82,22 @@ export default class SysNotice extends Component {
         <Divider type="horizontal" />
 
         <List
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
-            pageSize: 3,
-          }}
-          dataSource={listData}
-          footer={(
-            <div>
-              <b>ant design</b>
-              footer part
-            </div>
-          )}
+          className="notice-list"
+          loading={initLoading}
+          itemLayout="horizontal"
+          loadMore={loadMore}
+          dataSource={list}
           renderItem={item => (
-            <List.Item
-              key={item.title}
-              actions={[
-                <IconText type="clock-circle" text="2019-01-01 12:12:12" />,
-                <IconText type="like-o" text="156" />,
-              ]}
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
-              />
-              {item.content}
+            <List.Item actions={[<Button type="link">标记为已读</Button>]}>
+              <Skeleton avatar title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                  }
+                  title={<a href="https://ant.design">{item.name}</a>}
+                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                />
+              </Skeleton>
             </List.Item>
           )}
         />

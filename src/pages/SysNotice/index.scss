@@ -1,8 +1,15 @@
 .sys-setting-home{
+  height: 100%;
+
   .bread {
     border-left: 3px solid #574ab7;
     line-height: 40px;
     padding: 0 10px;
     font-weight: bold;
+  }
+
+  .notice-list{
+    height: calc(100% - 88px);
+    overflow-y: auto;
   }
 }
