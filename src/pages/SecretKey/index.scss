@@ -7,6 +7,11 @@
     font-weight: bold;
   }
 
+  .help-info {
+    color: #a2a2a2;
+    font-size: 12px;
+  }
+
   .table-viewer-header {
     display: flex;
     justify-content: space-between;
@@ -23,6 +28,13 @@
   .secret-table{
     border-left: 1px solid #e1e6eb;
     border-right: 1px solid #e1e6eb;
+
+    .access-key-secret-text {
+      color: #999999;
+      background-color: #f5f7fa;
+      border: 1px solid #E9EDF4;
+      padding: 5px;
+    }
   }
 
 }
