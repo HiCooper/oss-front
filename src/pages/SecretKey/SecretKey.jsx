@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './index.scss';
-import { Alert, Button, Divider, Modal, Table } from 'antd';
+import { Alert, Button, Collapse, Divider, Form, Icon, Input, Modal, Table } from 'antd';
 
 const data = [
   {
@@ -13,23 +13,22 @@ const data = [
     AccessKeySecret: 'Lmi3Uz2sdqq6NRwR71FynQqB1wDI6c',
     createTime: '2019-06-25 22:07:04',
     state: '禁用',
-  }, {
-    AccessKeyId: 'LTAI6Mf6vkhsILc3',
-    AccessKeySecret: 'Lmi3Uz2sdqq6NRwR71FynQqB1wDI6d',
-    createTime: '2019-06-25 22:07:04',
-    state: '启用',
   },
 ];
 
 const confirm = Modal.confirm;
-
-export default class SecretKey extends Component {
+const { Panel } = Collapse;
+class SecretKey extends Component {
   static displayName = 'SecretKey';
 
   constructor(props) {
     super(props);
     this.state = {
+      modelLoading: false,
       tableLoading: false,
+      showCreateModel: false,
+      generateSuccess: false,
+      genLoading: false,
       showKeySecret: [],
     };
   }
@@ -190,8 +189,50 @@ export default class SecretKey extends Component {
     });
   };
 
+  saveAKInfo = () => {
+    console.log('save AK info');
+  };
+
+  showModel = () => {
+    this.setState({
+      showCreateModel: true,
+    });
+  };
+
+  closeModel = () => {
+    this.setState({
+      showCreateModel: false,
+    });
+  };
+
+  callback = (key) => {
+    console.log(key);
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    this.setState({
+      genLoading: true,
+    });
+    await this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        console.log('generate success');
+        setTimeout(() => {
+          this.setState({
+            generateSuccess: true,
+          });
+        }, 500);
+      }
+    });
+    this.setState({
+      genLoading: false,
+    });
+  };
+
   render() {
-    const { tableLoading } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    const { tableLoading, generateSuccess, showCreateModel, modelLoading, genLoading } = this.state;
     return (
       <div className="secret-key">
         <div className="bread">
@@ -214,7 +255,7 @@ export default class SecretKey extends Component {
           {
             data.length < 3 ? (
               <div className="pull-right">
-                <Button type="default" size="small">
+                <Button type="default" size="small" onClick={this.showModel}>
                   创建AccessKey
                 </Button>
               </div>
@@ -236,7 +277,100 @@ export default class SecretKey extends Component {
             render={this.renderOp}
           />
         </Table>
+        {
+          showCreateModel ? (
+            <Modal
+              visible={showCreateModel}
+              title="新建用户 AccessKey"
+              onCancel={this.closeModel}
+              width={650}
+              footer={
+                generateSuccess ? (
+                  [
+                    <Button key="submit" type="primary" loading={modelLoading} onClick={this.saveAKInfo}>
+                      保存AK信息
+                    </Button>,
+                  ]
+                ) : (
+                  [
+                    <Button key="submit" type="default" onClick={this.closeModel}>
+                      取消
+                    </Button>,
+                  ]
+                )
+              }
+            >
+              {
+                generateSuccess ? (
+                  <div>
+                    <Alert style={{ fontSize: '12px' }} message="这是用户 AccessKey 可供下载的唯一机会，请及时保存！" type="success" />
+                    <div style={{ textAlign: 'center', lineHeight: '100px' }}>
+                      <h1>
+                        <Icon type="check-circle" style={{ color: 'green', marginRight: '10px' }} />
+                        新建AccessKey成功！
+                      </h1>
+                    </div>
+                    <Collapse defaultActiveKey={['1']} onChange={this.callback}>
+                      <Panel header="AccessKey 详情" key="1">
+                        <div style={styles.newAccessKeyDetail}>
+                          <div style={{ ...styles.item, ...styles.br }}>
+                            <p style={styles.label}>AccessKeyID:</p>
+                            <p style={styles.value}>LTAI6Mf6vkhsILc3</p>
+                          </div>
+                          <div style={styles.item}>
+                            <p style={styles.label}>AccessKeySecret:</p>
+                            <p style={styles.value}>Lmi3Uz2sdqq6NRwR71FynQqB1wDI6d</p>
+                          </div>
+                        </div>
+                      </Panel>
+                    </Collapse>
+                  </div>
+                ) : (
+                  <div className="check-auth">
+                    <Form labelCol={{ span: 8 }} wrapperCol={{ span: 12 }} onSubmit={this.handleSubmit}>
+                      <Form.Item label="校验当前用户密码">
+                        {getFieldDecorator('password', {
+                          rules: [{ required: true, message: '请输入当前用户密码!' }],
+                        })(
+                          <Input placeholder="请输入密码" />
+                        )}
+                      </Form.Item>
+                      <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
+                        <Button type="primary" htmlType="submit" loading={genLoading}>
+                          生成 AccessKey
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </div>
+                )
+              }
+            </Modal>
+          ) : null
+        }
       </div>
     );
   }
 }
+const styles = {
+  newAccessKeyDetail: {
+    display: 'flex',
+  },
+  item: {
+    flex: '1 1 50%',
+    padding: '0 10px',
+  },
+  br: {
+    borderRight: '1px solid #d9d9d9',
+  },
+  label: {
+    fontSize: '12px',
+  },
+  value: {
+    fontSize: '12px',
+    color: '#7d6767',
+    fontWeight: 'bold',
+  },
+};
+
+const WrappedSecretKey = Form.create({ name: 'coordinated' })(SecretKey);
+export default WrappedSecretKey;
