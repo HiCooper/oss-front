@@ -214,11 +214,11 @@ class SecretKey extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({
-      genLoading: true,
-    });
     await this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          genLoading: true,
+        });
         console.log('Received values of form: ', values);
         console.log('generate success');
         CreateAccessKeyApi(values).then((res) => {
@@ -298,6 +298,9 @@ class SecretKey extends Component {
               footer={
                 generateSuccess ? (
                   [
+                    <Button key="cancel" type="default" onClick={this.closeModel}>
+                      关闭
+                    </Button>,
                     <Button key="submit" type="primary" loading={modelLoading} onClick={this.saveAKInfo}>
                       保存AK信息
                     </Button>,
@@ -343,7 +346,7 @@ class SecretKey extends Component {
                         {getFieldDecorator('password', {
                           rules: [{ required: true, message: '请输入当前用户密码!' }],
                         })(
-                          <Input placeholder="请输入密码" />
+                          <Input placeholder="请输入密码" type="password" />
                         )}
                       </Form.Item>
                       <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
