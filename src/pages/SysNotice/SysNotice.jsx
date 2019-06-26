@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon } from 'antd';
+import { List, Avatar, Icon, Divider } from 'antd';
+import './index.scss';
 
 const listData = [];
 for (let i = 0; i < 23; i++) {
@@ -30,7 +31,12 @@ export default class SysNotice extends Component {
 
   render() {
     return (
-      <div>
+      <div className="sys-setting-home">
+        <div className="bread">
+          系统通知
+        </div>
+        <Divider type="horizontal" />
+
         <List
           itemLayout="vertical"
           size="large"

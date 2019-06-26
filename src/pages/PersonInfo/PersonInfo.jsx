@@ -19,10 +19,10 @@ export default class PersonInfo extends Component {
         <Divider type="horizontal" />
 
         <Descriptions title="基本信息">
-          <Descriptions.Item label="用户名">Berry_Cooper</Descriptions.Item>
+          <Descriptions.Item label="用户名">admin</Descriptions.Item>
           <Descriptions.Item label="手机号">1810000000</Descriptions.Item>
-          <Descriptions.Item label="邮箱">xxx@seassoon.com</Descriptions.Item>
-          <Descriptions.Item label="等级">Shanghai, Xuhui</Descriptions.Item>
+          <Descriptions.Item label="邮箱">admin@seassoon.com</Descriptions.Item>
+          <Descriptions.Item label="所在地">Shanghai, Xuhui</Descriptions.Item>
           <Descriptions.Item label="备注">无</Descriptions.Item>
         </Descriptions>
       </div>

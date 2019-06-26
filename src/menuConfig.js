@@ -51,7 +51,7 @@ const homeUserMenuConfig = [
     icon: 'setting',
     children: [
       {
-        name: '系统信息',
+        name: '系统通知',
         path: '/notice',
       }, {
         name: '通知设置',

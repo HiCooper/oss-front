@@ -50,27 +50,6 @@ export default class Overview extends Component {
                   <span className="display-unit">个</span>
                 </div>
               </div>
-              <div className="card">
-                <div className="card-hd">
-                  <span>存储用量</span>
-                  <span>剩余可用: 12.383 G</span>
-                </div>
-                <div className="card-bd">
-                  <div className="info">
-                    <div>
-                      <span>已使用：</span>
-                      <span className="display-value">5.307</span>
-                      <span className="display-unit">G</span>
-                    </div>
-                    <div>
-                      <span>总容量：</span>
-                      <span className="display-value">17.69</span>
-                      <span className="display-unit">G</span>
-                    </div>
-                  </div>
-                  <Progress percent={30} size="small" />
-                </div>
-              </div>
             </div>
           </div>
         </div>

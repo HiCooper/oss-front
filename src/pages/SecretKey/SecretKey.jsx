@@ -7,6 +7,7 @@ const data = [
     AccessKeyId: 'LTAI6Mf6vkhsILcs',
     AccessKeySecret: 'Lmi3Uz2sdqq6NRwR71FynQqB1wDI6b',
     createTime: '2019-06-25 22:07:04',
+    state: '启用',
   },
 ];
 export default class SecretKey extends Component {
