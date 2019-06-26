@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './index.scss';
 import { Alert, Button, Collapse, Divider, Form, Icon, Input, Modal, Table } from 'antd';
+import { CreateAccessKeyApi } from '../../api/accessKey';
 
 const data = [
   {
@@ -202,6 +203,8 @@ class SecretKey extends Component {
   closeModel = () => {
     this.setState({
       showCreateModel: false,
+      generateSuccess: false,
+      genLoading: false,
     });
   };
 
@@ -218,6 +221,13 @@ class SecretKey extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         console.log('generate success');
+        CreateAccessKeyApi(values).then((res) => {
+          if (res.msg === 'SUCCESS') {
+            console.log(res);
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
         setTimeout(() => {
           this.setState({
             generateSuccess: true,
@@ -280,6 +290,7 @@ class SecretKey extends Component {
         {
           showCreateModel ? (
             <Modal
+              maskClosable={false}
               visible={showCreateModel}
               title="新建用户 AccessKey"
               onCancel={this.closeModel}
