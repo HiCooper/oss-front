@@ -22,10 +22,42 @@
     align-items: center;
   }
 
+  .right{
+    .notice-icon{
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      height: 64px;
+      line-height: 64px;
+      padding: 0 10px;
+
+      &:hover{
+        background: #f5eeee;
+      }
+
+      i{
+        font-size: 18px;
+      }
+
+    }
+  }
+
 }
 
 .personal-info {
   cursor: pointer;
+  padding: 0 10px;
+  &:hover{
+    background: #f5eeee;
+  }
+}
+
+.notice-card-content{
+  width: 300px;
+
+  .footer {
+    text-align: center;
+  }
 }
 
 .personal-card-content {

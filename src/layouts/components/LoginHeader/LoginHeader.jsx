@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
-import { Avatar, Button, Divider, Icon, Layout, Popover } from 'antd';
+import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover } from 'antd';
 import { getUserInfo, removeAll } from '../../../util/auth';
 import './index.scss';
 
 const { Header } = Layout;
-
+const data = [
+  {
+    title: '系统通知 1',
+  },
+  {
+    title: '系统通知 2',
+  },
+  {
+    title: '系统通知 3',
+  },
+  {
+    title: '系统通知 4',
+  },
+];
 export default class LoginHeader extends Component {
   static displayName = 'LoginHeader';
 
@@ -15,6 +28,8 @@ export default class LoginHeader extends Component {
     this.state = {
       color: '#00a2ae',
       username: this.userInfo.username,
+      noticePopShow: false,
+      personPopShow: false,
     };
   }
 
@@ -46,7 +61,12 @@ export default class LoginHeader extends Component {
   goPage = (route, e) => {
     e.preventDefault();
     window.location.replace(`${window.location.protocol}//${window.location.host}/#${route}`);
+    this.setState({
+      noticePopShow: false,
+      personPopShow: false,
+    });
   };
+
 
   content = () => {
     return (
@@ -76,8 +96,48 @@ export default class LoginHeader extends Component {
     );
   };
 
+  noticePopContent = () => {
+    return (
+      <div className="notice-card-content">
+        <div className="notice-list">
+          <List
+            size="small"
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Badge status="processing" />}
+                  title={<a href="https://ant.design" style={{ fontSize: '12px' }}>{item.title}</a>}
+                  description={
+                    <span style={{ fontSize: '10px' }}>Message, message, message</span>
+                  }
+                />
+              </List.Item>
+            )}
+          />
+        </div>
+        <Divider style={{ margin: '10px 0' }} />
+        <div className="footer">
+          <Button type="link" style={{ color: '#ccccccc' }} onClick={e => this.goPage('/home/notice', e)}>
+            <Icon type="more" />
+            更多通知
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  handleVisibleChange = (visible) => {
+    this.setState({ noticePopShow: visible });
+  };
+
+  handlePersonVisibleChange = (visible) => {
+    this.setState({ personPopShow: visible });
+  };
+
   render() {
-    const { color, username } = this.state;
+    const { color, username, noticePopShow, personPopShow } = this.state;
     return (
       <Header className="default-header">
         <div className="left">
@@ -88,10 +148,26 @@ export default class LoginHeader extends Component {
         </div>
         <div className="right">
           <Popover placement="bottomRight"
+            title="系统通知"
+            content={this.noticePopContent()}
+            trigger="click"
+            visible={noticePopShow}
+            className="notice-bell"
+            onVisibleChange={this.handleVisibleChange}
+          >
+            <div className="notice-icon">
+              <Badge dot>
+                <Icon type="bell" />
+              </Badge>
+            </div>
+          </Popover>
+          <Popover placement="bottomRight"
             title={this.text()}
             content={this.content()}
             trigger="click"
+            visible={personPopShow}
             className="personal-info"
+            onVisibleChange={this.handlePersonVisibleChange}
           >
             <div>
               <Avatar style={{
