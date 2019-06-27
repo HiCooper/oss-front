@@ -262,8 +262,6 @@ class SecretKey extends Component {
         this.setState({
           genLoading: true,
         });
-        console.log('Received values of form: ', values);
-        console.log('generate success');
         CreateAccessKeyApi(values).then((res) => {
           if (res.msg === 'SUCCESS') {
             this.setState({
