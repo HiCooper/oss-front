@@ -2,6 +2,10 @@
 
 [Create React App](https://facebook.github.io/create-react-app/) + [Ant Design](https://ant.design).
 
+exxample:
+
+![avatar](./pic/20190627092438.png)
+
 ## Step by Step Documentation
 
 - 🇺🇸 English: https://ant.design/docs/react/use-with-create-react-app
