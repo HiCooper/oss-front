@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2b35659e.chunk.css",
+    "main.js": "/static/js/main.83991630.chunk.js",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "static/css/2.b87527a6.chunk.css": "/static/css/2.b87527a6.chunk.css",
+    "static/js/2.f61fea80.chunk.js": "/static/js/2.f61fea80.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.4dbfac1e56800d3ba4fdf64db2a5f62b.js": "/precache-manifest.4dbfac1e56800d3ba4fdf64db2a5f62b.js",
+    "service-worker.js": "/service-worker.js",
+    "static/media/NotFound-260-260.png": "/static/media/NotFound-260-260.8c382430.png",
+    "static/media/index.scss": "/static/media/main_bg_night.a11091bf.png"
+  }
+}
