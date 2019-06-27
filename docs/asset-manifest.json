@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.2b35659e.chunk.css",
-    "main.js": "/static/js/main.83991630.chunk.js",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "static/css/2.b87527a6.chunk.css": "/static/css/2.b87527a6.chunk.css",
-    "static/js/2.f61fea80.chunk.js": "/static/js/2.f61fea80.chunk.js",
-    "index.html": "/index.html",
-    "precache-manifest.4dbfac1e56800d3ba4fdf64db2a5f62b.js": "/precache-manifest.4dbfac1e56800d3ba4fdf64db2a5f62b.js",
-    "service-worker.js": "/service-worker.js",
-    "static/media/NotFound-260-260.png": "/static/media/NotFound-260-260.8c382430.png",
-    "static/media/index.scss": "/static/media/main_bg_night.a11091bf.png"
+    "main.css": "/oss-front/static/css/main.ef6bce09.chunk.css",
+    "main.js": "/oss-front/static/js/main.8785779c.chunk.js",
+    "runtime~main.js": "/oss-front/static/js/runtime~main.505e485d.js",
+    "static/css/2.b87527a6.chunk.css": "/oss-front/static/css/2.b87527a6.chunk.css",
+    "static/js/2.b3dfae57.chunk.js": "/oss-front/static/js/2.b3dfae57.chunk.js",
+    "index.html": "/oss-front/index.html",
+    "precache-manifest.a41c2a865c32c26f16ed264e4d37c8df.js": "/oss-front/precache-manifest.a41c2a865c32c26f16ed264e4d37c8df.js",
+    "service-worker.js": "/oss-front/service-worker.js",
+    "static/media/NotFound-260-260.png": "/oss-front/static/media/NotFound-260-260.8c382430.png",
+    "static/media/index.scss": "/oss-front/static/media/main_bg_night.a11091bf.png"
   }
 }
