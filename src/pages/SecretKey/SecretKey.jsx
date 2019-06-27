@@ -36,6 +36,9 @@ class SecretKey extends Component {
   }
 
   initData = () => {
+    this.setState({
+      tableLoading: true,
+    });
     ListAccessKeyApi().then((res) => {
       if (res.msg === 'SUCCESS') {
         this.setState({
@@ -44,6 +47,9 @@ class SecretKey extends Component {
       }
     }).catch((error) => {
       console.error(error);
+    });
+    this.setState({
+      tableLoading: false,
     });
   };
 

@@ -1,6 +1,6 @@
 const { override, fixBabelImports, addLessLoader } = require('customize-cra');
 
-process.env.PUBLIC_URL = '/oss-front';
+// process.env.PUBLIC_URL = '/oss-front';
 // 关闭 sourceMap
 process.env.GENERATE_SOURCEMAP = 'false';
 module.exports = override(
