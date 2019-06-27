@@ -4,7 +4,7 @@
 
 exxample:
 
-![avatar](./pic/20190627092438.png)
+![avatar](./pic/20190627092853.png)
 
 ## Step by Step Documentation
 
