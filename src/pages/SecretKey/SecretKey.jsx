@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
+import XLSX from 'xlsx';
 import './index.scss';
-import { Alert, Button, Collapse, Divider, Form, Icon, Input, Modal, Table } from 'antd';
-import { CreateAccessKeyApi } from '../../api/accessKey';
-
-const data = [
-  {
-    AccessKeyId: 'LTAI6Mf6vkhsILcs',
-    AccessKeySecret: 'Lmi3Uz2sdqq6NRwR71FynQqB1wDI6b',
-    createTime: '2019-06-25 22:07:04',
-    state: '启用',
-  }, {
-    AccessKeyId: 'LTAI6Mf6vkhsILc2',
-    AccessKeySecret: 'Lmi3Uz2sdqq6NRwR71FynQqB1wDI6c',
-    createTime: '2019-06-25 22:07:04',
-    state: '禁用',
-  },
-];
+import { Alert, Button, Collapse, Divider, Form, Icon, Input, Modal, Table, message } from 'antd';
+import {
+  CreateAccessKeyApi,
+  DeleteAccessKeyApi,
+  DisableAccessKeyApi,
+  EnableAccessKeyApi,
+  ListAccessKeyApi,
+} from '../../api/accessKey';
+import { dateFormat } from '../../util/DateUtil';
 
 const confirm = Modal.confirm;
 const { Panel } = Collapse;
@@ -25,14 +19,33 @@ class SecretKey extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      accessKeyList: [],
       modelLoading: false,
       tableLoading: false,
       showCreateModel: false,
       generateSuccess: false,
       genLoading: false,
       showKeySecret: [],
+      // 新创建的密钥对
+      genAccessKeyPair: null,
     };
   }
+
+  componentDidMount() {
+    this.initData();
+  }
+
+  initData = () => {
+    ListAccessKeyApi().then((res) => {
+      if (res.msg === 'SUCCESS') {
+        this.setState({
+          accessKeyList: res.data,
+        });
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
 
   showDisableKeyWarning = (record, e) => {
     e.preventDefault();
@@ -64,7 +77,15 @@ class SecretKey extends Component {
   };
 
   disableKey =(record) => {
-    console.log(record);
+    DisableAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        message.success('操作成功');
+        this.initData();
+      }
+    }).catch((e) => {
+      console.error(e);
+      message.success('操作失败');
+    });
   };
 
   showEnableKeyWarning = (record, e) => {
@@ -97,7 +118,15 @@ class SecretKey extends Component {
   };
 
   enableKey =(record) => {
-    console.log(record);
+    EnableAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        message.success('操作成功');
+        this.initData();
+      }
+    }).catch((e) => {
+      console.error(e);
+      message.success('操作失败');
+    });
   };
 
   showDeleteKeyWarning = (record, e) => {
@@ -130,14 +159,22 @@ class SecretKey extends Component {
   };
 
   deleteKey =(record) => {
-    console.log(record);
+    DeleteAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        message.success('操作成功');
+        this.initData();
+      }
+    }).catch((e) => {
+      console.error(e);
+      message.success('操作失败');
+    });
   };
 
   renderOp = (text, record) => {
     return (
       <div>
         {
-          record.state === '禁用' ? (
+          !record.state ? (
             <Button type="link" size="small" onClick={e => this.showEnableKeyWarning(record, e)}>启用</Button>
           ) : (
             <Button type="link" size="small" onClick={e => this.showDisableKeyWarning(record, e)}>禁用</Button>
@@ -149,22 +186,20 @@ class SecretKey extends Component {
     );
   };
 
-  renderState = (text) => {
-    if (text === '启用') {
+  renderState = (state) => {
+    if (state) {
       return (
-        <span style={{ color: '#009900' }}>{text}</span>
+        <span style={{ color: '#009900' }}>启用</span>
       );
     }
-    if (text === '禁用') {
-      return (
-        <span style={{ color: 'red' }}>{text}</span>
-      );
-    }
+    return (
+      <span style={{ color: 'red' }}>禁用</span>
+    );
   };
 
   renderAccessKeySecret = (text, record) => {
     const { showKeySecret } = this.state;
-    const find = showKeySecret.find(i => i === record.AccessKeyId);
+    const find = showKeySecret.find(i => i === record.accessKeyId);
     if (find) {
       return (
         <div>
@@ -181,9 +216,9 @@ class SecretKey extends Component {
   showKeySecret = (record, e) => {
     e.preventDefault();
     const { showKeySecret } = this.state;
-    const filter = showKeySecret.filter(i => i !== record.AccessKeyId);
+    const filter = showKeySecret.filter(i => i !== record.accessKeyId);
     if (filter.length === showKeySecret.length) {
-      filter.push(record.AccessKeyId);
+      filter.push(record.accessKeyId);
     }
     this.setState({
       showKeySecret: filter,
@@ -191,7 +226,17 @@ class SecretKey extends Component {
   };
 
   saveAKInfo = () => {
-    console.log('save AK info');
+    const { genAccessKeyPair } = this.state;
+    const excelData = [
+      ['AccessKeyId', 'AccessKeySecret'],
+      [genAccessKeyPair.accessKeyId, genAccessKeyPair.accessKeySecret],
+    ];
+    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, worksheet, 'SheetJS');
+    const time = new Date();
+    const timeStr = dateFormat(time, 'yyyyMMddhhmmss');
+    XLSX.writeFile(wb, `${timeStr}.csv`);
   };
 
   showModel = () => {
@@ -200,16 +245,14 @@ class SecretKey extends Component {
     });
   };
 
+  // 关闭创建弹窗，所有信息重置
   closeModel = () => {
     this.setState({
       showCreateModel: false,
       generateSuccess: false,
       genLoading: false,
+      genAccessKeyPair: null,
     });
-  };
-
-  callback = (key) => {
-    console.log(key);
   };
 
   handleSubmit = async (e) => {
@@ -223,26 +266,25 @@ class SecretKey extends Component {
         console.log('generate success');
         CreateAccessKeyApi(values).then((res) => {
           if (res.msg === 'SUCCESS') {
-            console.log(res);
+            this.setState({
+              genAccessKeyPair: res.data,
+              generateSuccess: true,
+            });
+            this.initData();
           }
         }).catch((error) => {
           console.error(error);
         });
-        setTimeout(() => {
-          this.setState({
-            generateSuccess: true,
-          });
-        }, 500);
       }
-    });
-    this.setState({
-      genLoading: false,
+      this.setState({
+        genLoading: false,
+      });
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { tableLoading, generateSuccess, showCreateModel, modelLoading, genLoading } = this.state;
+    const { accessKeyList, tableLoading, generateSuccess, showCreateModel, modelLoading, genLoading, genAccessKeyPair } = this.state;
     return (
       <div className="secret-key">
         <div className="bread">
@@ -263,7 +305,7 @@ class SecretKey extends Component {
             用户AccessKey
           </span>
           {
-            data.length < 3 ? (
+            accessKeyList.length < 3 ? (
               <div className="pull-right">
                 <Button type="default" size="small" onClick={this.showModel}>
                   创建AccessKey
@@ -274,13 +316,13 @@ class SecretKey extends Component {
         </div>
         <Table
           className="secret-table"
-          rowKey="AccessKeyId"
-          dataSource={data}
+          rowKey="accessKeyId"
+          dataSource={accessKeyList}
           pagination={false}
           loading={tableLoading}
         >
-          <Table.Column title="AccessKey ID" dataIndex="AccessKeyId" />
-          <Table.Column width={380} title="Access Key Secret" dataIndex="AccessKeySecret" render={this.renderAccessKeySecret} />
+          <Table.Column title="AccessKey ID" dataIndex="accessKeyId" />
+          <Table.Column width={400} title="Access Key Secret" dataIndex="accessKeySecret" render={this.renderAccessKeySecret} />
           <Table.Column title="状态" dataIndex="state" render={this.renderState} />
           <Table.Column title="创建时间" dataIndex="createTime" />
           <Table.Column title="操作"
@@ -296,11 +338,8 @@ class SecretKey extends Component {
               onCancel={this.closeModel}
               width={650}
               footer={
-                generateSuccess ? (
+                generateSuccess && genAccessKeyPair ? (
                   [
-                    <Button key="cancel" type="default" onClick={this.closeModel}>
-                      关闭
-                    </Button>,
                     <Button key="submit" type="primary" loading={modelLoading} onClick={this.saveAKInfo}>
                       保存AK信息
                     </Button>,
@@ -315,7 +354,7 @@ class SecretKey extends Component {
               }
             >
               {
-                generateSuccess ? (
+                generateSuccess && genAccessKeyPair ? (
                   <div>
                     <Alert style={{ fontSize: '12px' }} message="这是用户 AccessKey 可供下载的唯一机会，请及时保存！" type="success" />
                     <div style={{ textAlign: 'center', lineHeight: '100px' }}>
@@ -324,16 +363,16 @@ class SecretKey extends Component {
                         新建AccessKey成功！
                       </h1>
                     </div>
-                    <Collapse defaultActiveKey={['1']} onChange={this.callback}>
+                    <Collapse defaultActiveKey={['1']}>
                       <Panel header="AccessKey 详情" key="1">
                         <div style={styles.newAccessKeyDetail}>
                           <div style={{ ...styles.item, ...styles.br }}>
                             <p style={styles.label}>AccessKeyID:</p>
-                            <p style={styles.value}>LTAI6Mf6vkhsILc3</p>
+                            <p style={styles.value}>{genAccessKeyPair.accessKeyId}</p>
                           </div>
                           <div style={styles.item}>
                             <p style={styles.label}>AccessKeySecret:</p>
-                            <p style={styles.value}>Lmi3Uz2sdqq6NRwR71FynQqB1wDI6d</p>
+                            <p style={styles.value}>{genAccessKeyPair.accessKeySecret}</p>
                           </div>
                         </div>
                       </Panel>

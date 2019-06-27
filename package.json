@@ -16,7 +16,8 @@
     "react-app-rewired": "^2.1.0",
     "react-dom": "^16.8.2",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "^3.0.1"
+    "react-scripts": "^3.0.1",
+    "xlsx": "^0.14.3"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
