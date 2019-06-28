@@ -28,7 +28,7 @@ const ACLMessageTable = {
   >
 公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
   </span>,
-  PUBLIC:
+  PUBLIC_READ_WRITE:
   <span style={{
     color: 'red',
     fontSize: '12px',
@@ -166,7 +166,7 @@ class AddBucketDrawer extends Component {
                 <Radio.Group onChange={this.aclChange}>
                   <Radio.Button value="PRIVATE">私有</Radio.Button>
                   <Radio.Button value="PUBLIC_READ">公共读</Radio.Button>
-                  <Radio.Button value="PUBLIC">公共读写</Radio.Button>
+                  <Radio.Button value="PUBLIC_READ_WRITE">公共读写</Radio.Button>
                 </Radio.Group>,
               )
             }

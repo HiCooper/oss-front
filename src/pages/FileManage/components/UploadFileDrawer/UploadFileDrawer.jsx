@@ -31,7 +31,7 @@ const ACLMessageTable = {
   >
 公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
   </span>,
-  PUBLIC:
+  PUBLIC_READ_WRITE:
   <span style={{
     color: 'red',
     fontSize: '12px',
@@ -64,7 +64,6 @@ export default class UploadFileDrawer extends Component {
   }
 
   uploadBtnOnchange = (info) => {
-    console.log(info);
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
     }

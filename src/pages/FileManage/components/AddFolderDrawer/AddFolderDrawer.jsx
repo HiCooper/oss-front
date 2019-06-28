@@ -24,6 +24,7 @@ class AddFolderDrawer extends Component {
     super(props);
     const bucketInfo = getCurrentBucket();
     this.state = {
+      currentPath: this.props.currentPath,
       objectName: '',
       bucketInfo,
       submitLoading: false,
@@ -93,11 +94,14 @@ class AddFolderDrawer extends Component {
     this.setState({
       submitLoading: true,
     });
-    const { bucketInfo } = this.state;
+    const { bucketInfo, currentPath } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values.bucket = bucketInfo.name;
-        CreateFolderApi(values)
+        const params = {
+          bucket: bucketInfo.name,
+          objectName: currentPath === '/' ? values.objectName : `${currentPath.substr(1)}/${values.objectName}`,
+        };
+        CreateFolderApi(params)
           .then((res) => {
             if (res.msg === 'SUCCESS') {
               this.props.onSuccess();
@@ -115,8 +119,9 @@ class AddFolderDrawer extends Component {
   };
 
   render() {
-    const { submitLoading, objectName } = this.state;
+    const { submitLoading, objectName, currentPath } = this.state;
     const { getFieldDecorator, getFieldError } = this.props.form;
+    console.log(currentPath);
     return (
       <Drawer
         width={640}
@@ -131,6 +136,7 @@ class AddFolderDrawer extends Component {
         <Form {...formItemLayout} className="add-folder-form" onSubmit={this.createFolderSubmit}>
           <Form.Item
             label="目录名"
+            help={`oss:/${currentPath}`}
             extra={folderHelpMessage}
           >
             {
@@ -142,7 +148,7 @@ class AddFolderDrawer extends Component {
                 ],
                 initialValue: objectName,
               })(
-                <Input placeholder="相对根目录" suffix={`${objectName.length}/254`} />,
+                <Input placeholder="相对当前目录" suffix={`${objectName.length}/254`} />,
               )
             }
           </Form.Item>

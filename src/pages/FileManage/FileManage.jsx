@@ -495,6 +495,7 @@ export default class FileManage extends Component {
               {
                 addFolderVisible ? (
                   <AddFolderDrawer
+                    currentPath={currentPath}
                     onClose={this.closeAddFolderDrawer}
                     visible={addFolderVisible}
                     onSuccess={this.initObjectList}
