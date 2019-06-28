@@ -14,6 +14,7 @@ export default class Overview extends Component {
         totalCapacity: 0,
         usedCapacity: 0,
         bucketCount: 0,
+        objectCount: 0,
         objectMaxSize: '',
         objectMinSize: '',
         objectAverageSize: '',
@@ -94,7 +95,7 @@ export default class Overview extends Component {
                     <span>Object 数量</span>
                   </div>
                   <div className="card-bd">
-                    <span className="display-value">{data.bucketCount}</span>
+                    <span className="display-value">{data.objectCount}</span>
                     <span className="display-unit">个</span>
                   </div>
                 </div>
