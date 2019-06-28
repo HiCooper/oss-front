@@ -10,8 +10,21 @@
       .card-list {
         display: flex;
 
+        .left{
+          flex: 0 1 30%;
+        }
+
+        .right-statis{
+          display: flex;
+          flex: 0 1 70%;
+          justify-content: space-around;
+
+          .item{
+            margin: 0 8px;
+          }
+        }
+
         .card {
-          flex: 1 1 50%;
           font-size: 12px;
           padding: 0 16px;
           border-right: 1px dotted #d7d8d9;

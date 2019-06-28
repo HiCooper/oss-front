@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover, Tooltip } from 'antd';
+import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover } from 'antd';
 import { getUserInfo, removeAll } from '../../../util/auth';
 import './index.scss';
 
@@ -137,7 +137,7 @@ export default class LoginHeader extends Component {
   };
 
   render() {
-    const { color, username, noticePopShow, personPopShow } = this.state;
+    const { color, username, personPopShow } = this.state;
     return (
       <Header className="default-header">
         <div className="left">
