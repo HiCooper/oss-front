@@ -121,7 +121,6 @@ class AddFolderDrawer extends Component {
   render() {
     const { submitLoading, objectName, currentPath } = this.state;
     const { getFieldDecorator, getFieldError } = this.props.form;
-    console.log(currentPath);
     return (
       <Drawer
         width={640}
