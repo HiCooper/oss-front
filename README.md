@@ -4,7 +4,13 @@
 
 exxample:
 
-![avatar](./pic/20190627092853.png)
+![avatar](./pic/demo.png)
+
+Demo 示例：http://47.101.42.169:9002
+````
+username: test
+password: 123456
+````
 
 ## Step by Step Documentation
 
