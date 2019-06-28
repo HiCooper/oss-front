@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover } from 'antd';
+import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover, Tooltip } from 'antd';
 import { getUserInfo, removeAll } from '../../../util/auth';
 import './index.scss';
 
@@ -155,11 +155,13 @@ export default class LoginHeader extends Component {
             className="notice-bell"
             onVisibleChange={this.handleVisibleChange}
           >
-            <div className="notice-icon">
-              <Badge dot>
-                <Icon type="bell" />
-              </Badge>
-            </div>
+            <Tooltip placement="bottom" title="系统通知">
+              <div className="notice-icon">
+                <Badge dot>
+                  <Icon type="bell" />
+                </Badge>
+              </div>
+            </Tooltip>
           </Popover>
           <Popover placement="bottomRight"
             title={this.text()}

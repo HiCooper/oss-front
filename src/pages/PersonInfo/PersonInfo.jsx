@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { Descriptions, Divider } from 'antd';
 import './index.scss';
+import { getUserInfo } from '../../util/auth';
 
 export default class PersonInfo extends Component {
   static displayName = 'PersonInfo';
 
   constructor(props) {
     super(props);
-    this.state = {};
+    const userInfo = getUserInfo();
+    this.state = {
+      userInfo: userInfo ? JSON.parse(userInfo) : {},
+    };
   }
 
   render() {
+    const { userInfo } = this.state;
     return (
       <div className="profile-home">
         <div className="bread">
@@ -19,11 +24,11 @@ export default class PersonInfo extends Component {
         <Divider type="horizontal" />
 
         <Descriptions title="基本信息">
-          <Descriptions.Item label="用户名">admin</Descriptions.Item>
-          <Descriptions.Item label="手机号">1810000000</Descriptions.Item>
-          <Descriptions.Item label="邮箱">admin@seassoon.com</Descriptions.Item>
-          <Descriptions.Item label="所在地">Shanghai, Xuhui</Descriptions.Item>
-          <Descriptions.Item label="备注">无</Descriptions.Item>
+          <Descriptions.Item label="用户名">{userInfo.username}</Descriptions.Item>
+          <Descriptions.Item label="手机号">{userInfo.phone || '无'}</Descriptions.Item>
+          <Descriptions.Item label="邮箱">{userInfo.email || '无'}</Descriptions.Item>
+          <Descriptions.Item label="所在地">{userInfo.address || '无'}</Descriptions.Item>
+          <Descriptions.Item label="备注">{userInfo.remark || '无'}</Descriptions.Item>
         </Descriptions>
       </div>
     );

@@ -35,11 +35,11 @@ class SecretKey extends Component {
     this.initData();
   }
 
-  initData = () => {
+  initData = async () => {
     this.setState({
       tableLoading: true,
     });
-    ListAccessKeyApi().then((res) => {
+    await ListAccessKeyApi().then((res) => {
       if (res.msg === 'SUCCESS') {
         this.setState({
           accessKeyList: res.data,
@@ -309,7 +309,7 @@ class SecretKey extends Component {
             用户AccessKey
           </span>
           {
-            accessKeyList.length < 3 ? (
+            !tableLoading && accessKeyList.length < 3 ? (
               <div className="pull-right">
                 <Button type="default" size="small" onClick={this.showModel}>
                   创建AccessKey
