@@ -40,11 +40,9 @@ const styles = {
   link: {
     fontSize: '13px',
     marginRight: '40px',
-    color: '#fff',
   },
   copyright: {
     fontSize: '13px',
-    color: '#fff',
     lineHeight: 1.5,
     textAlign: 'right',
   },

@@ -4,16 +4,11 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url("./images/bg.jpg");
-  background-repeat: no-repeat;
 
   .header-banner {
     text-align: center;
     padding: 20px 0;
 
-    h1 {
-      color: #ffffff;
-    }
   }
 
   .login-body {
@@ -39,7 +34,6 @@
         .title {
           h1 {
             font-size: 30px;
-            color: #FFFFFF;
             line-height: 36px;
             margin-bottom: 19px;
             font-weight: bold;
