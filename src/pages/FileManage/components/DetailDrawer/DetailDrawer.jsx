@@ -91,10 +91,11 @@ class DetailDrawer extends Component {
   };
 
   renderFilePreview = () => {
-    const { detailInfo, genTempUrlInfo } = this.state;
+    const { detailInfo, genTempUrlInfo, bucketInfo } = this.state;
     if (!detailInfo.isDir && detailInfo.category && genTempUrlInfo.url && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+      const url = detailInfo.acl.startsWith('PRIVATE') || (detailInfo.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE')) ? `${genTempUrlInfo.url}?${genTempUrlInfo.signature}` : genTempUrlInfo.url;
       return (
-        <img src={`${genTempUrlInfo.url}?${genTempUrlInfo.signature}`} alt="文件无法预览。" />
+        <img src={url} alt="文件无法预览。" />
       );
     }
     return (
