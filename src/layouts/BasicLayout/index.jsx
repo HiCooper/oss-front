@@ -32,7 +32,10 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
-    this.initBucketList();
+    const userInfo = getUserInfo();
+    if (userInfo){
+      this.initBucketList();
+    }
   }
 
   componentWillReceiveProps(nextProps, nextContent) {

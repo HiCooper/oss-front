@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './index.scss';
 import { Progress } from 'antd';
+import { getUserInfo } from '../../util/auth';
 
 import LineChart from './components/LineChart';
 import BarChart from './components/BarChart';
@@ -24,7 +25,12 @@ export default class Overview extends Component {
   }
 
   componentDidMount() {
-    this.initData();
+    const userInfo = getUserInfo();
+    if (!userInfo) {
+      this.props.history.push('/user/login');
+    } else {
+      this.initData();
+    }
   }
 
   initData = () => {
