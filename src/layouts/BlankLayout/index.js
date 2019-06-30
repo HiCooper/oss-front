@@ -22,6 +22,8 @@ export default class BlankLayout extends Component {
             <div className="banner">
               <div className="title">
                 <h1>Balabala OSS</h1>
+                <span>测试用户名：test </span>
+                <span>密码：123456 </span>
               </div>
             </div>
             <div className="login-form">
