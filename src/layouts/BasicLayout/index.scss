@@ -33,7 +33,6 @@
 
 .main-content {
   margin-left: 200px;
-  height: 100%;
   background: #f0f2f5;
 }
 
@@ -57,7 +56,7 @@
 }
 
 .default-side {
-  height: 100vh;
+  height: 100%;
   position: fixed;
   z-index: 2;
   font-weight: bold;
