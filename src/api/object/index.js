@@ -60,3 +60,12 @@ export const CreateObjectUrl = `${axios.defaults.baseURL}/ajax/bucket/file/creat
  */
 export const GenerateUrlWithSignedApi = params => axios.post('/ajax/bucket/file/generate_url_with_signed.json', params)
   .then(res => res.data);
+
+/**
+ * 获取下载链接
+ * @param params
+ * @returns {Promise<AxiosResponse<T> | never>}
+ * @constructor
+ */
+export const GenerateDownloadUrlApi = params => axios.post('/ajax/bucket/file/generate_download_url.json', params)
+  .then(res => res.data);

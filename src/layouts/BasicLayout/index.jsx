@@ -33,7 +33,7 @@ class BasicLayout extends Component {
 
   componentDidMount() {
     const userInfo = getUserInfo();
-    if (userInfo){
+    if (userInfo) {
       this.initBucketList();
     }
   }

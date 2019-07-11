@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Modal, Table } from 'antd';
 import copyToClipboard from 'copy-to-clipboard';
 import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
-import { DeleteObjectHeadApi, GenerateUrlWithSignedApi, ListObjectApi } from '../../api/object';
+import { DeleteObjectHeadApi, GenerateDownloadUrlApi, GenerateUrlWithSignedApi, ListObjectApi } from '../../api/object';
 import './index.scss';
 import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
@@ -266,16 +266,39 @@ export default class FileManage extends Component {
   };
 
   handleMenuClick = async (item) => {
-    // 下载
+    // 批量下载
     if (item.key === '1') {
       const { selectedRows } = this.state;
-      console.log(selectedRows);
+      const fullPaths = [];
+      for (let i = 0; i < selectedRows.length; i++) {
+        const record = selectedRows[i];
+        const path = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+        fullPaths.push(path);
+      }
+      this.batchDownLoad(fullPaths);
       return;
     }
-    // 删除
+    // 批量删除
     if (item.key === '2') {
       this.showBatchDeleteWarning();
     }
+  };
+
+  batchDownLoad = (fullPaths) => {
+    GenerateDownloadUrlApi({ bucket: this.state.bucketName, objectPath: fullPaths }).then((res) => {
+      if (res.msg === 'SUCCESS') {
+        const downUrls = res.data;
+        downUrls.forEach((url) => {
+          const downloadElement = document.createElement('a');
+          downloadElement.href = url;
+          document.body.appendChild(downloadElement);
+          downloadElement.click();
+          document.body.removeChild(downloadElement);
+        });
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
   };
 
   showBatchDeleteWarning = () => {

@@ -147,22 +147,22 @@ export default class LoginHeader extends Component {
           </div>
         </div>
         <div className="right">
-          {/*<Popover placement="bottomRight"*/}
-          {/*  title={<span>系统通知(5未读)</span>}*/}
-          {/*  content={this.noticePopContent()}*/}
-          {/*  trigger="click"*/}
-          {/*  visible={noticePopShow}*/}
-          {/*  className="notice-bell"*/}
-          {/*  onVisibleChange={this.handleVisibleChange}*/}
-          {/*>*/}
-          {/*  <Tooltip placement="bottom" title="系统通知">*/}
-          {/*    <div className="notice-icon">*/}
-          {/*      <Badge dot>*/}
-          {/*        <Icon type="bell" />*/}
-          {/*      </Badge>*/}
-          {/*    </div>*/}
-          {/*  </Tooltip>*/}
-          {/*</Popover>*/}
+          {/* <Popover placement="bottomRight" */}
+          {/*  title={<span>系统通知(5未读)</span>} */}
+          {/*  content={this.noticePopContent()} */}
+          {/*  trigger="click" */}
+          {/*  visible={noticePopShow} */}
+          {/*  className="notice-bell" */}
+          {/*  onVisibleChange={this.handleVisibleChange} */}
+          {/* > */}
+          {/*  <Tooltip placement="bottom" title="系统通知"> */}
+          {/*    <div className="notice-icon"> */}
+          {/*      <Badge dot> */}
+          {/*        <Icon type="bell" /> */}
+          {/*      </Badge> */}
+          {/*    </div> */}
+          {/*  </Tooltip> */}
+          {/* </Popover> */}
           <Popover placement="bottomRight"
             title={this.text()}
             content={this.content()}
