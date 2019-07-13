@@ -56,17 +56,6 @@ class AddFolderDrawer extends Component {
       );
       return;
     }
-    if (value.indexOf('..') !== -1) {
-      callback(
-        <span style={{
-          fontSize: '12px',
-          color: 'red',
-        }}
-        >
-          目录路径中不允许出现名为「..」的子目录
-        </span>);
-      return;
-    }
     if (value.startsWith('/') || value.startsWith('\\') || value.endsWith('/') || value.endsWith('\\')) {
       callback(
         <span style={{
@@ -82,6 +71,20 @@ class AddFolderDrawer extends Component {
         </span>,
       );
       return;
+    }
+    if (!/^[^/]((?!\/\/)[a-zA-Z0-9/\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
+      callback(
+        <span
+          style={{
+            fontSize: '12px',
+            color: 'red',
+          }}
+        >
+          目录仅支持数字字母中文和
+          <code>/</code>
+          字符
+        </span>
+      );
     }
     this.setState({
       objectName: value,
@@ -119,7 +122,7 @@ class AddFolderDrawer extends Component {
   };
 
   render() {
-    const { submitLoading, objectName, currentPath } = this.state;
+    const { submitLoading, objectName } = this.state;
     const { getFieldDecorator, getFieldError } = this.props.form;
     return (
       <Drawer
@@ -135,7 +138,6 @@ class AddFolderDrawer extends Component {
         <Form {...formItemLayout} className="add-folder-form" onSubmit={this.createFolderSubmit}>
           <Form.Item
             label="目录名"
-            help={`oss:/${currentPath}`}
             extra={folderHelpMessage}
           >
             {

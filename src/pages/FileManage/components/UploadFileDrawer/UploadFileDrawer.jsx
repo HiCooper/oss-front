@@ -267,38 +267,59 @@ export default class UploadFileDrawer extends Component {
 
 const checkInput = function (value) {
   let errorMsg = '';
-  if (value.startsWith('//')) {
+  if (!value || value.trim().length < 1 || value.trim().length > 254) {
     errorMsg = (
-      <span style={styles.errorMsg}>
-          目录路径不允许出现连续的「/」
+      <span style={{
+        fontSize: '12px',
+        color: 'red',
+      }}
+      >
+        1-254个字符长度
       </span>
     );
-  } else if (value.startsWith('/') || value.endsWith('\\')) {
+    return errorMsg;
+  }
+  if (value.indexOf('//') !== -1) {
     errorMsg = (
-      <span style={styles.errorMsg}>
-          文件名不能以
+      <span style={{
+        fontSize: '12px',
+        color: 'red',
+      }}
+      >
+        目录路径不允许出现连续的「/」
+      </span>
+    );
+    return errorMsg;
+  }
+  if (value.startsWith('/') || value.startsWith('\\') || value.endsWith('/') || value.endsWith('\\')) {
+    errorMsg = (
+      <span style={{
+        fontSize: '12px',
+        color: 'red',
+      }}
+      >
+        文件名不能以
         <code>/</code>
-          或
+        或
         <code>\</code>
-          开头和结尾。
+        开头和结尾。
       </span>
     );
-  } else if (value.length > 254) {
+    return errorMsg;
+  }
+  if (!/^[^/]((?!\/\/)[a-zA-Z0-9/\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
     errorMsg = (
-      <span>
-          目录长度不超过 254 个字符
+      <span
+        style={{
+          fontSize: '12px',
+          color: 'red',
+        }}
+      >
+          目录仅支持数字字母中文和
+        <code>/</code>
+          字符
       </span>
     );
-  } else if (value.indexOf('..') !== -1) {
-    errorMsg = (
-      <span style={styles.errorMsg}>
-          不允许出现名为
-        <code>..</code>
-          的子目录
-      </span>
-    );
-  } else {
-    errorMsg = '';
   }
   return errorMsg;
 };
