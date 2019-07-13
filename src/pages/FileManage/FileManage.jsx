@@ -399,7 +399,7 @@ export default class FileManage extends Component {
         </div>
       );
     }
-    const fullPath = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+    const fullPath = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
     confirm({
       title: (
         <div>
