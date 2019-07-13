@@ -244,7 +244,7 @@ export default class UploadFileDrawer extends Component {
               }}
               data={{
                 bucket: bucketInfo.name,
-                filePath: uploadPath,
+                filePath: uploadPath.startsWith('/') ? uploadPath : `/${uploadPath}`,
                 acl,
               }}
               beforeUpload={this.beforeUploadHook}
@@ -267,14 +267,14 @@ export default class UploadFileDrawer extends Component {
 
 const checkInput = function (value) {
   let errorMsg = '';
-  if (!value || value.trim().length < 1 || value.trim().length > 254) {
+  if (!value || value.trim().length < 2 || value.trim().length > 254) {
     errorMsg = (
       <span style={{
         fontSize: '12px',
         color: 'red',
       }}
       >
-        1-254个字符长度
+        2-254个字符长度
       </span>
     );
     return errorMsg;

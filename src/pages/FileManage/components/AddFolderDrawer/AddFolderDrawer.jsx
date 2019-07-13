@@ -32,14 +32,14 @@ class AddFolderDrawer extends Component {
   }
 
   validateFolder = (rule, value, callback) => {
-    if (!value || value.trim().length < 1 || value.trim().length > 254) {
+    if (!value || value.trim().length < 2 || value.trim().length > 254) {
       callback(
         <span style={{
           fontSize: '12px',
           color: 'red',
         }}
         >
-        1-254个字符长度
+        2-254个字符长度
         </span>,
       );
       return;
@@ -102,7 +102,7 @@ class AddFolderDrawer extends Component {
       if (!err) {
         const params = {
           bucket: bucketInfo.name,
-          objectName: currentPath === '/' ? values.objectName : `${currentPath.substr(1)}/${values.objectName}`,
+          folder: currentPath === '/' ? values.objectName : `${currentPath.substr(1)}/${values.objectName}`,
         };
         CreateFolderApi(params)
           .then((res) => {

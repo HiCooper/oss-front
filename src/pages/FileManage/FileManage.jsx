@@ -308,23 +308,28 @@ export default class FileManage extends Component {
       centered: true,
       content: (
         <div style={{ color: 'red' }}>
-          批量删除对象，该操作不可恢复，请慎重操作!
+          批量删除对象或目录，如果包含目录，该目录下所有子对象将会被同步，删除操作不可恢复，请慎重操作!
         </div>
       ),
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        const { selectedRows } = thisAlias.state;
+        let { selectedRows } = thisAlias.state;
         let fullPaths = '';
         for (let i = 0; i < selectedRows.length; i++) {
           const record = selectedRows[i];
-          const path = record.filePath === '/' ? record.fileName : `${record.filePath}/${record.fileName}`;
+          const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
           fullPaths += path;
           if (i < selectedRows.length - 1) {
             fullPaths += ',';
           }
+          selectedRows = selectedRows.filter(i => i.id !== record.id);
         }
         thisAlias.deleteObject(fullPaths);
+        thisAlias.setState({
+          selectedRows,
+        });
+        console.log(selectedRows);
       },
       onCancel() {
         message.info('批量取消删除');
