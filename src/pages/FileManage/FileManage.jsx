@@ -323,7 +323,7 @@ export default class FileManage extends Component {
           if (i < selectedRows.length - 1) {
             fullPaths += ',';
           }
-          selectedRows = selectedRows.filter(i => i.id !== record.id);
+          selectedRows = selectedRows.filter(k => k.id !== record.id);
         }
         thisAlias.deleteObject(fullPaths);
         thisAlias.setState({
