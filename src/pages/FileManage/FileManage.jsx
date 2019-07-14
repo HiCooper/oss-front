@@ -583,6 +583,7 @@ export default class FileManage extends Component {
             <Table rowSelection={rowSelection}
               dataSource={objectList}
               pagination={false}
+              scroll={{ y: window.innerHeight - 357 }}
               rowKey="id"
               loading={tableLoading}
               onRow={(record) => {

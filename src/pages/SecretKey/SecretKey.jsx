@@ -68,7 +68,7 @@ class SecretKey extends Component {
             fontWeight: 'bold',
           }}
           >
-            {record.AccessKeyId}
+            {record.accessKeyId}
           </span>
           吗?
         </div>
@@ -109,7 +109,7 @@ class SecretKey extends Component {
             fontWeight: 'bold',
           }}
           >
-            {record.AccessKeyId}
+            {record.accessKeyId}
           </span>
           吗?
         </div>
@@ -150,7 +150,7 @@ class SecretKey extends Component {
             fontWeight: 'bold',
           }}
           >
-            {record.AccessKeyId}
+            {record.accessKeyId}
           </span>
           吗?
         </div>
