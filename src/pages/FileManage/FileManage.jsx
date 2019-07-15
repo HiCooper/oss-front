@@ -42,7 +42,7 @@ export default class FileManage extends Component {
       // 设置对象acl 抽屉显示
       setObjectAclVisible: false,
       // 授权auth显示
-      showAuthDrawerVisible: true,
+      showAuthDrawerVisible: false,
       search: '',
     };
   }
