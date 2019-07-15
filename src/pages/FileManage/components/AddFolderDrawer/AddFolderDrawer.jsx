@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Alert, Button, Drawer, Form, Input } from 'antd';
-import './index.scss';
 import { getCurrentBucket } from '../../../../util/Bucket';
 import { CreateFolderApi } from '../../../../api/object';
 
