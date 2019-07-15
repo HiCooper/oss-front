@@ -316,7 +316,7 @@ export default class FileManage extends Component {
       onOk() {
         let { selectedRows } = thisAlias.state;
         let fullPaths = '';
-        for (let i = 0; i < selectedRows.length; i++) {
+        for (let i = 0; i < selectedRows.length; ) {
           const record = selectedRows[i];
           const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
           fullPaths += path;
@@ -329,7 +329,6 @@ export default class FileManage extends Component {
         thisAlias.setState({
           selectedRows,
         });
-        console.log(selectedRows);
       },
       onCancel() {
         message.info('批量取消删除');
