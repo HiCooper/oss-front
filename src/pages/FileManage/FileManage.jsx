@@ -8,6 +8,7 @@ import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
 import SetObjectAclDrawer from './components/SetObjectAclDrawer';
 import AddFolderDrawer from './components/AddFolderDrawer';
+import AuthDrawer from './components/AuthDrawer';
 import { getCurrentBucket } from '../../util/Bucket';
 
 const Search = Input.Search;
@@ -40,6 +41,8 @@ export default class FileManage extends Component {
       addFolderVisible: false,
       // 设置对象acl 抽屉显示
       setObjectAclVisible: false,
+      // 授权auth显示
+      showAuthDrawerVisible: true,
       search: '',
     };
   }
@@ -494,8 +497,20 @@ export default class FileManage extends Component {
     this.initObjectList();
   };
 
+  authDrawerOpen = () => {
+    this.setState({
+      showAuthDrawerVisible: true,
+    });
+  };
+
+  authDrawerClose = () => {
+    this.setState({
+      showAuthDrawerVisible: false,
+    });
+  };
+
   render() {
-    const { tableLoading, setObjectAclVisible, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord, search } = this.state;
+    const { tableLoading, showAuthDrawerVisible, setObjectAclVisible, objectList, selectedRowKeys, visible, addFolderVisible, currentPath, detailVisible, currentRecord, search } = this.state;
     const pathQueue = currentPath.length > 1 ? currentPath.substr(1)
       .split('/') : null;
     const rowSelection = {
@@ -529,7 +544,17 @@ export default class FileManage extends Component {
                   />
                 ) : null
               }
-              <Button icon="safety-certificate" style={{ marginRight: '10px' }}>授权</Button>
+              <Button icon="safety-certificate" style={{ marginRight: '10px' }} onClick={this.authDrawerOpen}>授权</Button>
+              {
+                showAuthDrawerVisible
+                  ? (
+                    <AuthDrawer
+                      onClose={this.authDrawerClose}
+                      visible={showAuthDrawerVisible}
+                    />
+                  )
+                  : null
+              }
               <Dropdown overlay={this.menu}>
                 <Button style={{ marginRight: '10px' }}>
                   批量操作
