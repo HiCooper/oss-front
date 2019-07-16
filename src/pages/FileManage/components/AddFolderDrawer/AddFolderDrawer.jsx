@@ -17,7 +17,7 @@ const formItemLayout = {
 };
 
 class AddFolderDrawer extends Component {
-  static displayName = 'DetailDrawer';
+  static displayName = 'AddFolderDrawer';
 
   constructor(props) {
     super(props);

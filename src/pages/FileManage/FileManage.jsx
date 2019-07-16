@@ -8,7 +8,7 @@ import UploadFileDrawer from './components/UploadFileDrawer';
 import DetailDrawer from './components/DetailDrawer';
 import SetObjectAclDrawer from './components/SetObjectAclDrawer';
 import AddFolderDrawer from './components/AddFolderDrawer';
-import AuthDrawer from './components/AuthDrawer';
+import PolicyListDrawer from './components/PolicyDrawer';
 import { getCurrentBucket } from '../../util/Bucket';
 
 const Search = Input.Search;
@@ -319,7 +319,7 @@ export default class FileManage extends Component {
       onOk() {
         let { selectedRows } = thisAlias.state;
         let fullPaths = '';
-        for (let i = 0; i < selectedRows.length; ) {
+        for (let i = 0; i < selectedRows.length;) {
           const record = selectedRows[i];
           const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
           fullPaths += path;
@@ -548,7 +548,7 @@ export default class FileManage extends Component {
               {
                 showAuthDrawerVisible
                   ? (
-                    <AuthDrawer
+                    <PolicyListDrawer
                       onClose={this.authDrawerClose}
                       visible={showAuthDrawerVisible}
                     />

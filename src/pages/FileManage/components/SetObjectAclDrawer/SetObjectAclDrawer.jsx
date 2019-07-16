@@ -41,7 +41,7 @@ const ACLMessageTable = {
 };
 
 class SetObjectAclDrawer extends Component {
-  static displayName = 'AddBucketDrawer';
+  static displayName = 'SetObjectAclDrawer';
 
   constructor(props) {
     super(props);

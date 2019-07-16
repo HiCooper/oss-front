@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, Icon, Input, Radio, Tooltip } from 'antd';
-import { getCurrentBucket } from '../../../../util/Bucket';
+import { Button, Drawer, Form, Icon, Input, Radio, Tooltip, message } from 'antd';
+import { getCurrentBucket } from '../../../../../util/Bucket';
+import { AddPolicyApi } from '../../../../../api/policy';
 
 const formItemLayout = {
   labelCol: {
@@ -17,8 +18,8 @@ const formItemLayout = {
 
 const TextArea = Input.TextArea;
 
-class AuthDrawer extends Component {
-  static displayName = 'AddBucketDrawer';
+class AddPolicyDrawer extends Component {
+  static displayName = 'AddPolicyDrawer';
 
   constructor(props) {
     super(props);
@@ -28,13 +29,13 @@ class AuthDrawer extends Component {
       resourcePathRadio: `${bucketInfo.name}/*`,
       defaultResourcePath: `${bucketInfo.name}/*`,
       actionType: 1,
-      resource: '',
       submitLoading: false,
     };
   }
 
   addAuthSubmit = (e) => {
     e.preventDefault();
+    const { bucketInfo, resourcePathRadio } = this.state;
     this.setState({
       submitLoading: true,
     });
@@ -42,15 +43,23 @@ class AuthDrawer extends Component {
       if (!err) {
         const { actionType, principal } = values;
         const params = {
+          bucket: bucketInfo.name,
           actionType,
           principal: principal.replace(/ /g, '').split('\n'),
         };
-        if (values.resource === 'CUSTOM') {
-          params.resource = this.state.resource.split(',');
+        if (resourcePathRadio === 'CUSTOM') {
+          params.resource = values.resource.split(',').map(item => `${bucketInfo.name}/${item}`);
         } else {
           params.resource = this.state.defaultResourcePath.split(',');
         }
-        console.log(params);
+        AddPolicyApi(params).then((res) => {
+          if (res.msg === 'SUCCESS') {
+            message.success('新增授权成功');
+            this.props.onSuccess();
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
       }
     });
     this.setState({
@@ -60,23 +69,32 @@ class AuthDrawer extends Component {
 
   resourcePathChange = (e) => {
     e.preventDefault();
+    const newVal = e.target.value;
     this.setState({
-      resourcePathRadio: e.target.value,
+      resourcePathRadio: newVal,
     });
+    if (newVal !== 'CUSTOM') {
+      this.props.form.resetFields('resource');
+    }
   };
 
-  inputResourceChange = (e) => {
-    this.setState({
-      resource: e.target.value,
-    });
+  checkResourceInput = (rule, value, callback) => {
+    const { resourcePathRadio } = this.state;
+    if (resourcePathRadio === 'CUSTOM') {
+      if (!value) {
+        callback('请输入授权资源');
+        return;
+      }
+    }
+    callback();
   };
 
   render() {
-    const { actionType, submitLoading, resource, defaultResourcePath, resourcePathRadio, bucketInfo } = this.state;
+    const { actionType, submitLoading, defaultResourcePath, resourcePathRadio, bucketInfo } = this.state;
     const { getFieldDecorator, getFieldError } = this.props.form;
     return (
       <Drawer
-        width={640}
+        width={620}
         placement="right"
         closable
         maskClosable={false}
@@ -87,16 +105,10 @@ class AuthDrawer extends Component {
       >
         <Form {...formItemLayout} onSubmit={this.addAuthSubmit} hideRequiredMark>
           <Form.Item label="授权资源">
-            {
-              getFieldDecorator('resource', {
-                initialValue: defaultResourcePath,
-              })(
-                <Radio.Group onChange={this.resourcePathChange}>
-                  <Radio.Button value={defaultResourcePath}>整个 Bucket</Radio.Button>
-                  <Radio.Button value="CUSTOM">指定资源</Radio.Button>
-                </Radio.Group>
-              )
-            }
+            <Radio.Group defaultValue={defaultResourcePath} onChange={this.resourcePathChange}>
+              <Radio.Button value={defaultResourcePath}>整个 Bucket</Radio.Button>
+              <Radio.Button value="CUSTOM">指定资源</Radio.Button>
+            </Radio.Group>
           </Form.Item>
 
           <Form.Item label={(
@@ -122,15 +134,25 @@ class AuthDrawer extends Component {
           )}
           >
             {
-              resourcePathRadio === defaultResourcePath ? (
-                <span>{defaultResourcePath}</span>
-              ) : (
-                <div style={{ display: 'flex' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>{`${bucketInfo.name}/`}</span>
-                  <div style={{ marginLeft: '8px', width: '100%' }}>
-                    <Input placeholder="资源路径" value={resource} onChange={this.inputResourceChange} />
-                  </div>
-                </div>
+              getFieldDecorator('resource', {
+                rules: [
+                  { validator: this.checkResourceInput },
+                ],
+              })(
+                <div>
+                  {
+                    resourcePathRadio === defaultResourcePath ? (
+                      <span>{defaultResourcePath}</span>
+                    ) : (
+                      <div style={{ display: 'flex' }}>
+                        <span style={{ whiteSpace: 'nowrap' }}>{`${bucketInfo.name}/`}</span>
+                        <div style={{ marginLeft: '8px', width: '100%' }}>
+                          <Input placeholder="资源路径" />
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>,
               )
             }
           </Form.Item>
@@ -204,6 +226,6 @@ class AuthDrawer extends Component {
   }
 }
 
-const WrappedAddBucketDrawer = Form.create({ name: 'normal_login' })(AuthDrawer);
+const WrappedAddPolicyDrawer = Form.create({ name: 'normal_login' })(AddPolicyDrawer);
 
-export default WrappedAddBucketDrawer;
+export default WrappedAddPolicyDrawer;
