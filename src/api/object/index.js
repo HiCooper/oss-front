@@ -5,7 +5,7 @@ import axios from '../config';
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const ListObjectApi = params => axios.get('/ajax/bucket/file/list_objects.json', { params })
+export const ListObjectApi = params => axios.get('/ajax/bucket/list_objects.json', { params })
   .then(res => res.data);
 
 /**
@@ -14,7 +14,7 @@ export const ListObjectApi = params => axios.get('/ajax/bucket/file/list_objects
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GetObjectHeadApi = params => axios.get('/ajax/bucket/file/head_object.json', { params })
+export const GetObjectHeadApi = params => axios.get('/ajax/bucket/head_object.json', { params })
   .then(res => res.data);
 
 /**
@@ -23,7 +23,7 @@ export const GetObjectHeadApi = params => axios.get('/ajax/bucket/file/head_obje
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delete_objects.json', params)
+export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/delete_objects.json', params)
   .then(res => res.data);
 
 /**
@@ -32,7 +32,7 @@ export const DeleteObjectHeadApi = params => axios.post('/ajax/bucket/file/delet
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_folder.json', params)
+export const CreateFolderApi = params => axios.post('/ajax/bucket/create_folder.json', params)
   .then(res => res.data);
 
 /**
@@ -41,7 +41,7 @@ export const CreateFolderApi = params => axios.post('/ajax/bucket/file/create_fo
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const SetObjectAclApi = params => axios.post('/ajax/bucket/file/set_object_acl.json', params)
+export const SetObjectAclApi = params => axios.post('/ajax/bucket/set_object_acl.json', params)
   .then(res => res.data);
 
 /**
@@ -50,7 +50,7 @@ export const SetObjectAclApi = params => axios.post('/ajax/bucket/file/set_objec
  * @returns {string}
  * @constructor
  */
-export const CreateObjectUrl = `${axios.defaults.baseURL}/ajax/bucket/file/create`;
+export const CreateObjectUrl = `${axios.defaults.baseURL}/ajax/bucket/create`;
 
 /**
  * 生成临时访问对象 url
@@ -58,7 +58,7 @@ export const CreateObjectUrl = `${axios.defaults.baseURL}/ajax/bucket/file/creat
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const GenerateUrlWithSignedApi = params => axios.post('/ajax/bucket/file/generate_url_with_signed.json', params)
+export const GenerateUrlWithSignedApi = params => axios.post('/ajax/bucket/generate_url_with_signed.json', params)
   .then(res => res.data);
 
 /**
@@ -67,5 +67,5 @@ export const GenerateUrlWithSignedApi = params => axios.post('/ajax/bucket/file/
  * @returns {Promise<AxiosResponse<T> | never>}
  * @constructor
  */
-export const GenerateDownloadUrlApi = params => axios.post('/ajax/bucket/file/generate_download_url.json', params)
+export const GenerateDownloadUrlApi = params => axios.post('/ajax/bucket/generate_download_url.json', params)
   .then(res => res.data);
