@@ -6,10 +6,10 @@ export LANG="en_US.UTF-8"
 #----------------------------------------------------------------------
 
 # 远程服务器 ip
-remote_server_ip='47.101.42.169'
+remote_server_ip='10.50.12.38'
 username='root'
 # !确保远程文件夹存在
-store_dir='/usr/local/share/app/oss'
+store_dir='/home/jar-service/oss/front'
 
 #----------------------------------------------------------------------
 # 脚本
