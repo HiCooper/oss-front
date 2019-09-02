@@ -68,11 +68,11 @@ export default class UploadFileDrawer extends Component {
       console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
-      message.success(`${info.file.name} ${info.file.response.data && info.file.response.data}`);
+      message.success('上传成功');
       this.props.onSuccess();
       this.props.onClose();
     } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} 上传失败，${info.file.response.msg}`);
+      message.error(`${info.file.name} 上传失败，${info.file.response && info.file.response.msg}`);
     }
   };
 
