@@ -633,7 +633,7 @@ export default class FileManage extends Component {
               <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
               {
                 search ? (
-                  <Table.Column title="路径" dataIndex="filePath" />
+                  <Table.Column width={280} title="路径" dataIndex="filePath" />
                 ) : null
               }
               <Table.Column title="大小" width={180} dataIndex="formattedSize" />
