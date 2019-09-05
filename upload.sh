@@ -5,11 +5,15 @@ export LANG="en_US.UTF-8"
 # 常量配置信息
 #----------------------------------------------------------------------
 
+echo '正在打包...'
+npm run build
+echo '打包完成'
+
 # 远程服务器 ip
-remote_server_ip='10.50.12.38'
+remote_server_ip='47.101.42.169'
 username='root'
 # !确保远程文件夹存在
-store_dir='/home/jar-service/oss/front'
+store_dir='/usr/local/share/app/oss'
 
 #----------------------------------------------------------------------
 # 脚本

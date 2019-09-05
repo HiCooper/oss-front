@@ -64,9 +64,6 @@ export default class UploadFileDrawer extends Component {
   }
 
   uploadBtnOnchange = (info) => {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
     if (info.file.status === 'done') {
       message.success('上传成功');
       this.props.onSuccess();

@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { getToken, removeAll } from '../util/auth';
 
 // axios.defaults.baseURL = 'http://47.101.42.169:8077';
-// axios.defaults.baseURL = 'http://192.168.0.119:8077';
+// axios.defaults.baseURL = 'http://192.168.2.250:8077';
 axios.defaults.baseURL = 'http://10.50.12.38:8077';
 axios.defaults.timeout = 5000;
 
@@ -15,18 +15,26 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use((response) => {
+  const { code, msg } = response.data;
+  if (response.data.size) {
+    return response;
+  }
+  if (code && code !== '200') {
+    message.info(msg);
+    if (code === 'TOKEN_EXPIRED') {
+      removeAll();
+      localStorage.clear();
+      window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login?fallback=${encodeURIComponent(window.location.href)}`);
+    }
+    return Promise.reject(code);
+  }
   return Promise.resolve(response);
 }, (error) => {
-  const { status, statusText } = error.response;
-  if (status === 403 && statusText === 'Forbidden') {
-    message.error('登录过期，请重新登录');
-    removeAll();
-    localStorage.clear();
-    window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login`);
-  } else {
-    console.error(error);
-    message.error('500,服务器出现了点问题');
+  let content = '系统连接超时';
+  if (error.response) {
+    content = `${error.response.status},${error.response.statusText}`;
   }
+  message.error(content);
   return Promise.reject(error);
 });
 
