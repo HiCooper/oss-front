@@ -636,8 +636,8 @@ export default class FileManage extends Component {
                   <Table.Column title="路径" dataIndex="filePath" />
                 ) : null
               }
-              <Table.Column title="大小" dataIndex="formattedSize" />
-              <Table.Column title="更新时间" dataIndex="updateTime" />
+              <Table.Column title="大小" width={180} dataIndex="formattedSize" />
+              <Table.Column title="更新时间" width={180} dataIndex="updateTime" />
               <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
             </Table>
             {
