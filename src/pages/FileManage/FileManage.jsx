@@ -310,7 +310,7 @@ export default class FileManage extends Component {
       centered: true,
       content: (
         <div style={{ color: 'red' }}>
-          批量删除对象或目录，如果包含目录，该目录下所有子对象将会被同步，删除操作不可恢复，请慎重操作!
+          批量删除对象或目录，如果包含目录，该目录下所有子对象将会被同步删除，操作不可撤销，请慎重操作!
         </div>
       ),
       okText: '确定',
