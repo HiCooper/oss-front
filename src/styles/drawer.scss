@@ -8,7 +8,7 @@
   .ant-drawer-body {
     padding: 16px;
     overflow: auto;
-    height: 100%;
+    height: calc(100% - 55px);
   }
 
   .ant-divider-horizontal {

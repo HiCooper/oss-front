@@ -54,6 +54,7 @@ export default class FileManage extends Component {
   initObjectList = async () => {
     const { currentPath, search } = this.state;
     await this.setState({
+      selectedRowKeys: [],
       tableLoading: true,
     });
     const path = search ? '' : currentPath;
@@ -220,20 +221,18 @@ export default class FileManage extends Component {
     }
   };
 
-  /**
-   *  fullPath 对象全路径，多个用逗号隔开
-   * @param fullPath
-   * @returns {Promise<void>}
-   */
-  deleteObject = async (fullPath) => {
+  deleteObject = async () => {
+    await this.setState({
+      tableLoading: true,
+    });
     const params = {
       bucket: this.state.bucketName,
-      objects: fullPath,
+      objectIds: this.state.selectedRowKeys.join(','),
     };
     await DeleteObjectHeadApi(params)
       .then((res) => {
         if (res.msg === 'SUCCESS') {
-          message.success('操作成功');
+          message.success(`批量删除成功(${this.state.selectedRowKeys.length})`);
           this.initObjectList();
         }
       })
@@ -318,17 +317,11 @@ export default class FileManage extends Component {
       cancelText: '取消',
       onOk() {
         let { selectedRows } = thisAlias.state;
-        let fullPaths = '';
         for (let i = 0; i < selectedRows.length;) {
           const record = selectedRows[i];
-          const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
-          fullPaths += path;
-          if (i < selectedRows.length - 1) {
-            fullPaths += ',';
-          }
           selectedRows = selectedRows.filter(k => k.id !== record.id);
         }
-        thisAlias.deleteObject(fullPaths);
+        thisAlias.deleteObject();
         thisAlias.setState({
           selectedRows,
         });
@@ -601,6 +594,14 @@ export default class FileManage extends Component {
                 }) : null
               }
             </Breadcrumb>
+            {
+              selectedRowKeys && selectedRowKeys.length > 0 ? (
+                <div className="select-count">
+                  已选择：
+                  <span>{`${selectedRowKeys.length}/${objectList.length}`}</span>
+                </div>
+              ) : null
+            }
           </div>
 
           <div className="table">
@@ -630,7 +631,7 @@ export default class FileManage extends Component {
                 };
               }}
             >
-              <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
+              <Table.Column width={280} title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
               {
                 search ? (
                   <Table.Column width={280} title="路径" dataIndex="filePath" />

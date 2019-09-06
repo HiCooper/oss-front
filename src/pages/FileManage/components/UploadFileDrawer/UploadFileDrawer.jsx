@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Drawer, Form, Icon, Input, message, Radio, Upload } from 'antd';
+import { Alert, Drawer, Form, Icon, Input, message, Radio, Switch, Upload } from 'antd';
 import CryptoJS from 'crypto-js/crypto-js';
 import { CreateObjectUrl } from '../../../../api/object';
 import { getToken } from '../../../../util/auth';
@@ -10,13 +10,13 @@ import './index.scss';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    s: { span: 5 },
-    sm: { span: 4 },
+    s: { span: 6 },
+    sm: { span: 5 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    s: { span: 19 },
-    sm: { span: 20 },
+    s: { span: 18 },
+    sm: { span: 19 },
   },
 };
 
@@ -48,6 +48,7 @@ export default class UploadFileDrawer extends Component {
   constructor(props) {
     super(props);
     const bucketInfoFromStore = getCurrentBucket();
+    const tempSwitchValue = sessionStorage.getItem('switchValue');
     this.state = {
       bucketInfo: bucketInfoFromStore,
       currentFilePath: this.props.currentPath,
@@ -60,16 +61,39 @@ export default class UploadFileDrawer extends Component {
       radioSelect: this.props.currentPath,
       // 输入指定目录错误提示信息
       inputPathErrorMsg: '',
+      // 上传完成后是否自动关闭 drawer
+      switchValue: tempSwitchValue === 'true',
     };
   }
 
   uploadBtnOnchange = (info) => {
-    if (info.file.status === 'done') {
-      message.success('上传成功');
+    const fileList = info.fileList;
+    let replaceCount = 0;
+    fileList.forEach((file) => {
+      const { status, response } = file;
+      if (status === 'error') {
+        message.error(`${info.file.name} 上传失败，${info.file.response && info.file.response.msg}`);
+      }
+      if (response && response.data && response.data.length > 0) {
+        const successResult = response.data[0];
+        if (successResult.replace) {
+          replaceCount++;
+        }
+      }
+    });
+    if (fileList.every(item => item.status === 'done')) {
+      message.success(
+        <div>
+          上传成功,共
+          <span style={{ color: 'green', fontWeight: 'bold' }}>{fileList.length}</span>
+          个,其中替换
+          <span style={{ color: 'green', fontWeight: 'bold' }}>{replaceCount}</span>
+          个
+        </div>);
       this.props.onSuccess();
-      this.props.onClose();
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} 上传失败，${info.file.response && info.file.response.msg}`);
+      if (this.state.switchValue) {
+        this.props.onClose();
+      }
     }
   };
 
@@ -172,8 +196,16 @@ export default class UploadFileDrawer extends Component {
     });
   };
 
+  switchChange =(checked) => {
+    sessionStorage.setItem('switchValue', checked);
+    this.setState({
+      switchValue: checked,
+    });
+  };
+
   render() {
-    const { bucketInfo, currentFilePath, radioSelect, uploadPath, hash, fileSize, acl, aclMessage, uploadPathMessage, inputPathErrorMsg } = this.state;
+    const { bucketInfo, currentFilePath, radioSelect, uploadPath, switchValue,
+      hash, fileSize, acl, aclMessage, uploadPathMessage, inputPathErrorMsg } = this.state;
     return (
       <Drawer
         width={640}
@@ -224,6 +256,9 @@ export default class UploadFileDrawer extends Component {
               <Radio.Button value="PUBLIC_READ">公共读</Radio.Button>
               <Radio.Button value="PUBLIC_READ_WRITE">公共读写</Radio.Button>
             </Radio.Group>
+          </Form.Item>
+          <Form.Item label="完成后自动关闭">
+            <Switch defaultChecked={switchValue} onChange={this.switchChange} />
           </Form.Item>
           <Form.Item
             label="上传文件"
@@ -336,6 +371,10 @@ const uploadHelpMessage = (
         <li>使用 UTF-8 编码；</li>
         <li>区分大小写；</li>
         <li>长度必须在 1-1023 字节之间；</li>
+        <li>
+          特殊字符将会被系统过滤：
+          <code>{'<>"#%{}^[]`\\'}</code>
+        </li>
         <li>
           不能以
           <code>/</code>
