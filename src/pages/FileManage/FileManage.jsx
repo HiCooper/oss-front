@@ -221,7 +221,7 @@ export default class FileManage extends Component {
     }
   };
 
-  deleteObject = async () => {
+  deleteObject = async (objectId) => {
     await this.setState({
       tableLoading: true,
     });
@@ -229,6 +229,9 @@ export default class FileManage extends Component {
       bucket: this.state.bucketName,
       objectIds: this.state.selectedRowKeys.join(','),
     };
+    if (objectId) {
+      params.objectIds = objectId;
+    }
     if (!params.objectIds) {
       message.warn('请选择要删除的文件或目录');
       return;
@@ -419,7 +422,7 @@ export default class FileManage extends Component {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        thisAlias.deleteObject();
+        thisAlias.deleteObject(record.id);
       },
       onCancel() {
         message.info('取消删除');
