@@ -229,10 +229,14 @@ export default class FileManage extends Component {
       bucket: this.state.bucketName,
       objectIds: this.state.selectedRowKeys.join(','),
     };
+    if (!params.objectIds) {
+      message.warn('请选择要删除的文件或目录');
+      return;
+    }
     await DeleteObjectHeadApi(params)
       .then((res) => {
         if (res.msg === 'SUCCESS') {
-          message.success(`批量删除成功(${this.state.selectedRowKeys.length})`);
+          message.success(`删除成功(${this.state.selectedRowKeys.length})`);
           this.initObjectList();
         }
       })
@@ -415,7 +419,7 @@ export default class FileManage extends Component {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        thisAlias.deleteObject(fullPath);
+        thisAlias.deleteObject();
       },
       onCancel() {
         message.info('取消删除');

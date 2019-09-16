@@ -71,7 +71,7 @@ class AddFolderDrawer extends Component {
       );
       return;
     }
-    if (!/^[^/]((?!\/\/)[a-zA-Z0-9/\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
+    if (!/^[^/]((?!\/\/)[a-zA-Z0-9/-\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
       callback(
         <span
           style={{
@@ -79,7 +79,7 @@ class AddFolderDrawer extends Component {
             color: 'red',
           }}
         >
-          目录仅支持数字字母中文和
+          目录仅支持数字字母中文短横线和
           <code>/</code>
           字符
         </span>
@@ -132,7 +132,7 @@ class AddFolderDrawer extends Component {
         onClose={this.props.onClose}
         visible={this.props.visible}
         className="oss-drawer"
-        title="详情"
+        title="新建目录"
       >
         <Form {...formItemLayout} className="add-folder-form" onSubmit={this.createFolderSubmit}>
           <Form.Item
