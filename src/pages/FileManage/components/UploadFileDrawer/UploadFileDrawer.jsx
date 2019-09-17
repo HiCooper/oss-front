@@ -339,7 +339,7 @@ const checkInput = function (value) {
     );
     return errorMsg;
   }
-  if (!/^[^/]((?!\/\/)[a-zA-Z0-9/-\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
+  if (!/^[^/]((?!\/\/)[a-zA-Z0-9/-_\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
     errorMsg = (
       <span
         style={{
@@ -347,7 +347,7 @@ const checkInput = function (value) {
           color: 'red',
         }}
       >
-          目录仅支持数字字母中文短横线和
+          目录仅支持数字字母中文短横线下划线和
         <code>/</code>
           字符
       </span>
