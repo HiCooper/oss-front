@@ -71,7 +71,7 @@ class AddFolderDrawer extends Component {
       );
       return;
     }
-    if (!/^[^/]((?!\/\/)[a-zA-Z0-9/-_\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
+    if (!/^[^/]((?!\/\/)[a-zA-Z0-9/\-_\u4E00-\u9FA5]+)*[^/]$/.test(value)) {
       callback(
         <span
           style={{
