@@ -137,6 +137,7 @@ export default class FileManage extends Component {
       const path = record.filePath === '/' ? `/${record.fileName}` : `${record.filePath}/${record.fileName}`;
       await this.setState({
         currentPath: path,
+        search: '',
       });
       this.props.history.push(`${pathname}?path=${encodeURIComponent(path)}`);
       this.initObjectList();

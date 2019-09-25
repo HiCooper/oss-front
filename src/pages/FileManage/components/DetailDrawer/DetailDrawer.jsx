@@ -189,36 +189,22 @@ class DetailDrawer extends Component {
                   >
                     {detailInfo.category}
                   </Form.Item>
+                  <Form.Item
+                    label="文件ACL"
+                    validateStatus="success"
+                  >
+                    {getAclDesc(detailInfo.acl)}
+                  </Form.Item>
                 </div>
               ) : (
-                <div>
-                  <Form.Item
-                    label="文件类型"
-                    validateStatus="success"
-                  >
-                    文件夹
-                  </Form.Item>
-                  <Form.Item
-                    label="大小"
-                    validateStatus="success"
-                  >
-                    100M
-                  </Form.Item>
-                  <Form.Item
-                    label="子文件"
-                    validateStatus="success"
-                  >
-                    11项
-                  </Form.Item>
-                </div>
+                <Form.Item
+                  label="文件类型"
+                  validateStatus="success"
+                >
+                  文件夹
+                </Form.Item>
               )
             }
-            <Form.Item
-              label="文件ACL"
-              validateStatus="success"
-            >
-              {getAclDesc(detailInfo.acl)}
-            </Form.Item>
             <Form.Item
               label="上次修改时间"
               validateStatus="success"
