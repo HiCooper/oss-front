@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './index.scss';
 import { Button, Form, Input, message, Modal, Popconfirm, Radio, Switch } from 'antd';
 import { getAclDesc } from '../../util/AclTable';
-import { DeleteBucketApi, GetBucketRefererApi, SetBucketAclApi } from '../../api/bucket';
+import { DeleteBucketApi, GetBucketRefererApi, SetBucketAclApi, UpdateRefererApi } from '../../api/bucket';
 import { getCurrentBucket, setCurrentBucketInfo } from '../../util/Bucket';
 
 
@@ -56,8 +56,9 @@ class Settings extends Component {
       aclMessage: ACLMessageTable.PRIVATE,
       defaultReferer: '',
       referer: '',
-      defaultAllowEmpty: true,
-      allowEmpty: true,
+      refererId: undefined,
+      defaultAllowEmpty: undefined,
+      allowEmpty: undefined,
       editStatus: {
         acl: false,
         referer: false,
@@ -74,9 +75,13 @@ class Settings extends Component {
     GetBucketRefererApi({ bucket: bucketInfo.name })
       .then((res) => {
         if (res.msg === 'SUCCESS' && res.data) {
+          const whiteList = res.data.whiteList.replace(/,/g, '\n')
           this.setState({
+            refererId: res.data.id,
             allowEmpty: res.data.allowEmpty,
-            defaultReferer: res.data.whiteList,
+            defaultAllowEmpty: res.data.allowEmpty,
+            referer: whiteList,
+            defaultReferer: whiteList,
           });
         }
       });
@@ -111,9 +116,31 @@ class Settings extends Component {
 
   bucketRefererChangeSubmit = (e) => {
     e.preventDefault();
+    const { bucketInfo, refererId } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        const params = {
+          id: refererId,
+          bucket: bucketInfo.name,
+          allowEmpty: values.allowEmpty,
+          whiteList: values.referer.split(/[\n\r]/)
+            .filter(i => !!i)
+            .toString(),
+        };
+        UpdateRefererApi(params)
+          .then((res) => {
+            if (res.msg === 'SUCCESS') {
+              this.getRefererInfo();
+              this.setState({
+                referer: values.whiteList,
+                allowEmpty: values.allowEmpty,
+                editStatus: {
+                  referer: false,
+                },
+              });
+              message.success('设置成功');
+            }
+          });
       }
     });
   };
@@ -128,14 +155,6 @@ class Settings extends Component {
     if (!editStatus[id]) {
       this.resetDefaultValue(id);
     }
-  };
-
-  commitRefererInfo = () => {
-    const params = {
-      allowEmpty: this.state.allowEmpty,
-      whiteList: this.state.referer.split('\n'),
-    };
-    console.log(params);
   };
 
   // 重置 默认值
@@ -320,7 +339,10 @@ class Settings extends Component {
                               initialValue: defaultReferer,
                             })(
                               <TextArea onChange={this.refererInputChange}
-                                autosize={{ minRows: 3, maxRows: 6 }}
+                                autosize={{
+                                  minRows: 3,
+                                  maxRows: 6,
+                                }}
                                 placeholder="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
                               />,
                             )
@@ -353,7 +375,6 @@ class Settings extends Component {
                                 marginRight: 8,
                               }}
                               disabled={allowEmpty === defaultAllowEmpty && referer === defaultReferer}
-                              onClick={this.commitRefererInfo}
                             >
                               保存
                             </Button>

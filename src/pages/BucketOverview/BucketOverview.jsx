@@ -30,7 +30,7 @@ export default class BucketOverview extends Component {
               <div className="item-value">
                 <div className="value-and-setting">
                   <span>{getAclDesc(bucketInfo.acl)}</span>
-                  <a className="next-btn next-small next-btn-normal go-setting" href="/#/bucket/berry/settings">设置</a>
+                  <a className="next-btn next-small next-btn-normal go-setting" href={`/#/bucket/${bucketInfo.name}/settings`}>设置</a>
                 </div>
               </div>
             </div>
@@ -40,8 +40,8 @@ export default class BucketOverview extends Component {
               </div>
               <div className="item-value">
                 <div className="value-and-setting">
-                  <span>未开启</span>
-                  <a className="next-btn next-small next-btn-normal go-setting" href="/#/bucket/berry/settings">设置</a>
+                  <span>{bucketInfo.referer ? '已开启' : '未开启'}</span>
+                  <a className="next-btn next-small next-btn-normal go-setting" href={`/#/bucket/${bucketInfo.name}/settings`}>设置</a>
                 </div>
               </div>
             </div>

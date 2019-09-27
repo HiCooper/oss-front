@@ -27,6 +27,15 @@ export const GetBucketRefererApi = params => axios.get('/ajax/bucket/get_referer
   .then(res => res.data);
 
 /**
+ * 更新 防盗链设置
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ * @constructor
+ */
+export const UpdateRefererApi = params => axios.post('/ajax/bucket/update_referer.json', params )
+  .then(res => res.data);
+
+/**
  * 创建 Bucket
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
