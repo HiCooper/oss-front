@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './index.scss';
 import { Button, Form, Input, message, Modal, Popconfirm, Radio, Switch } from 'antd';
 import { getAclDesc } from '../../util/AclTable';
-import { DeleteBucketApi, SetBucketAclApi } from '../../api/bucket';
+import { DeleteBucketApi, GetBucketRefererApi, SetBucketAclApi } from '../../api/bucket';
 import { getCurrentBucket, setCurrentBucketInfo } from '../../util/Bucket';
 
 
@@ -65,6 +65,23 @@ class Settings extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getRefererInfo();
+  }
+
+  getRefererInfo = () => {
+    const { bucketInfo } = this.state;
+    GetBucketRefererApi({ bucket: bucketInfo.name })
+      .then((res) => {
+        if (res.msg === 'SUCCESS' && res.data) {
+          this.setState({
+            allowEmpty: res.data.allowEmpty,
+            defaultReferer: res.data.whiteList,
+          });
+        }
+      });
+  };
+
   bucketAclChangeSubmit = (e) => {
     e.preventDefault();
     const { acl, aclDefault, bucketInfo, editStatus } = this.state;
@@ -113,6 +130,14 @@ class Settings extends Component {
     }
   };
 
+  commitRefererInfo = () => {
+    const params = {
+      allowEmpty: this.state.allowEmpty,
+      whiteList: this.state.referer.split('\n'),
+    };
+    console.log(params);
+  };
+
   // 重置 默认值
   resetDefaultValue = (id) => {
     const { bucketInfo, defaultReferer, defaultAllowEmpty } = this.state;
@@ -146,9 +171,9 @@ class Settings extends Component {
       this.aclChange(value);
       return;
     }
-    let msg = '尊敬的客户您好，公共读（public-read） 权限可以不通过身份验证直接读取您 Bucket 中的数据，安全风险高，为确保您的数据安全，不推荐此配置，建议您选择私有（private）.';
+    let msg = '提示，公共读（public-read） 权限可以不通过身份验证直接读取您 Bucket 中的数据，安全风险高，为确保您的数据安全，不推荐此配置，建议您选择私有（private）.';
     if (value === 'PUBLIC_READ_WRITE') {
-      msg = '尊敬的客户您好，公共读写（public-read-write） 权限可以不通过身份验证直接读取您 Bucket 中的数据，安全风险高，为确保您的数据安全，不推荐此配置，建议您选择私有（private）。';
+      msg = '提示，公共读写（public-read-write） 权限可以不通过身份验证直接读取您 Bucket 中的数据，安全风险高，为确保您的数据安全，不推荐此配置，建议您选择私有（private）。';
     }
     const thisAlias = this;
     confirm({
@@ -201,7 +226,13 @@ class Settings extends Component {
               <header className="section-header">读写权限</header>
               <div className="form">
                 <Form {...formItemLayout} onSubmit={this.bucketAclChangeSubmit}>
-                  <Form.Item validateStatus="success" wrapperCol={{ span: 16, offset: 5 }} colon={false}>
+                  <Form.Item validateStatus="success"
+                    wrapperCol={{
+                      span: 16,
+                      offset: 5,
+                    }}
+                    colon={false}
+                  >
                     <span className="help-msg">OSS ACL 提供 Bucket 级别的权限访问控制</span>
                   </Form.Item>
                   {
@@ -218,7 +249,13 @@ class Settings extends Component {
                             <Radio.Button value="PUBLIC_READ_WRITE">公共读写</Radio.Button>
                           </Radio.Group>
                         </Form.Item>
-                        <Form.Item validateStatus="success" wrapperCol={{ span: 16, offset: 5 }} colon={false}>
+                        <Form.Item validateStatus="success"
+                          wrapperCol={{
+                            span: 16,
+                            offset: 5,
+                          }}
+                          colon={false}
+                        >
                           <div className="form-btn">
                             <Button
                               type="normal"
@@ -241,7 +278,12 @@ class Settings extends Component {
                         <Form.Item colon={false} label="Bucket ACL">
                           <span>{getAclDesc(acl)}</span>
                         </Form.Item>
-                        <Form.Item colon={false} wrapperCol={{ span: 16, offset: 5 }}>
+                        <Form.Item colon={false}
+                          wrapperCol={{
+                            span: 16,
+                            offset: 5,
+                          }}
+                        >
                           <Button type="normal" onClick={e => this.doEdit('acl', e)}>
                             设置
                           </Button>
@@ -257,7 +299,13 @@ class Settings extends Component {
               <header className="section-header">防盗链</header>
               <div className="form">
                 <Form {...formItemLayout} onSubmit={this.bucketRefererChangeSubmit}>
-                  <Form.Item validateStatus="success" wrapperCol={{ span: 16, offset: 5 }} colon={false}>
+                  <Form.Item validateStatus="success"
+                    wrapperCol={{
+                      span: 16,
+                      offset: 5,
+                    }}
+                    colon={false}
+                  >
                     <span className="help-msg">OSS 提供 HTTP Referer 白名单配置，用于防止盗链</span>
                   </Form.Item>
                   {
@@ -272,6 +320,7 @@ class Settings extends Component {
                               initialValue: defaultReferer,
                             })(
                               <TextArea onChange={this.refererInputChange}
+                                autosize={{ minRows: 3, maxRows: 6 }}
                                 placeholder="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
                               />,
                             )
@@ -289,7 +338,13 @@ class Settings extends Component {
                             )
                           }
                         </Form.Item>
-                        <Form.Item validateStatus="success" wrapperCol={{ span: 16, offset: 5 }} colon={false}>
+                        <Form.Item validateStatus="success"
+                          wrapperCol={{
+                            span: 16,
+                            offset: 5,
+                          }}
+                          colon={false}
+                        >
                           <div className="form-btn">
                             <Button
                               type="normal"
@@ -298,6 +353,7 @@ class Settings extends Component {
                                 marginRight: 8,
                               }}
                               disabled={allowEmpty === defaultAllowEmpty && referer === defaultReferer}
+                              onClick={this.commitRefererInfo}
                             >
                               保存
                             </Button>
@@ -310,7 +366,7 @@ class Settings extends Component {
                     ) : (
                       <div>
                         <Form.Item colon={false} label="Referer">
-                          <span>未设置</span>
+                          <span>{referer || '未设置'}</span>
                         </Form.Item>
                         <Form.Item colon={false} label="允许空 Referer">
                           <span>{allowEmpty ? '允许' : '不允许'}</span>
@@ -331,10 +387,21 @@ class Settings extends Component {
               <header className="section-header">Bucket 管理</header>
               <div className="form">
                 <Form {...formItemLayout}>
-                  <Form.Item validateStatus="success" wrapperCol={{ span: 16, offset: 5 }} colon={false}>
+                  <Form.Item validateStatus="success"
+                    wrapperCol={{
+                      span: 16,
+                      offset: 5,
+                    }}
+                    colon={false}
+                  >
                     <span className="help-msg">可以对 Bucket 进行删除操作，Bucket 删除后将不可恢复，请您谨慎操作</span>
                   </Form.Item>
-                  <Form.Item colon={false} wrapperCol={{ span: 16, offset: 5 }}>
+                  <Form.Item colon={false}
+                    wrapperCol={{
+                      span: 16,
+                      offset: 5,
+                    }}
+                  >
                     <Popconfirm
                       title="删除 Bucket 后将不可恢复，确定要删除该 Bucket 吗？"
                       onConfirm={this.confirmDelete}

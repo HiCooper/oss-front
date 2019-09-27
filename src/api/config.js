@@ -3,8 +3,8 @@ import { message } from 'antd';
 import { getToken, removeAll } from '../util/auth';
 
 // axios.defaults.baseURL = 'http://47.101.42.169:8077';
-// axios.defaults.baseURL = 'http://192.168.3.190:8077';
-axios.defaults.baseURL = 'http://10.50.12.38:8077';
+axios.defaults.baseURL = 'http://192.168.3.190:8077';
+// axios.defaults.baseURL = 'http://10.50.12.38:8077';
 axios.defaults.timeout = 6000;
 
 axios.interceptors.request.use((config) => {
