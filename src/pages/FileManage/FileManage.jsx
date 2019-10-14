@@ -57,10 +57,9 @@ export default class FileManage extends Component {
       selectedRowKeys: [],
       tableLoading: true,
     });
-    const path = search ? '' : currentPath;
     await ListObjectApi({
       bucket: this.state.bucketName,
-      path,
+      path: currentPath,
       search,
     })
       .then((res) => {
