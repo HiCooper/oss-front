@@ -10,10 +10,10 @@ npm run build
 echo '打包完成'
 
 # 远程服务器 ip
-remote_server_ip='10.50.12.38'
+remote_server_ip='192.168.2.195'
 username='root'
 # !确保远程文件夹存在
-store_dir='/home/jar-service/oss/front'
+store_dir='/bagua/oss_service/front'
 
 #----------------------------------------------------------------------
 # 脚本
