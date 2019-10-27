@@ -63,9 +63,6 @@ class DetailDrawer extends Component {
             objectHeadInfo: res.data,
           });
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
   };
 
@@ -84,9 +81,6 @@ class DetailDrawer extends Component {
             genTempUrlInfo: res.data,
           });
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
   };
 

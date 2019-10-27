@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './index.scss';
 import { getCurrentBucket } from '../../util/Bucket';
 import { getAclDesc } from '../../util/AclTable';
+import LineChart from './components/LineChart';
+import { StatisticsDailyQueryTimesApi } from '../../api/statis';
 
 export default class BucketOverview extends Component {
   static displayName = 'BucketOverview';
@@ -11,11 +13,28 @@ export default class BucketOverview extends Component {
     const bucketInfo = getCurrentBucket();
     this.state = {
       bucketInfo,
+      data: {},
     };
   }
 
-  render() {
+  componentDidMount() {
+    this.initData();
+  }
+
+  initData = () => {
     const { bucketInfo } = this.state;
+    StatisticsDailyQueryTimesApi({ bucket: bucketInfo.name })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            data: res.data,
+          });
+        }
+      });
+  };
+
+  render() {
+    const { bucketInfo, data } = this.state;
     return (
       <div className="bucket-overview">
         <div className="oss-box">
@@ -30,7 +49,11 @@ export default class BucketOverview extends Component {
               <div className="item-value">
                 <div className="value-and-setting">
                   <span>{getAclDesc(bucketInfo.acl)}</span>
-                  <a className="next-btn next-small next-btn-normal go-setting" href={`/#/bucket/${bucketInfo.name}/settings`}>设置</a>
+                  <a className="next-btn next-small next-btn-normal go-setting"
+                    href={`/#/bucket/${bucketInfo.name}/settings`}
+                  >
+                    设置
+                  </a>
                 </div>
               </div>
             </div>
@@ -41,11 +64,22 @@ export default class BucketOverview extends Component {
               <div className="item-value">
                 <div className="value-and-setting">
                   <span>{bucketInfo.referer ? '已开启' : '未开启'}</span>
-                  <a className="next-btn next-small next-btn-normal go-setting" href={`/#/bucket/${bucketInfo.name}/settings`}>设置</a>
+                  <a className="next-btn next-small next-btn-normal go-setting"
+                    href={`/#/bucket/${bucketInfo.name}/settings`}
+                  >
+                    设置
+                  </a>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="oss-box">
+          <div className="box-hd">
+            <h3>最近30天的对象引用次数统计分布</h3>
+          </div>
+          <LineChart data={data} />
         </div>
       </div>
     );

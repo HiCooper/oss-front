@@ -10,12 +10,6 @@ const headMenuConfig = [
     name: '基础设置',
     path: '/settings',
   }, {
-    name: 'API统计',
-    path: '/stats-api',
-  }, {
-    name: '文件访问统计',
-    path: '/stats-file',
-  }, {
     name: '热点数据',
     path: '/stats-hot',
   },

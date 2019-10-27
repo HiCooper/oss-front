@@ -3,8 +3,6 @@ import './index.scss';
 import { Progress } from 'antd';
 import { getUserInfo } from '../../util/auth';
 
-import LineChart from './components/LineChart';
-import BarChart from './components/BarChart';
 import { StatisOverviewApi } from '../../api/statis';
 
 export default class Overview extends Component {
@@ -34,6 +32,7 @@ export default class Overview extends Component {
   }
 
   initData = () => {
+    console.log('get statistics data');
     StatisOverviewApi()
       .then((res) => {
         if (res.msg === 'SUCCESS') {
@@ -41,15 +40,11 @@ export default class Overview extends Component {
             data: res.data,
           });
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
   };
 
   render() {
     const { data } = this.state;
-    const { lastMonthObjectReferenceData, lastMonthHotObjectRanking } = data;
     return (
       <div className="overview">
         <div className="oss-box">
@@ -134,21 +129,6 @@ export default class Overview extends Component {
             </div>
           </div>
         </div>
-
-        <div className="oss-box">
-          <div className="box-hd">
-            <h3>最近30天的对象引用次数统计分布</h3>
-          </div>
-          <LineChart data={lastMonthObjectReferenceData} />
-        </div>
-
-        <div className="oss-box">
-          <div className="box-hd">
-            <h3>最近30天热点数据排行前10</h3>
-          </div>
-          <BarChart data={lastMonthHotObjectRanking} />
-        </div>
-
       </div>
     );
   }

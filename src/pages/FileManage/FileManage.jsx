@@ -68,9 +68,6 @@ export default class FileManage extends Component {
             objectList: res.data,
           });
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
     this.setState({
       tableLoading: false,
@@ -192,9 +189,6 @@ export default class FileManage extends Component {
             url = `${genTempUrlInfo.url}`;
           }
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
     return url;
   };
@@ -305,8 +299,6 @@ export default class FileManage extends Component {
           document.body.removeChild(downloadElement);
         });
       }
-    }).catch((e) => {
-      console.error(e);
     });
   };
 

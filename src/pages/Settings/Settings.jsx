@@ -75,7 +75,7 @@ class Settings extends Component {
     GetBucketRefererApi({ bucket: bucketInfo.name })
       .then((res) => {
         if (res.msg === 'SUCCESS' && res.data) {
-          const whiteList = res.data.whiteList.replace(/,/g, '\n')
+          const whiteList = res.data.whiteList.replace(/,/g, '\n');
           this.setState({
             refererId: res.data.id,
             allowEmpty: res.data.allowEmpty,
@@ -224,9 +224,6 @@ class Settings extends Component {
           message.success('删除成功');
           this.props.history.push('/');
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
   };
 

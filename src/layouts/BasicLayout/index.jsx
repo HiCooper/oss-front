@@ -57,9 +57,7 @@ class BasicLayout extends Component {
           });
         }
       })
-      .catch((e) => {
-        console.error(e);
-      });
+      ;
   };
 
   searchBucket = async (value) => {

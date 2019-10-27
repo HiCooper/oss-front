@@ -37,9 +37,6 @@ export default class PolicyListDrawer extends Component {
             listData: res.data,
           });
         }
-      })
-      .catch((e) => {
-        console.error(e);
       });
     this.setState({
       tableLoading: false,
