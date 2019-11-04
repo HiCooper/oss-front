@@ -94,14 +94,20 @@ class DetailDrawer extends Component {
     }
     return (
       <div style={{ textAlign: 'center' }}>
-        <Icon type={getIconByFileName(detailInfo)}
-          theme="filled"
-          style={{
-            color: '#ffeb3b',
-            marginRight: '8px',
-            fontSize: '200px',
-          }}
-        />
+        {
+          detailInfo.isDir ? (
+            <i className="icon icon-file-m" />
+          ) : (
+            <Icon type={getIconByFileName(detailInfo)}
+              theme="filled"
+              style={{
+                color: '#ffeb3b',
+                marginRight: '8px',
+                fontSize: '200px',
+              }}
+            />
+          )
+        }
         <p>{detailInfo.fileName}</p>
       </div>
     );

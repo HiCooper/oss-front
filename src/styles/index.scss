@@ -82,3 +82,18 @@ code {
   }
 
 }
+
+.icon {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  font-size: 0;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon-file-m {
+  background-image: url(../asserts/images/icon-file-m.svg);
+}

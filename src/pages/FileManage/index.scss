@@ -19,6 +19,11 @@
     }
   }
 
+  .object-name {
+    display: flex;
+    align-items: center;
+  }
+
   .breadcrumb {
     padding: 0 0 8px 0;
     border-bottom: 1px solid #e8e8e8;
@@ -48,6 +53,7 @@
 
     .list-file-name {
       cursor: pointer;
+      margin-left: 10px;
     }
   }
 

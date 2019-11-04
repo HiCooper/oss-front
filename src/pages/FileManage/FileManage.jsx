@@ -94,15 +94,21 @@ export default class FileManage extends Component {
       color = '#ffeb3b';
     }
     return (
-      <div>
-        <Icon type={getIconByFileName(record)}
-          theme="filled"
-          style={{
-            color,
-            marginRight: '8px',
-            fontSize: '18px',
-          }}
-        />
+      <div className="object-name">
+        {
+          record.isDir ? (
+            <i className="icon icon-file-m" />
+          ) : (
+            <Icon type={getIconByFileName(record)}
+              theme="filled"
+              style={{
+                color,
+                marginRight: '8px',
+                fontSize: '24px',
+              }}
+            />
+          )
+        }
         <span className="list-file-name" onClick={e => this.detailDrawerShow(record, e)}>{val}</span>
       </div>
     );
