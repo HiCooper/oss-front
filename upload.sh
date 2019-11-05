@@ -16,7 +16,7 @@ remote_server_ip='192.168.2.195'
 username='root'
 # !确保远程文件夹存在
 #store_dir='/usr/local/share/app/oss'
-store_dir='/home/jar-service/oss/front'
+#store_dir='/home/jar-service/oss/front'
 store_dir='/bagua/oss_service/front'
 
 #----------------------------------------------------------------------
