@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Axis, Chart, Coord, Geom, Tooltip } from 'bizcharts';
+import { Axis, Chart, Coord, Geom, Label, Tooltip } from 'bizcharts';
 
 export default class BarChart extends Component {
   static displayName = 'BarChart';
@@ -14,26 +14,32 @@ export default class BarChart extends Component {
     const data = this.props.data;
     let temp;
     if (data) {
-      temp = data.map((item) => {
+      temp = data.map((item, index) => {
         return {
           name: item.fullPath,
           value: item.count,
+          index,
         };
-      }).sort((a, b) => a.value - b.value);
+      })
+        .sort((a, b) => a.value - b.value);
     }
 
     return (
       <div>
-        <Chart height={window.innerHeight - 283} data={temp} forceFit>
+        <Chart height={window.innerHeight - 283} data={temp} forceFit padding={['auto', 100, 'auto']}>
           <Coord transpose />
           <Axis
             name="name"
             label={{
               offset: 12,
+              formatter: (text => text.substr(text.lastIndexOf('/') + 1)),
             }}
           />
+          <Axis name="value" />
           <Tooltip />
-          <Geom type="interval" position="name*value" />
+          <Geom type="interval" position="name*value" color={['value', '#E6F6C8-#3376CB']}>
+            <Label content={['name*value', (name, value) => value]} />
+          </Geom>
         </Chart>
       </div>
     );
