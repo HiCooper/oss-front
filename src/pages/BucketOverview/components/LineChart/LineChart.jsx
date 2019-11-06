@@ -28,7 +28,7 @@ export default class LineChart extends Component {
     }
     return (
       <div>
-        <Chart height={window.innerHeight - 385} data={temp} scale={cols} forceFit>
+        <Chart height={window.innerHeight - 410} data={temp} scale={cols} forceFit>
           <Axis name="date" />
           <Axis name="value" />
           <Tooltip

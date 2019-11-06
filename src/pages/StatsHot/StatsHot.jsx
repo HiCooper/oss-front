@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BarChart from './components/BarChart';
 import { StatisticsHotDataApi } from '../../api/statis';
 import { getCurrentBucket } from '../../util/Bucket';
+import './index.scss';
 
 export default class StatsHot extends Component {
   static displayName = 'StatsHot';
@@ -34,8 +35,8 @@ export default class StatsHot extends Component {
   render() {
     const { hotData } = this.state;
     return (
-      <div>
-        <div className="oss-box">
+      <div className="statistics-hot-home">
+        <div className="oss-box" style={{ height: '100%' }}>
           <div className="box-hd">
             <h3>最近30天热点数据排行前10</h3>
           </div>
