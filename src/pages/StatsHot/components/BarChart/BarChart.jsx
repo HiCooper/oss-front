@@ -16,7 +16,7 @@ export default class BarChart extends Component {
     if (data) {
       temp = data.map((item, index) => {
         return {
-          name: item.fullPath,
+          name: decodeURIComponent(item.fullPath),
           value: item.count,
           index,
         };
