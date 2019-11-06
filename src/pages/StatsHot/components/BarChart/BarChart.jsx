@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import { Axis, Chart, Coord, Geom, Label, Tooltip } from 'bizcharts';
-import { Col, Row } from 'antd';
-import { Link } from 'react-router-dom';
 
 export default class BarChart extends Component {
   static displayName = 'BarChart';
