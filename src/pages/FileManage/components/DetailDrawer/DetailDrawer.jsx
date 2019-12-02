@@ -19,6 +19,7 @@ const formItemLayout = {
   },
 };
 const pictureShowType = 'png, jpg, jpeg, bmg, gif, svg';
+const videoShowType = 'mp4';
 
 class DetailDrawer extends Component {
   static displayName = 'DetailDrawer';
@@ -86,8 +87,25 @@ class DetailDrawer extends Component {
 
   renderFilePreview = () => {
     const { detailInfo, genTempUrlInfo, bucketInfo } = this.state;
-    if (!detailInfo.isDir && detailInfo.category && genTempUrlInfo.url && pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+    if (!detailInfo.isDir && detailInfo.category && genTempUrlInfo.url) {
       const url = detailInfo.acl.startsWith('PRIVATE') || (detailInfo.acl.startsWith('EXTEND') && bucketInfo.acl.startsWith('PRIVATE')) ? `${genTempUrlInfo.url}?${genTempUrlInfo.signature}` : genTempUrlInfo.url;
+      if (pictureShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+        return (
+          <img src={url} alt="文件无法预览。" />
+        );
+      }
+      if (videoShowType.indexOf(detailInfo.category.toLowerCase()) !== -1) {
+        return (
+          <video controls src={url} autoPlay={false}>
+            <source src={url} type="video/mp4" />
+            <track default
+              kind="captions"
+              srcLang="en"
+            />
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+        );
+      }
       return (
         <img src={url} alt="文件无法预览。" />
       );
