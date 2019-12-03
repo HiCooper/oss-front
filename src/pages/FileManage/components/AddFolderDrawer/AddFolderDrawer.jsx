@@ -82,7 +82,7 @@ class AddFolderDrawer extends Component {
           目录仅支持数字字母中文短横线下划线,中英文小括号和
           <code>/</code>
           字符
-        </span>
+        </span>,
       );
     }
     this.setState({

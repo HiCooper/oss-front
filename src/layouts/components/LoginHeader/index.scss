@@ -22,8 +22,8 @@
     align-items: center;
   }
 
-  .right{
-    .notice-icon{
+  .right {
+    .notice-icon {
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -31,11 +31,11 @@
       line-height: 64px;
       padding: 0 10px;
 
-      &:hover{
+      &:hover {
         background: #f5eeee;
       }
 
-      i{
+      i {
         font-size: 18px;
       }
 
@@ -47,12 +47,13 @@
 .personal-info {
   cursor: pointer;
   padding: 0 10px;
-  &:hover{
+
+  &:hover {
     background: #f5eeee;
   }
 }
 
-.notice-card-content{
+.notice-card-content {
   width: 300px;
 
   .footer {

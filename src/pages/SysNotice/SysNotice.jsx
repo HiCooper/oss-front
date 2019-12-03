@@ -41,7 +41,10 @@ export default class SysNotice extends Component {
 
   onLoadMore = () => {
     const { data } = this.state;
-    const temp = data.concat([...new Array(count)].map(() => ({ loading: true, name: {} })));
+    const temp = data.concat([...new Array(count)].map(() => ({
+      loading: true,
+      name: {},
+    })));
     this.setState({
       loading: true,
       list: temp,

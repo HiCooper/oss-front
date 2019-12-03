@@ -32,7 +32,7 @@ export const GetBucketRefererApi = params => axios.get('/ajax/bucket/get_referer
  * @returns {Promise<AxiosResponse<T>>}
  * @constructor
  */
-export const UpdateRefererApi = params => axios.post('/ajax/bucket/update_referer.json', params )
+export const UpdateRefererApi = params => axios.post('/ajax/bucket/update_referer.json', params)
   .then(res => res.data);
 
 /**

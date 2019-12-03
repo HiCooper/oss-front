@@ -44,7 +44,11 @@ export default class UserLayout extends Component {
     return (
       <Layout style={{ height: '100%' }}>
         <LoginHeader />
-        <Layout style={{ marginTop: '65px', height: '100%' }}>
+        <Layout style={{
+          marginTop: '65px',
+          height: '100%',
+        }}
+        >
           <Sider width={200} className="user-sider">
             <Menu
               onSelect={this.subMenuSelect}

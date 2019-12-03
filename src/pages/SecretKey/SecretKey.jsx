@@ -13,6 +13,7 @@ import { dateFormat } from '../../util/DateUtil';
 
 const confirm = Modal.confirm;
 const { Panel } = Collapse;
+
 class SecretKey extends Component {
   static displayName = 'SecretKey';
 
@@ -39,15 +40,17 @@ class SecretKey extends Component {
     this.setState({
       tableLoading: true,
     });
-    await ListAccessKeyApi().then((res) => {
-      if (res.msg === 'SUCCESS') {
-        this.setState({
-          accessKeyList: res.data,
-        });
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+    await ListAccessKeyApi()
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            accessKeyList: res.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     this.setState({
       tableLoading: false,
     });
@@ -60,7 +63,14 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{ color: 'red', fontWeight: 'bold', margin: '0 5px' }}>禁用</span>
+          <span style={{
+            color: 'red',
+            fontWeight: 'bold',
+            margin: '0 5px',
+          }}
+          >
+禁用
+          </span>
           AccessKey:
           <span style={{
             color: 'green',
@@ -82,16 +92,18 @@ class SecretKey extends Component {
     });
   };
 
-  disableKey =(record) => {
-    DisableAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('操作成功');
-        this.initData();
-      }
-    }).catch((e) => {
-      console.error(e);
-      message.success('操作失败');
-    });
+  disableKey = (record) => {
+    DisableAccessKeyApi({ accessKeyId: record.accessKeyId })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('操作成功');
+          this.initData();
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        message.success('操作失败');
+      });
   };
 
   showEnableKeyWarning = (record, e) => {
@@ -101,7 +113,14 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{ color: 'green', fontWeight: 'bold', margin: '0 5px' }}>启用</span>
+          <span style={{
+            color: 'green',
+            fontWeight: 'bold',
+            margin: '0 5px',
+          }}
+          >
+启用
+          </span>
           AccessKey:
           <span style={{
             color: '#607D8B',
@@ -123,16 +142,18 @@ class SecretKey extends Component {
     });
   };
 
-  enableKey =(record) => {
-    EnableAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('操作成功');
-        this.initData();
-      }
-    }).catch((e) => {
-      console.error(e);
-      message.success('操作失败');
-    });
+  enableKey = (record) => {
+    EnableAccessKeyApi({ accessKeyId: record.accessKeyId })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('操作成功');
+          this.initData();
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        message.success('操作失败');
+      });
   };
 
   showDeleteKeyWarning = (record, e) => {
@@ -142,7 +163,14 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{ color: 'red', fontWeight: 'bold', margin: '0 5px' }}>删除</span>
+          <span style={{
+            color: 'red',
+            fontWeight: 'bold',
+            margin: '0 5px',
+          }}
+          >
+删除
+          </span>
           AccessKey:
           <span style={{
             color: 'green',
@@ -164,16 +192,18 @@ class SecretKey extends Component {
     });
   };
 
-  deleteKey =(record) => {
-    DeleteAccessKeyApi({ accessKeyId: record.accessKeyId }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('操作成功');
-        this.initData();
-      }
-    }).catch((e) => {
-      console.error(e);
-      message.success('操作失败');
-    });
+  deleteKey = (record) => {
+    DeleteAccessKeyApi({ accessKeyId: record.accessKeyId })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('操作成功');
+          this.initData();
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        message.success('操作失败');
+      });
   };
 
   renderOp = (text, record) => {
@@ -268,17 +298,19 @@ class SecretKey extends Component {
         this.setState({
           genLoading: true,
         });
-        CreateAccessKeyApi(values).then((res) => {
-          if (res.msg === 'SUCCESS') {
-            this.setState({
-              genAccessKeyPair: res.data,
-              generateSuccess: true,
-            });
-            this.initData();
-          }
-        }).catch((error) => {
-          console.error(error);
-        });
+        CreateAccessKeyApi(values)
+          .then((res) => {
+            if (res.msg === 'SUCCESS') {
+              this.setState({
+                genAccessKeyPair: res.data,
+                generateSuccess: true,
+              });
+              this.initData();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
       this.setState({
         genLoading: false,
@@ -299,7 +331,10 @@ class SecretKey extends Component {
           注意：每个账户最多能创建 3个 密钥对
         </div>
         <Alert
-          style={{ margin: '10px 0', fontSize: '12px' }}
+          style={{
+            margin: '10px 0',
+            fontSize: '12px',
+          }}
           message="AccessKey ID和AccessKey Secret是您访问 OSS API的密钥，具有该账户完全的权限，请您妥善保管。"
           type="warning"
           showIcon
@@ -326,7 +361,11 @@ class SecretKey extends Component {
           loading={tableLoading}
         >
           <Table.Column title="AccessKey ID" dataIndex="accessKeyId" />
-          <Table.Column width={400} title="Access Key Secret" dataIndex="accessKeySecret" render={this.renderAccessKeySecret} />
+          <Table.Column width={400}
+            title="Access Key Secret"
+            dataIndex="accessKeySecret"
+            render={this.renderAccessKeySecret}
+          />
           <Table.Column title="状态" dataIndex="state" render={this.renderState} />
           <Table.Column title="创建时间" dataIndex="createTime" />
           <Table.Column title="操作"
@@ -361,9 +400,18 @@ class SecretKey extends Component {
                 generateSuccess && genAccessKeyPair ? (
                   <div>
                     <Alert style={{ fontSize: '12px' }} message="这是用户 AccessKey 可供下载的唯一机会，请及时保存！" type="success" />
-                    <div style={{ textAlign: 'center', lineHeight: '100px' }}>
+                    <div style={{
+                      textAlign: 'center',
+                      lineHeight: '100px',
+                    }}
+                    >
                       <h1>
-                        <Icon type="check-circle" style={{ color: 'green', marginRight: '10px' }} />
+                        <Icon type="check-circle"
+                          style={{
+                            color: 'green',
+                            marginRight: '10px',
+                          }}
+                        />
                         新建AccessKey成功！
                       </h1>
                     </div>
@@ -387,12 +435,19 @@ class SecretKey extends Component {
                     <Form labelCol={{ span: 8 }} wrapperCol={{ span: 12 }} onSubmit={this.handleSubmit}>
                       <Form.Item label="校验当前用户密码">
                         {getFieldDecorator('password', {
-                          rules: [{ required: true, message: '请输入当前用户密码!' }],
+                          rules: [{
+                            required: true,
+                            message: '请输入当前用户密码!',
+                          }],
                         })(
-                          <Input placeholder="请输入密码" type="password" />
+                          <Input placeholder="请输入密码" type="password" />,
                         )}
                       </Form.Item>
-                      <Form.Item wrapperCol={{ span: 12, offset: 8 }}>
+                      <Form.Item wrapperCol={{
+                        span: 12,
+                        offset: 8,
+                      }}
+                      >
                         <Button type="primary" htmlType="submit" loading={genLoading}>
                           生成 AccessKey
                         </Button>
@@ -408,6 +463,7 @@ class SecretKey extends Component {
     );
   }
 }
+
 const styles = {
   newAccessKeyDetail: {
     display: 'flex',

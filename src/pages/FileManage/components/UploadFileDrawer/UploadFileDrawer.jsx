@@ -85,9 +85,21 @@ export default class UploadFileDrawer extends Component {
       message.success(
         <div>
           上传成功,共
-          <span style={{ color: 'green', fontWeight: 'bold' }}>{fileList.length}</span>
+          <span style={{
+            color: 'green',
+            fontWeight: 'bold',
+          }}
+          >
+            {fileList.length}
+          </span>
           个,其中替换
-          <span style={{ color: 'green', fontWeight: 'bold' }}>{replaceCount}</span>
+          <span style={{
+            color: 'green',
+            fontWeight: 'bold',
+          }}
+          >
+            {replaceCount}
+          </span>
           个
         </div>);
       this.props.onSuccess();
@@ -196,7 +208,7 @@ export default class UploadFileDrawer extends Component {
     });
   };
 
-  switchChange =(checked) => {
+  switchChange = (checked) => {
     sessionStorage.setItem('switchValue', checked);
     this.setState({
       switchValue: checked,
@@ -204,8 +216,10 @@ export default class UploadFileDrawer extends Component {
   };
 
   render() {
-    const { bucketInfo, currentFilePath, radioSelect, uploadPath, switchValue,
-      hash, fileSize, acl, aclMessage, uploadPathMessage, inputPathErrorMsg } = this.state;
+    const {
+      bucketInfo, currentFilePath, radioSelect, uploadPath, switchValue,
+      hash, fileSize, acl, aclMessage, uploadPathMessage, inputPathErrorMsg,
+    } = this.state;
     return (
       <Drawer
         width={640}

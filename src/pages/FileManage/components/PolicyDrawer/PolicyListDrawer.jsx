@@ -82,14 +82,16 @@ export default class PolicyListDrawer extends Component {
       bucket: bucketInfo.name,
       policyIds: selectedRowKeys.toString(),
     };
-    DeletePolicyApi(params).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        message.success('删除成功');
-        this.initData();
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+    DeletePolicyApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          message.success('删除成功');
+          this.initData();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   render() {
@@ -111,7 +113,12 @@ export default class PolicyListDrawer extends Component {
       >
         <div className="op-btn">
           <Button type="primary" style={{ marginRight: '8px' }} onClick={this.addDrawerOpen}>新增授权</Button>
-          <Button style={{ marginRight: '8px' }} disabled={selectedRowKeys.length === 0} onClick={this.deletePolicy}>删除</Button>
+          <Button style={{ marginRight: '8px' }}
+            disabled={selectedRowKeys.length === 0}
+            onClick={this.deletePolicy}
+          >
+删除
+          </Button>
           <div className="statis" hidden={selectedRowKeys.length === 0}>
             已选择：
             {`${selectedRowKeys.length} / ${listData.length}`}
@@ -130,7 +137,10 @@ export default class PolicyListDrawer extends Component {
         </Table>
         {
           addPolicyDrawerVisible ? (
-            <AddPolicyDrawer visible={addPolicyDrawerVisible} onClose={this.addDrawerClose} onSuccess={this.successAddPolicy} />
+            <AddPolicyDrawer visible={addPolicyDrawerVisible}
+              onClose={this.addDrawerClose}
+              onSuccess={this.successAddPolicy}
+            />
           ) : null
         }
       </Drawer>

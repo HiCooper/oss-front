@@ -10,11 +10,15 @@ export default class BucketOverview extends Component {
 
   constructor(props) {
     super(props);
-    const bucketInfo = getCurrentBucket();
     this.state = {
-      bucketInfo,
+      bucketInfo: getCurrentBucket(),
       data: {},
     };
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  componentWillReceiveProps(nextProps, nextContent) {
+    this.initData();
   }
 
   componentDidMount() {
@@ -22,12 +26,13 @@ export default class BucketOverview extends Component {
   }
 
   initData = () => {
-    const { bucketInfo } = this.state;
+    const bucketInfo = getCurrentBucket();
     StatisticsDailyQueryTimesApi({ bucket: bucketInfo.name })
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           this.setState({
             data: res.data,
+            bucketInfo,
           });
         }
       });

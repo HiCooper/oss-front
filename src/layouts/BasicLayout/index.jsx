@@ -38,6 +38,7 @@ class BasicLayout extends Component {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   componentWillReceiveProps(nextProps, nextContent) {
     const pathname = nextProps.location.pathname;
     const base = pathname.substr(0, pathname.lastIndexOf('/'));
@@ -56,8 +57,7 @@ class BasicLayout extends Component {
             bucketList: res.data,
           });
         }
-      })
-      ;
+      });
   };
 
   searchBucket = async (value) => {

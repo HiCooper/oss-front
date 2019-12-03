@@ -45,21 +45,25 @@ class AddPolicyDrawer extends Component {
         const params = {
           bucket: bucketInfo.name,
           actionType,
-          principal: principal.replace(/ /g, '').split('\n'),
+          principal: principal.replace(/ /g, '')
+            .split('\n'),
         };
         if (resourcePathRadio === 'CUSTOM') {
-          params.resource = values.resource.split(',').map(item => `${bucketInfo.name}/${item}`);
+          params.resource = values.resource.split(',')
+            .map(item => `${bucketInfo.name}/${item}`);
         } else {
           params.resource = this.state.defaultResourcePath.split(',');
         }
-        AddPolicyApi(params).then((res) => {
-          if (res.msg === 'SUCCESS') {
-            message.success('新增授权成功');
-            this.props.onSuccess();
-          }
-        }).catch((error) => {
-          console.error(error);
-        });
+        AddPolicyApi(params)
+          .then((res) => {
+            if (res.msg === 'SUCCESS') {
+              message.success('新增授权成功');
+              this.props.onSuccess();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     });
     this.setState({
@@ -126,7 +130,7 @@ class AddPolicyDrawer extends Component {
                     </code>
                     。多个资源请使用英文逗号分隔。
                   </span>
-                )}
+                       )}
               >
                 <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
               </Tooltip>
@@ -146,7 +150,11 @@ class AddPolicyDrawer extends Component {
                     ) : (
                       <div style={{ display: 'flex' }}>
                         <span style={{ whiteSpace: 'nowrap' }}>{`${bucketInfo.name}/`}</span>
-                        <div style={{ marginLeft: '8px', width: '100%' }}>
+                        <div style={{
+                          marginLeft: '8px',
+                          width: '100%',
+                        }}
+                        >
                           <Input placeholder="资源路径" />
                         </div>
                       </div>
@@ -166,7 +174,7 @@ class AddPolicyDrawer extends Component {
                   <span>
                      指被允许或者拒绝访问资源的账号。请输入对应账号或者子用户的 用户名。多个被授权用户请换行。不支持输入通配符*。
                   </span>
-                )}
+                       )}
               >
                 <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
               </Tooltip>
