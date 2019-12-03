@@ -330,6 +330,7 @@ class Settings extends Component {
                         <Form.Item
                           colon={false}
                           label="Referer"
+                          help="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
                         >
                           {
                             getFieldDecorator('referer', {
