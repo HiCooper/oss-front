@@ -113,6 +113,9 @@ export function getIconByFileName(record) {
   if (fileName.endsWith('.txt')) {
     return 'file-text';
   }
+  if (fileName.endsWith('.mp4')) {
+    return 'video-camera';
+  }
   return 'file-unknown';
 }
 
