@@ -620,7 +620,7 @@ export default class FileManage extends Component {
             <Table rowSelection={rowSelection}
               dataSource={objectList}
               pagination={false}
-              scroll={{ y: window.innerHeight - 357, x: 1100 }}
+              scroll={{ y: window.innerHeight - 357 }}
               rowKey="id"
               loading={tableLoading}
               onRow={(record) => {
@@ -643,20 +643,20 @@ export default class FileManage extends Component {
                 };
               }}
             >
-              <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={renderFileName} />
+              <Table.Column ellipsis title="文件名(Object Name)" dataIndex="fileName" render={renderFileName} />
               {
                 search ? (
-                  <Table.Column title="路径" dataIndex="filePath" />
+                  <Table.Column ellipsis width={280} title="路径" dataIndex="filePath" />
                 ) : null
               }
+              <Table.Column width={160} title="大小" dataIndex="formattedSize" />
               <Table.Column
                 width={200}
                 title="上次修改时间"
                 dataIndex="updateTime"
                 sorter={(rowA, rowB) => rowA.createTime > rowB.createTime}
               />
-              <Table.Column width={120} title="大小" dataIndex="formattedSize" />
-              <Table.Column fixed="right" width={200} title="操作" render={renderOperate} align="center" />
+              <Table.Column width={180} title="操作" render={renderOperate} align="center" />
             </Table>
             {
               currentRecord ? (
