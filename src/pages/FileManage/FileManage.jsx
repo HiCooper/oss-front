@@ -88,31 +88,6 @@ export default class FileManage extends Component {
     });
   };
 
-  renderFileName = (val, record) => {
-    let color = 'green';
-    if (record.isDir) {
-      color = '#ffeb3b';
-    }
-    return (
-      <div className="object-name">
-        {
-          record.isDir ? (
-            <i className="icon icon-file-m" />
-          ) : (
-            <Icon type={getIconByFileName(record)}
-              theme="filled"
-              style={{
-                color,
-                marginRight: '8px',
-                fontSize: '24px',
-              }}
-            />
-          )
-        }
-        <span className="list-file-name" onClick={e => this.detailDrawerShow(record, e)}>{val}</span>
-      </div>
-    );
-  };
 
   onRowClick = (record, e) => {
     e.preventDefault();
@@ -294,18 +269,22 @@ export default class FileManage extends Component {
   };
 
   batchDownLoad = (fullPaths) => {
-    GenerateDownloadUrlApi({ bucket: this.state.bucketName, objectPath: fullPaths }).then((res) => {
-      if (res.msg === 'SUCCESS') {
-        const downUrls = res.data;
-        downUrls.forEach((url) => {
-          const downloadElement = document.createElement('a');
-          downloadElement.href = url;
-          document.body.appendChild(downloadElement);
-          downloadElement.click();
-          document.body.removeChild(downloadElement);
-        });
-      }
-    });
+    GenerateDownloadUrlApi({
+      bucket: this.state.bucketName,
+      objectPath: fullPaths,
+    })
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          const downUrls = res.data;
+          downUrls.forEach((url) => {
+            const downloadElement = document.createElement('a');
+            downloadElement.href = url;
+            document.body.appendChild(downloadElement);
+            downloadElement.click();
+            document.body.removeChild(downloadElement);
+          });
+        }
+      });
   };
 
   showBatchDeleteWarning = () => {
@@ -335,25 +314,6 @@ export default class FileManage extends Component {
         message.info('批量取消删除');
       },
     });
-  };
-
-  moreMenu = (record) => {
-    return (
-      <Menu onClick={item => this.handleMoreMenuClick(record, item)}>
-        <Menu.Item key="1">
-          设置读写权限
-        </Menu.Item>
-        <Menu.Item key="2">
-          下载
-        </Menu.Item>
-        <Menu.Item key="3">
-          复制文件URL
-        </Menu.Item>
-        <Menu.Item key="4">
-          删除
-        </Menu.Item>
-      </Menu>
-    );
   };
 
   showSetObjectAclDrawer = async (record) => {
@@ -428,26 +388,6 @@ export default class FileManage extends Component {
     });
   };
 
-  renderOperate = (text, record) => {
-    return (
-      <div>
-        <Button type="link" size="small" onClick={e => this.detailDrawerShow(record, e)}>详情</Button>
-        {
-          record.isDir ? (
-            <Button type="link" size="small" onClick={e => this.showDeleteConfirm(record, e)}>删除</Button>
-          ) : (
-            <Dropdown overlay={this.moreMenu(record)} size="small">
-              <Button type="link" size="small">
-                更多
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          )
-        }
-      </div>
-    );
-  };
-
   showDrawer = () => {
     this.setState({
       visible: true,
@@ -515,6 +455,68 @@ export default class FileManage extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    const renderFileName = (val, record) => {
+      let color = 'green';
+      if (record.isDir) {
+        color = '#ffeb3b';
+      }
+      return (
+        <div className="object-name">
+          {
+            record.isDir ? (
+              <i className="icon icon-file-m" />
+            ) : (
+              <Icon type={getIconByFileName(record)}
+                theme="filled"
+                style={{
+                  color,
+                  marginRight: '8px',
+                  fontSize: '24px',
+                }}
+              />
+            )
+          }
+          <span className="list-file-name" onClick={e => this.detailDrawerShow(record, e)}>{val}</span>
+        </div>
+      );
+    };
+    const moreMenu = (record) => {
+      return (
+        <Menu onClick={item => this.handleMoreMenuClick(record, item)}>
+          <Menu.Item key="1">
+            设置读写权限
+          </Menu.Item>
+          <Menu.Item key="2">
+            下载
+          </Menu.Item>
+          <Menu.Item key="3">
+            复制文件URL
+          </Menu.Item>
+          <Menu.Item key="4">
+            删除
+          </Menu.Item>
+        </Menu>
+      );
+    };
+    const renderOperate = (text, record) => {
+      return (
+        <div>
+          <Button type="link" size="small" onClick={e => this.detailDrawerShow(record, e)}>详情</Button>
+          {
+            record.isDir ? (
+              <Button type="link" size="small" onClick={e => this.showDeleteConfirm(record, e)}>删除</Button>
+            ) : (
+              <Dropdown overlay={moreMenu(record)} size="small">
+                <Button type="link" size="small">
+                  更多
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            )
+          }
+        </div>
+      );
+    };
     return (
       <div className="file-home">
         <div className="head">
@@ -542,7 +544,12 @@ export default class FileManage extends Component {
                   />
                 ) : null
               }
-              <Button icon="safety-certificate" style={{ marginRight: '10px' }} onClick={this.authDrawerOpen}>授权</Button>
+              <Button icon="safety-certificate"
+                style={{ marginRight: '10px' }}
+                onClick={this.authDrawerOpen}
+              >
+                授权
+              </Button>
               {
                 showAuthDrawerVisible
                   ? (
@@ -613,14 +620,14 @@ export default class FileManage extends Component {
             <Table rowSelection={rowSelection}
               dataSource={objectList}
               pagination={false}
-              scroll={{ y: window.innerHeight - 357 }}
+              scroll={{ y: window.innerHeight - 357, x: 1100 }}
               rowKey="id"
               loading={tableLoading}
               onRow={(record) => {
                 return {
                   onClick: (e) => {
                     this.onRowClick(record, e);
-                  }, // 点击行
+                  },
                   onDoubleClick: (e) => {
                     this.onRowDoubleClick(record, e);
                   },
@@ -629,22 +636,27 @@ export default class FileManage extends Component {
                   },
                   onMouseEnter: (e) => {
                     this.onRowMouseEnter(record, e);
-                  }, // 鼠标移入行
+                  },
                   onMouseLeave: (e) => {
                     this.onRowMouseLeave(record, e);
                   },
                 };
               }}
             >
-              <Table.Column width={280} title="文件名(Object Name)" dataIndex="fileName" render={this.renderFileName} />
+              <Table.Column title="文件名(Object Name)" dataIndex="fileName" render={renderFileName} />
               {
                 search ? (
-                  <Table.Column width={280} title="路径" dataIndex="filePath" />
+                  <Table.Column title="路径" dataIndex="filePath" />
                 ) : null
               }
-              <Table.Column title="上次修改时间" width={180} dataIndex="updateTime" sorter={(rowA, rowB) => rowA.createTime > rowB.createTime} />
-              <Table.Column title="大小" width={180} dataIndex="formattedSize" />
-              <Table.Column title="操作" width={180} render={this.renderOperate} align="center" />
+              <Table.Column
+                width={200}
+                title="上次修改时间"
+                dataIndex="updateTime"
+                sorter={(rowA, rowB) => rowA.createTime > rowB.createTime}
+              />
+              <Table.Column width={120} title="大小" dataIndex="formattedSize" />
+              <Table.Column fixed="right" width={200} title="操作" render={renderOperate} align="center" />
             </Table>
             {
               currentRecord ? (
