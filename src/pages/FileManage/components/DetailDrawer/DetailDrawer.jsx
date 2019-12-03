@@ -106,9 +106,6 @@ class DetailDrawer extends Component {
           </video>
         );
       }
-      return (
-        <img src={url} alt="文件无法预览。" />
-      );
     }
     return (
       <div style={{ textAlign: 'center' }}>
