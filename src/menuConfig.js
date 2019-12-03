@@ -41,19 +41,19 @@ const homeUserMenuConfig = [
       },
     ],
   },
-  // {
-  //   name: '系统设置',
-  //   icon: 'setting',
-  //   children: [
-  //     {
-  //       name: '系统通知',
-  //       path: '/notice',
-  //     }, {
-  //       name: '通知设置',
-  //       path: '/notice-setting',
-  //     },
-  //   ],
-  // },
+  {
+    name: '系统设置',
+    icon: 'setting',
+    children: [
+      {
+        name: '系统通知',
+        path: '/notice',
+      }, {
+        name: '通知设置',
+        path: '/notice-setting',
+      },
+    ],
+  },
 ];
 
 // 文件管理分类

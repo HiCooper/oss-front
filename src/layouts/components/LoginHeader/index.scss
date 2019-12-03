@@ -23,13 +23,15 @@
   }
 
   .right {
-    .notice-icon {
-      display: flex;
-      align-items: center;
+
+    .item {
       cursor: pointer;
       height: 64px;
       line-height: 64px;
       padding: 0 10px;
+      display: flex;
+      align-items: center;
+      color: rgb(6,6,6);
 
       &:hover {
         background: #f5eeee;
@@ -38,20 +40,11 @@
       i {
         font-size: 18px;
       }
-
     }
   }
 
 }
 
-.personal-info {
-  cursor: pointer;
-  padding: 0 10px;
-
-  &:hover {
-    background: #f5eeee;
-  }
-}
 
 .notice-card-content {
   width: 300px;

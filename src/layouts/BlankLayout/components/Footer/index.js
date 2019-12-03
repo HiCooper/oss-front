@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'antd';
 
 export default () => {
   return (
@@ -18,7 +19,17 @@ export default () => {
           条款
         </span>
       </div>
-      <div style={styles.copyright}>Berry Cooper © 2019 版权所有</div>
+      <div style={styles.copyright}>
+        <span style={styles.text}>Berry Cooper © 2019 版权所有</span>
+        <a style={styles.a}
+          title="Fork me on Github"
+          href="https://github.com/HiCooper/oss-backend"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon type="github" />
+        </a>
+      </div>
     </div>
   );
 };
@@ -30,20 +41,27 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'fixed',
-    left: '0',
-    right: '0',
-    bottom: '20px',
+    left: 0,
+    right: 0,
+    bottom: 20,
   },
   links: {
-    marginBottom: '8px',
+    marginBottom: 8,
   },
   link: {
-    fontSize: '13px',
-    marginRight: '40px',
+    fontSize: 13,
+    marginRight: 40,
   },
   copyright: {
-    fontSize: '13px',
+    fontSize: 13,
     lineHeight: 1.5,
     textAlign: 'right',
+  },
+
+  text: {
+    marginRight: 8,
+  },
+  a: {
+    color: 'rgb(6,6,6)',
   },
 };

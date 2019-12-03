@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover } from 'antd';
+import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover, Tooltip } from 'antd';
 import { getUserInfo, removeAll } from '../../../util/auth';
 import './index.scss';
 
@@ -137,38 +137,46 @@ export default class LoginHeader extends Component {
   };
 
   render() {
-    const { color, username, personPopShow } = this.state;
+    const { color, username, personPopShow, noticePopShow } = this.state;
     return (
       <Header className="default-header">
         <div className="left">
           <div className="logo" onClick={e => this.goPage('/', e)}>
             <Icon type="hdd" />
-            <span style={{ marginLeft: '5px' }}>对象存储OSS</span>
+            <span style={{ marginLeft: '5px' }} title="返回首页">对象存储OSS</span>
           </div>
         </div>
         <div className="right">
-          {/* <Popover placement="bottomRight" */}
-          {/*  title={<span>系统通知(5未读)</span>} */}
-          {/*  content={this.noticePopContent()} */}
-          {/*  trigger="click" */}
-          {/*  visible={noticePopShow} */}
-          {/*  className="notice-bell" */}
-          {/*  onVisibleChange={this.handleVisibleChange} */}
-          {/* > */}
-          {/*  <Tooltip placement="bottom" title="系统通知"> */}
-          {/*    <div className="notice-icon"> */}
-          {/*      <Badge dot> */}
-          {/*        <Icon type="bell" /> */}
-          {/*      </Badge> */}
-          {/*    </div> */}
-          {/*  </Tooltip> */}
-          {/* </Popover> */}
+          <Popover content="Fork me on Github" className="item">
+            <a href="https://github.com/HiCooper/oss-backend"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon type="github" />
+            </a>
+          </Popover>
+          <Popover placement="bottomRight"
+            title={<span>系统通知(5未读)</span>}
+            content={this.noticePopContent()}
+            trigger="click"
+            visible={noticePopShow}
+            className="notice-bell"
+            onVisibleChange={this.handleVisibleChange}
+          >
+            <Tooltip placement="bottom">
+              <div className="item">
+                <Badge dot>
+                  <Icon type="bell" />
+                </Badge>
+              </div>
+            </Tooltip>
+          </Popover>
           <Popover placement="bottomRight"
             title={this.text()}
             content={this.content()}
             trigger="click"
             visible={personPopShow}
-            className="personal-info"
+            className="item"
             onVisibleChange={this.handlePersonVisibleChange}
           >
             <div>
