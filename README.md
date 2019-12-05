@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HiCooper/oss-front.svg?branch=master)](https://travis-ci.org/HiCooper/oss-front)
+
 仿写阿里云OSS
 
 # Use antd in create-react-app ✨
