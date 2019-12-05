@@ -155,6 +155,14 @@ export default class LoginHeader extends Component {
               <Icon type="github" />
             </a>
           </Popover>
+          <Popover content="文档" className="item">
+            <a href="https://hicooper007.gitbook.io/oss/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon type="file-search" />
+            </a>
+          </Popover>
           <Popover placement="bottomRight"
             title={<span>系统通知(5未读)</span>}
             content={this.noticePopContent()}
