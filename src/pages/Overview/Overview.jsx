@@ -4,20 +4,20 @@ import { Progress } from 'antd';
 import { getUserInfo } from '../../util/auth';
 
 import { StatisOverviewApi } from '../../api/statis';
+import { formatFileSize } from '../../util/stringUtils';
 
 export default class Overview extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        totalCapacity: 0,
-        usedCapacity: 0,
+        totalObjectCount: 0,
+        totalUsed: 0,
         bucketCount: 0,
-        objectCount: 0,
-        objectMaxSize: '',
-        objectMinSize: '',
-        objectAverageSize: '',
-        lastMonthObjectReferenceData: {},
+        maxSize: 0,
+        minSize: 0,
+        allAverage: 0,
+        capacity: 0,
       },
     };
   }
@@ -36,8 +36,9 @@ export default class Overview extends Component {
     StatisOverviewApi()
       .then((res) => {
         if (res.msg === 'SUCCESS') {
+          console.log(res.data.total);
           this.setState({
-            data: res.data,
+            data: res.data.total,
           });
         }
       });
@@ -60,24 +61,21 @@ export default class Overview extends Component {
                   <span>存储用量</span>
                   <div>
                     剩余可用:
-                    {data.totalCapacity - data.usedCapacity}
-                    <span>G</span>
+                    {formatFileSize(data.capacity - data.totalUsed)}
                   </div>
                 </div>
                 <div className="card-bd">
                   <div className="info">
                     <div>
                       <span>已使用：</span>
-                      <span className="display-value">{data.usedCapacity}</span>
-                      <span className="display-unit">G</span>
+                      <span className="display-value">{formatFileSize(data.totalUsed)}</span>
                     </div>
                     <div>
                       <span>总容量：</span>
-                      <span className="display-value">{data.totalCapacity}</span>
-                      <span className="display-unit">G</span>
+                      <span className="display-value">{formatFileSize(data.capacity)}</span>
                     </div>
                   </div>
-                  <Progress percent={Math.ceil(data.usedCapacity / data.totalCapacity)} size="small" />
+                  <Progress percent={Math.ceil(data.totalUsed / data.capacity)} size="small" />
                 </div>
               </div>
 
@@ -96,7 +94,7 @@ export default class Overview extends Component {
                     <span>Object 数量</span>
                   </div>
                   <div className="card-bd">
-                    <span className="display-value">{data.objectCount}</span>
+                    <span className="display-value">{data.totalObjectCount}</span>
                     <span className="display-unit">个</span>
                   </div>
                 </div>
@@ -105,7 +103,7 @@ export default class Overview extends Component {
                     <span>最大对象大小</span>
                   </div>
                   <div className="card-bd">
-                    <span className="display-value">{data.objectMaxSize}</span>
+                    <span className="display-value">{formatFileSize(data.maxSize)}</span>
                   </div>
                 </div>
                 <div className="item">
@@ -113,7 +111,7 @@ export default class Overview extends Component {
                     <span>最小对象大小</span>
                   </div>
                   <div className="card-bd">
-                    <span className="display-value">{data.objectMinSize}</span>
+                    <span className="display-value">{formatFileSize(data.minSize)}</span>
                   </div>
                 </div>
                 <div className="item">
@@ -121,7 +119,7 @@ export default class Overview extends Component {
                     <span>平均对象大小</span>
                   </div>
                   <div className="card-bd">
-                    <span className="display-value">{data.objectAverageSize}</span>
+                    <span className="display-value">{formatFileSize(data.allAverage)}</span>
                   </div>
                 </div>
 

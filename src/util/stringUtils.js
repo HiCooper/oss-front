@@ -133,3 +133,30 @@ export function filterNonNullValue(object) {
     });
   return temp;
 }
+
+
+/**
+ * 获取格式化文件大小
+ * @param size
+ * @returns {string}
+ */
+export function formatFileSize(size) {
+  if (typeof size !== 'number') {
+    throw new Error('size type must be number!!!');
+  }
+  const MAGIC_NUM = 1024;
+  const KB = size / MAGIC_NUM;
+  if (KB <= MAGIC_NUM) {
+    return `${KB.toFixed(2)}KB`;
+  }
+  const MB = KB / MAGIC_NUM;
+  if (MB <= MAGIC_NUM) {
+    return `${MB.toFixed(2)}MB`;
+  }
+  const GB = MB / MAGIC_NUM;
+  if (GB <= MAGIC_NUM) {
+    return `${GB.toFixed(2)}GB`;
+  }
+  console.warn(GB)
+  throw new Error('File size too Big!!!');
+}
