@@ -75,7 +75,7 @@ export default class Overview extends Component {
                       <span className="display-value">{formatFileSize(data.capacity)}</span>
                     </div>
                   </div>
-                  <Progress percent={Math.ceil(data.totalUsed / data.capacity)} size="small" />
+                  <Progress percent={parseFloat((data.totalUsed / data.capacity * 100).toFixed(2))} size="small" />
                 </div>
               </div>
 
