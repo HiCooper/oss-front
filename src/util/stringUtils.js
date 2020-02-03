@@ -141,8 +141,9 @@ export function filterNonNullValue(object) {
  * @returns {string}
  */
 export function formatFileSize(size) {
-  if (typeof size !== 'number') {
-    throw new Error('size type must be number!!!');
+  if (!size || typeof size !== 'number') {
+    console.error('size type must be number!!!');
+    return '0KB';
   }
   const MAGIC_NUM = 1024;
   const KB = size / MAGIC_NUM;

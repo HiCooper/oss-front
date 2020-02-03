@@ -37,6 +37,7 @@ export default class Overview extends Component {
       .then((res) => {
         if (res.msg === 'SUCCESS') {
           console.log(res.data.total);
+          console.log(this.state.data)
           this.setState({
             data: res.data.total,
           });
