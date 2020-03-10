@@ -45,7 +45,7 @@ export default class UserLayout extends Component {
       <Layout style={{ height: '100%' }}>
         <LoginHeader />
         <Layout style={{
-          marginTop: '65px',
+          marginTop: '50px',
           height: '100%',
         }}
         >

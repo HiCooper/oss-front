@@ -1,6 +1,7 @@
 .default-header {
   position: fixed;
-  z-index: 2;
+  z-index: 1001;
+  height: 50px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -12,7 +13,7 @@
     cursor: pointer;
     width: 200px;
     line-height: 32px;
-    font-size: 24px;
+    font-size: 18px;
     color: #574ab7;
     font-weight: bold;
   }
@@ -26,8 +27,8 @@
 
     .item {
       cursor: pointer;
-      height: 64px;
-      line-height: 64px;
+      height: 50px;
+      line-height: 50px;
       padding: 0 10px;
       display: flex;
       align-items: center;
@@ -38,7 +39,7 @@
       }
 
       i {
-        font-size: 18px;
+        font-size: 16px;
       }
     }
   }
