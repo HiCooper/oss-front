@@ -14,6 +14,8 @@ export default class LineChart extends Component {
     const cols = {
       value: {
         min: 0,
+        alias: '访问量',
+        minTickInterval: 1,
       },
     };
     let temp;
@@ -42,6 +44,7 @@ export default class LineChart extends Component {
             position="date*value"
             size={4}
             shape="circle"
+            color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
             style={{
               stroke: '#fff',
               lineWidth: 1,
