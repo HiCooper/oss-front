@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, message } from 'antd';
-import { Link } from 'react-router-dom';
 import { UserLoginApi } from '../../api/user';
 import { removeAll, setToken, setUserInfo } from '../../util/auth';
 
