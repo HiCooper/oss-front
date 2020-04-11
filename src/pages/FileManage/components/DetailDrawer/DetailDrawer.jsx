@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Drawer, Form, Icon, InputNumber, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Drawer, Form, InputNumber, Tooltip } from 'antd';
 import './index.scss';
 import { GenerateUrlWithSignedApi, GetObjectHeadApi } from '../../../../api/object';
 import { getAclDesc } from '../../../../util/AclTable';
 import { getCurrentBucket } from '../../../../util/Bucket';
-import { getIconByFileName } from '../../../../util/stringUtils';
+import {getIconByFileName} from "../../../../util/stringUtils";
 
 const formItemLayout = {
   labelCol: {
@@ -21,7 +22,7 @@ const formItemLayout = {
 const pictureShowType = 'png, jpg, jpeg, bmg, gif, svg';
 const videoShowType = 'mp4';
 
-class DetailDrawer extends Component {
+export default class DetailDrawer extends Component {
   static displayName = 'DetailDrawer';
 
   constructor(props) {
@@ -111,16 +112,11 @@ class DetailDrawer extends Component {
       <div style={{ textAlign: 'center' }}>
         {
           detailInfo.isDir ? (
-            <i className="icon icon-file-m" />
+            <i className="icon-file-m" />
           ) : (
-            <Icon type={getIconByFileName(detailInfo)}
-              theme="filled"
-              style={{
-                color: '#ffeb3b',
-                marginRight: '8px',
-                fontSize: '200px',
-              }}
-            />
+            <svg className="icon" aria-hidden="true">
+              <use xlinkHref={`#${getIconByFileName(detailInfo)}`} />
+            </svg>
           )
         }
         <p>{detailInfo.fileName}</p>
@@ -170,13 +166,13 @@ class DetailDrawer extends Component {
                       <Form.Item
                         label={(
                           <span>
-                        链接有效时间(s)
+                            链接有效时间(s)
                             <Tooltip autoAdjustOverflow
                               arrowPointAtCenter
                               placement="topLeft"
                               title="您可以设置链接地址可访问的有效时间(1min-18h)，访问者可以在有效时间内，通过此链接访问该文件"
                             >
-                              <Icon type="question-circle-o" style={{ margin: '0 5px' }} />
+                              <QuestionCircleOutlined style={{ margin: '0 5px' }} />
                             </Tooltip>
                           </span>
                         )}
@@ -232,7 +228,3 @@ class DetailDrawer extends Component {
     );
   }
 }
-
-const WrappedDetailDrawer = Form.create({ name: 'object-detail-form' })(DetailDrawer);
-
-export default WrappedDetailDrawer;

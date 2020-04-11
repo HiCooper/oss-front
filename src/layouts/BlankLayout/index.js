@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Icon } from 'antd';
+import { HddOutlined } from '@ant-design/icons';
 import Footer from './components/Footer';
 import { userRouterConfig } from '../../routerConfig';
 import './index.scss';
@@ -12,7 +12,7 @@ export default class BlankLayout extends Component {
         <header>
           <div className="header-banner">
             <h1>
-              <Icon type="hdd" />
+              <HddOutlined />
               对象存储 OSS
             </h1>
           </div>

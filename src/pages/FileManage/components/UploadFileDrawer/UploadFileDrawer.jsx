@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Drawer, Form, Icon, Input, message, Radio, Switch, Upload } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import { Alert, Drawer, Input, message, Radio, Switch, Upload, Form } from 'antd';
 import CryptoJS from 'crypto-js/crypto-js';
 import { CreateObjectUrl } from '../../../../api/object';
 import { getToken } from '../../../../util/auth';
@@ -23,22 +24,8 @@ const formItemLayout = {
 const ACLMessageTable = {
   EXTEND_BUCKET: <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
   PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
-  </span>,
-  PUBLIC_READ_WRITE:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读写：所有人都可以对文件进行读写操作。
-  </span>,
+  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
+  PUBLIC_READ_WRITE: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
 };
 
 const Dragger = Upload.Dragger;
@@ -154,9 +141,9 @@ export default class UploadFileDrawer extends Component {
 
   currentFilePathChange = (e) => {
     e.preventDefault();
-    const { uploadPath, uploadPathMessage, bucketInfo, currentFilePath, inputPathErrorMsg } = this.state;
-    let msg = uploadPathMessage;
-    let path = uploadPath;
+    const { bucketInfo, currentFilePath, inputPathErrorMsg } = this.state;
+    let msg;
+    let path;
     let inputErrorMsg = inputPathErrorMsg;
     if (e.target.value !== currentFilePath) {
       path = '';
@@ -243,7 +230,9 @@ export default class UploadFileDrawer extends Component {
             </Radio.Group>
             {
               radioSelect !== currentFilePath ? (
-                <Input placeholder="根目录"
+                <Input
+                  placeholder="根目录"
+                  style={{ margin: '5px 0' }}
                   value={uploadPath}
                   suffix={`${uploadPath.length}/254`}
                   onChange={this.uploadPathInputChange}
@@ -297,7 +286,7 @@ export default class UploadFileDrawer extends Component {
               onChange={this.uploadBtnOnchange}
             >
               <p className="ant-upload-drag-icon">
-                <Icon type="inbox" />
+                <InboxOutlined />
               </p>
               <p className="ant-upload-text">单击或拖拽上传</p>
               <p className="ant-upload-hint">
@@ -353,7 +342,7 @@ const checkInput = function (value) {
     );
     return errorMsg;
   }
-  if (!/^[^/]((?!\/\/)[（）\\(\\)a-zA-Z0-9/\-_\u4E00-\u9FA5])*[^/]$/.test(value)) {
+  if (!/^[^/]((?!\/\/)(?!\\)[（）\\(\\)a-zA-Z0-9/\-_\u4E00-\u9FA5])*[^/]$/.test(value)) {
     errorMsg = (
       <span
         style={{

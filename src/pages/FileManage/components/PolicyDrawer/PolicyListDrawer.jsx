@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Drawer, Table, Button, message } from 'antd';
+import { Button, Drawer, message, Table } from 'antd';
 import { getCurrentBucket } from '../../../../util/Bucket';
 import { DeletePolicyApi, GetPolicyApi } from '../../../../api/policy';
 import AddPolicyDrawer from './components/AddPolicyDrawer';
@@ -117,7 +117,7 @@ export default class PolicyListDrawer extends Component {
             disabled={selectedRowKeys.length === 0}
             onClick={this.deletePolicy}
           >
-删除
+            删除
           </Button>
           <div className="statis" hidden={selectedRowKeys.length === 0}>
             已选择：

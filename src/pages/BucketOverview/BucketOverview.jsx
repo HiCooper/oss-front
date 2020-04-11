@@ -32,7 +32,6 @@ export default class BucketOverview extends Component {
         if (res.msg === 'SUCCESS') {
           this.setState({
             data: res.data,
-            bucketInfo,
           });
         }
       });

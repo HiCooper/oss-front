@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { GithubOutlined } from '@ant-design/icons';
 
 export default () => {
   return (
@@ -27,7 +27,7 @@ export default () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Icon type="github" />
+          <GithubOutlined />
         </a>
       </div>
     </div>

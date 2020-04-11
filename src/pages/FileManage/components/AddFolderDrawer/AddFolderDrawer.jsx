@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Drawer, Form, Input } from 'antd';
+import { Alert, Button, Drawer, Input, Form } from 'antd';
 import { getCurrentBucket } from '../../../../util/Bucket';
 import { CreateFolderApi } from '../../../../api/object';
 
@@ -16,8 +16,10 @@ const formItemLayout = {
   },
 };
 
-class AddFolderDrawer extends Component {
+export default class AddFolderDrawer extends Component {
   static displayName = 'AddFolderDrawer';
+
+  formRef = React.createRef();
 
   constructor(props) {
     super(props);
@@ -30,9 +32,9 @@ class AddFolderDrawer extends Component {
     };
   }
 
-  validateFolder = (rule, value, callback) => {
+  validateFolder = (rule, value) => {
     if (!value || value.trim().length < 2 || value.trim().length > 254) {
-      callback(
+      return Promise.reject(
         <span style={{
           fontSize: '12px',
           color: 'red',
@@ -41,10 +43,9 @@ class AddFolderDrawer extends Component {
         2-254个字符长度
         </span>,
       );
-      return;
     }
     if (value.indexOf('//') !== -1) {
-      callback(
+      return Promise.reject(
         <span style={{
           fontSize: '12px',
           color: 'red',
@@ -53,10 +54,9 @@ class AddFolderDrawer extends Component {
         目录路径不允许出现连续的「/」
         </span>,
       );
-      return;
     }
     if (value.startsWith('/') || value.startsWith('\\') || value.endsWith('/') || value.endsWith('\\')) {
-      callback(
+      return Promise.reject(
         <span style={{
           fontSize: '12px',
           color: 'red',
@@ -69,10 +69,9 @@ class AddFolderDrawer extends Component {
         开头和结尾。
         </span>,
       );
-      return;
     }
-    if (!/^[^/]((?!\/\/)[（）\\(\\)a-zA-Z0-9/\-_\u4E00-\u9FA5])*[^/]$/.test(value)) {
-      callback(
+    if (!/^[^/]((?!\/\/)(?!\\)[（）\\(\\)a-zA-Z0-9/\-_\u4E00-\u9FA5])*[^/]$/.test(value)) {
+      return Promise.reject(
         <span
           style={{
             fontSize: '12px',
@@ -88,33 +87,28 @@ class AddFolderDrawer extends Component {
     this.setState({
       objectName: value,
     });
-    callback();
+    return Promise.resolve();
   };
 
-  createFolderSubmit = (e) => {
-    e.preventDefault();
-    this.setState({
+  createFolderSubmit = async (values) => {
+    await this.setState({
       submitLoading: true,
     });
     const { bucketInfo, currentPath } = this.state;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const params = {
-          bucket: bucketInfo.name,
-          folder: currentPath === '/' ? values.objectName : `${currentPath.substr(1)}/${values.objectName}`,
-        };
-        CreateFolderApi(params)
-          .then((res) => {
-            if (res.msg === 'SUCCESS') {
-              this.props.onSuccess();
-              this.props.onClose();
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    });
+    const params = {
+      bucket: bucketInfo.name,
+      folder: currentPath === '/' ? values.objectName : `${currentPath.substr(1)}/${values.objectName}`,
+    };
+    CreateFolderApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.props.onSuccess();
+          this.props.onClose();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     this.setState({
       submitLoading: false,
     });
@@ -122,7 +116,6 @@ class AddFolderDrawer extends Component {
 
   render() {
     const { submitLoading, objectName } = this.state;
-    const { getFieldDecorator, getFieldError } = this.props.form;
     return (
       <Drawer
         width={640}
@@ -134,23 +127,24 @@ class AddFolderDrawer extends Component {
         className="oss-drawer"
         title="新建目录"
       >
-        <Form {...formItemLayout} className="add-folder-form" onSubmit={this.createFolderSubmit}>
+        <Form
+          ref={this.formRef}
+          {...formItemLayout}
+          className="add-folder-form"
+          onFinish={this.createFolderSubmit}
+          initialValues={objectName}
+        >
           <Form.Item
+            name="objectName"
             label="目录名"
             extra={folderHelpMessage}
+            rules={[
+              {
+                validator: this.validateFolder,
+              },
+            ]}
           >
-            {
-              getFieldDecorator('objectName', {
-                rules: [
-                  {
-                    validator: this.validateFolder,
-                  },
-                ],
-                initialValue: objectName,
-              })(
-                <Input placeholder="相对当前目录" suffix={`${objectName.length}/254`} />,
-              )
-            }
+            <Input placeholder="相对当前目录" suffix={`${objectName.length}/254`} />
           </Form.Item>
           <div className="form-btn">
             <Button
@@ -160,7 +154,7 @@ class AddFolderDrawer extends Component {
               style={{
                 marginRight: 8,
               }}
-              disabled={!!getFieldError('objectName') || !objectName}
+              disabled={!objectName}
             >
               确认
             </Button>
@@ -200,7 +194,3 @@ const folderHelpMessage = (
     <Alert message="注意，Bucket 下若存在同名目录，将会忽略。" type="warning" showIcon />
   </div>
 );
-
-const WrappedAddFolderDrawer = Form.create({ name: 'add-folder-form' })(AddFolderDrawer);
-
-export default WrappedAddFolderDrawer;

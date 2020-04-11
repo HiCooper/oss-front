@@ -1,3 +1,6 @@
+import React from 'react';
+import { DashboardOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+
 // 存储空间头部 tab
 const headMenuConfig = [
   {
@@ -20,14 +23,14 @@ const sideMenuConfig = [
   {
     name: '概览',
     path: '/dashboard',
-    icon: 'dashboard',
+    icon: <DashboardOutlined />,
   },
 ];
 
 const homeUserMenuConfig = [
   {
     name: '个人中心',
-    icon: 'user',
+    icon: <UserOutlined />,
     children: [
       {
         name: '个人信息',
@@ -43,7 +46,7 @@ const homeUserMenuConfig = [
   },
   {
     name: '系统设置',
-    icon: 'setting',
+    icon: <SettingOutlined />,
     children: [
       {
         name: '系统通知',
@@ -84,7 +87,6 @@ const fileManage = [
   {
     name: '回收站',
     path: '/recycle-bin',
-    icon: 'delete',
   },
 ];
 

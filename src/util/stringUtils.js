@@ -89,34 +89,34 @@ export function getIconByFileName(record) {
     || fileName.endsWith('.png')
     || fileName.endsWith('.bmg')
     || fileName.endsWith('.gif')) {
-    return 'file-image';
+    return 'icon-file-image-o';
   }
   //  办公文档
   if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-    return 'file-excel';
+    return 'icon-file-excel--line';
   }
   if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-    return 'file-word';
+    return 'icon-file-word--line';
   }
   if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) {
-    return 'file-ppt';
+    return 'icon-file-ppt--line';
   }
   if (fileName.endsWith('.pdf')) {
-    return 'file-pdf';
+    return 'icon-file-pdf';
   }
   if (fileName.endsWith('.md')) {
-    return 'file-markdown';
+    return 'icon-file-markdown';
   }
   if (fileName.endsWith('.zip')) {
-    return 'file-zip';
+    return 'icon-file-zip';
   }
   if (fileName.endsWith('.txt')) {
-    return 'file-text';
+    return 'icon-file-text';
   }
   if (fileName.endsWith('.mp4')) {
-    return 'video-camera';
+    return 'icon-file-video';
   }
-  return 'file-unknown';
+  return 'icon-file-unknown';
 }
 
 /**

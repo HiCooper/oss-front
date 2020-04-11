@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import UserRouter from './UserRouter';
 import LoginHeader from '../components/LoginHeader';
 import './index.scss';
@@ -69,7 +69,7 @@ export default class UserLayout extends Component {
                         key={index}
                         title={(
                           <span>
-                            <Icon type={item.icon} />
+                            {item.icon}
                             {item.name}
                           </span>
                         )}

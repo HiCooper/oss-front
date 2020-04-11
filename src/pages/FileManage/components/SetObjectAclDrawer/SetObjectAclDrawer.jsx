@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Drawer, Form, message, Radio } from 'antd';
+import { Button, Drawer, message, Radio, Form } from 'antd';
 import { SetObjectAclApi } from '../../../../api/object';
 import { getCurrentBucket } from '../../../../util/Bucket';
 
@@ -18,29 +18,13 @@ const formItemLayout = {
 
 
 const ACLMessageTable = {
-  EXTEND_BUCKET:
-  <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
-  PRIVATE:
-  <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
-  </span>,
-  PUBLIC_READ_WRITE:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读写：所有人都可以对文件进行读写操作。
-  </span>,
+  EXTEND_BUCKET: <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
+  PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
+  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
+  PUBLIC_READ_WRITE: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
 };
 
-class SetObjectAclDrawer extends Component {
+export default class SetObjectAclDrawer extends Component {
   static displayName = 'SetObjectAclDrawer';
 
   constructor(props) {
@@ -64,9 +48,9 @@ class SetObjectAclDrawer extends Component {
     });
   };
 
-  setObjectAclSubmit = (e) => {
-    e.preventDefault();
-    this.setState({
+  setObjectAclSubmit = async (values) => {
+    console.log(values);
+    await this.setState({
       submitLoading: true,
     });
     const { bucketInfo, objectInfo, acl } = this.state;
@@ -105,7 +89,7 @@ class SetObjectAclDrawer extends Component {
         className="oss-drawer"
         title="设置读写权限"
       >
-        <Form {...formItemLayout} onSubmit={this.setObjectAclSubmit}>
+        <Form {...formItemLayout} onFinish={this.setObjectAclSubmit}>
           <Form.Item
             label="读写权限"
             validateStatus="success"
@@ -139,7 +123,3 @@ class SetObjectAclDrawer extends Component {
     );
   }
 }
-
-const WrappedSetObjectAclDrawer = Form.create({ name: 'normal_login' })(SetObjectAclDrawer);
-
-export default WrappedSetObjectAclDrawer;

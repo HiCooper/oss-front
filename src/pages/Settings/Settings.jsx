@@ -22,28 +22,13 @@ const formItemLayout = {
 
 const confirm = Modal.confirm;
 const ACLMessageTable = {
-  PRIVATE:
-  <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
-  </span>,
-  PUBLIC_READ_WRITE:
-  <span style={{
-    color: 'red',
-    fontSize: '12px',
-  }}
-  >
-公共读写：所有人都可以对文件进行读写操作。
-  </span>,
+  PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
+  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
+  PUBLIC_READ_WRITE: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
 };
 
 
-class Settings extends Component {
+export default class Settings extends Component {
   static displayName = 'Settings';
 
   constructor(props) {
@@ -87,8 +72,7 @@ class Settings extends Component {
       });
   };
 
-  bucketAclChangeSubmit = (e) => {
-    e.preventDefault();
+  bucketAclChangeSubmit = () => {
     const { acl, aclDefault, bucketInfo, editStatus } = this.state;
     if (acl !== aclDefault) {
       SetBucketAclApi({
@@ -114,35 +98,30 @@ class Settings extends Component {
     }
   };
 
-  bucketRefererChangeSubmit = (e) => {
-    e.preventDefault();
-    const { bucketInfo, refererId } = this.state;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const params = {
-          id: refererId,
-          bucket: bucketInfo.name,
-          allowEmpty: values.allowEmpty,
-          whiteList: values.referer.split(/[\n\r]/)
-            .filter(i => !!i)
-            .toString(),
-        };
-        UpdateRefererApi(params)
-          .then((res) => {
-            if (res.msg === 'SUCCESS') {
-              this.getRefererInfo();
-              this.setState({
-                referer: values.whiteList,
-                allowEmpty: values.allowEmpty,
-                editStatus: {
-                  referer: false,
-                },
-              });
-              message.success('设置成功');
-            }
+  bucketRefererChangeSubmit = () => {
+    const { bucketInfo, refererId, allowEmpty, referer } = this.state;
+    const params = {
+      id: refererId,
+      bucket: bucketInfo.name,
+      allowEmpty,
+      whiteList: referer.split(/[\n\r]/)
+        .filter(i => !!i)
+        .toString(),
+    };
+    UpdateRefererApi(params)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.getRefererInfo();
+          this.setState({
+            editStatus: {
+              referer: false,
+            },
           });
-      }
-    });
+          message.success('设置成功');
+          bucketInfo.referer = allowEmpty !== undefined || referer !== undefined;
+          setCurrentBucketInfo(JSON.stringify(bucketInfo));
+        }
+      });
   };
 
   doEdit = (id, e) => {
@@ -233,7 +212,6 @@ class Settings extends Component {
 
   render() {
     const { aclDefault, acl, editStatus, aclMessage, defaultReferer, referer, defaultAllowEmpty, allowEmpty } = this.state;
-    const { getFieldDecorator } = this.props.form;
     return (
       <div className="oss-pg-bucket-setting">
         <div className="oss-rc-sections">
@@ -241,7 +219,7 @@ class Settings extends Component {
             <section className="a-section" id="acl">
               <header className="section-header">读写权限</header>
               <div className="form">
-                <Form {...formItemLayout} onSubmit={this.bucketAclChangeSubmit}>
+                <Form {...formItemLayout} onFinish={this.bucketAclChangeSubmit}>
                   <Form.Item validateStatus="success"
                     wrapperCol={{
                       span: 16,
@@ -314,8 +292,9 @@ class Settings extends Component {
             <section className="a-section" id="referer">
               <header className="section-header">防盗链</header>
               <div className="form">
-                <Form {...formItemLayout} onSubmit={this.bucketRefererChangeSubmit}>
-                  <Form.Item validateStatus="success"
+                <Form {...formItemLayout} onFinish={this.bucketRefererChangeSubmit}>
+                  <Form.Item
+                    validateStatus="success"
                     wrapperCol={{
                       span: 16,
                       offset: 5,
@@ -332,33 +311,25 @@ class Settings extends Component {
                           label="Referer"
                           help="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
                         >
-                          {
-                            getFieldDecorator('referer', {
-                              initialValue: defaultReferer,
-                            })(
-                              <TextArea onChange={this.refererInputChange}
-                                autosize={{
-                                  minRows: 3,
-                                  maxRows: 6,
-                                }}
-                                placeholder="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
-                              />,
-                            )
-                          }
+                          <TextArea
+                            autosize={{
+                              minRows: 3,
+                              maxRows: 6,
+                            }}
+                            defaultValue={defaultReferer}
+                            onChange={this.refererInputChange}
+                            placeholder="Referer 通常为 URL 地址，支持通配符「?」和「*」，多个 referer 以换行分隔。"
+                          />
                         </Form.Item>
                         <Form.Item
                           colon={false}
                           label="允许空 Referer"
+                          valuePropName="checked"
                         >
-                          {
-                            getFieldDecorator('allowEmpty', {
-                              initialValue: defaultAllowEmpty,
-                            })(
-                              <Switch checked={allowEmpty} onChange={this.refererAllowEmptyChange} />,
-                            )
-                          }
+                          <Switch defaultChecked={defaultAllowEmpty} onChange={this.refererAllowEmptyChange} />
                         </Form.Item>
-                        <Form.Item validateStatus="success"
+                        <Form.Item
+                          validateStatus="success"
                           wrapperCol={{
                             span: 16,
                             offset: 5,
@@ -406,7 +377,8 @@ class Settings extends Component {
               <header className="section-header">Bucket 管理</header>
               <div className="form">
                 <Form {...formItemLayout}>
-                  <Form.Item validateStatus="success"
+                  <Form.Item
+                    validateStatus="success"
                     wrapperCol={{
                       span: 16,
                       offset: 5,
@@ -440,8 +412,3 @@ class Settings extends Component {
     );
   }
 }
-
-
-const WrappedSettings = Form.create({ name: 'normal_login' })(Settings);
-
-export default WrappedSettings;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Col, Icon, Input, Layout, Menu, message, Popover, Row } from 'antd';
+import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
+import { Col, Input, Layout, Menu, message, Popover, Row } from 'antd';
 import MainRouter from './MainRouter';
 import { sideMenuConfig } from '../../menuConfig';
 import './index.scss';
@@ -13,7 +13,7 @@ import { setCurrentBucketInfo } from '../../util/Bucket';
 const { Content, Sider } = Layout;
 const Search = Input.Search;
 
-class BasicLayout extends Component {
+export default class BasicLayout extends Component {
   static displayName = 'BasicLayout';
 
   userInfo = getUserInfo() ? JSON.parse(getUserInfo()) : { username: '' };
@@ -98,7 +98,7 @@ class BasicLayout extends Component {
       <Menu.Item key={item.path}>
         <Row>
           <Col span={4}>
-            <Icon type={item.icon} theme="filled" />
+            {item.icon}
           </Col>
           <Col span={20}>
             {item.name}
@@ -157,7 +157,7 @@ class BasicLayout extends Component {
                 <span>存储空间</span>
                 <div>
                   <Popover placement="top" content="新建Bucket" trigger="hover">
-                    <Icon type="plus"
+                    <PlusOutlined
                       style={{
                         cursor: 'pointer',
                         marginRight: '8px',
@@ -167,7 +167,7 @@ class BasicLayout extends Component {
                   </Popover>
                   <AddBucketDrawer onClose={this.onClose} visible={visible} onSuccess={this.initBucketList} />
                   <Popover placement="top" content="刷新" trigger="hover">
-                    <Icon type="sync" style={{ cursor: 'pointer' }} onClick={this.flushList} />
+                    <SyncOutlined style={{ cursor: 'pointer' }} onClick={this.flushList} />
                   </Popover>
                 </div>
               </div>
@@ -186,5 +186,3 @@ class BasicLayout extends Component {
     );
   }
 }
-
-export default withRouter(BasicLayout);

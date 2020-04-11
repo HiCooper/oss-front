@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import XLSX from 'xlsx';
 import './index.scss';
-import { Alert, Button, Collapse, Divider, Form, Icon, Input, Modal, Table, message } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { Alert, Button, Collapse, Divider, Form, Input, message, Modal, Table } from 'antd';
 import {
   CreateAccessKeyApi,
   DeleteAccessKeyApi,
@@ -14,7 +15,7 @@ import { dateFormat } from '../../util/DateUtil';
 const confirm = Modal.confirm;
 const { Panel } = Collapse;
 
-class SecretKey extends Component {
+export default class SecretKey extends Component {
   static displayName = 'SecretKey';
 
   constructor(props) {
@@ -63,14 +64,7 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{
-            color: 'red',
-            fontWeight: 'bold',
-            margin: '0 5px',
-          }}
-          >
-禁用
-          </span>
+          <span style={{ color: 'red', fontWeight: 'bold', margin: '0 5px' }}>禁用</span>
           AccessKey:
           <span style={{
             color: 'green',
@@ -113,21 +107,11 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{
-            color: 'green',
-            fontWeight: 'bold',
-            margin: '0 5px',
-          }}
-          >
-启用
+          <span style={{ color: 'green', fontWeight: 'bold', margin: '0 5px' }}>
+            启用
           </span>
           AccessKey:
-          <span style={{
-            color: '#607D8B',
-            margin: '0 5px',
-            fontWeight: 'bold',
-          }}
-          >
+          <span style={{ color: '#607D8B', margin: '0 5px', fontWeight: 'bold' }}>
             {record.accessKeyId}
           </span>
           吗?
@@ -163,21 +147,9 @@ class SecretKey extends Component {
       title: (
         <div>
           你确定要
-          <span style={{
-            color: 'red',
-            fontWeight: 'bold',
-            margin: '0 5px',
-          }}
-          >
-删除
-          </span>
+          <span style={{ color: 'red', fontWeight: 'bold', margin: '0 5px' }}>删除</span>
           AccessKey:
-          <span style={{
-            color: 'green',
-            margin: '0 5px',
-            fontWeight: 'bold',
-          }}
-          >
+          <span style={{ color: 'green', margin: '0 5px', fontWeight: 'bold' }}>
             {record.accessKeyId}
           </span>
           吗?
@@ -291,35 +263,29 @@ class SecretKey extends Component {
     });
   };
 
-  handleSubmit = async (e) => {
-    e.preventDefault();
-    await this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.setState({
-          genLoading: true,
-        });
-        CreateAccessKeyApi(values)
-          .then((res) => {
-            if (res.msg === 'SUCCESS') {
-              this.setState({
-                genAccessKeyPair: res.data,
-                generateSuccess: true,
-              });
-              this.initData();
-            }
-          })
-          .catch((error) => {
-            console.error(error);
+  handleSubmit = async (values) => {
+    await this.setState({
+      genLoading: true,
+    });
+    CreateAccessKeyApi(values)
+      .then((res) => {
+        if (res.msg === 'SUCCESS') {
+          this.setState({
+            genAccessKeyPair: res.data,
+            generateSuccess: true,
           });
-      }
-      this.setState({
-        genLoading: false,
+          this.initData();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
+    this.setState({
+      genLoading: false,
     });
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { accessKeyList, tableLoading, generateSuccess, showCreateModel, modelLoading, genLoading, genAccessKeyPair } = this.state;
     return (
       <div className="secret-key">
@@ -372,93 +338,90 @@ class SecretKey extends Component {
             render={this.renderOp}
           />
         </Table>
-        {
-          showCreateModel ? (
-            <Modal
-              maskClosable={false}
-              visible={showCreateModel}
-              title="新建用户 AccessKey"
-              onCancel={this.closeModel}
-              width={650}
-              footer={
-                generateSuccess && genAccessKeyPair ? (
-                  [
-                    <Button key="submit" type="primary" loading={modelLoading} onClick={this.saveAKInfo}>
-                      保存AK信息
-                    </Button>,
-                  ]
-                ) : (
-                  [
-                    <Button key="submit" type="default" onClick={this.closeModel}>
-                      取消
-                    </Button>,
-                  ]
-                )
-              }
-            >
-              {
-                generateSuccess && genAccessKeyPair ? (
-                  <div>
-                    <Alert style={{ fontSize: '12px' }} message="这是用户 AccessKey 可供下载的唯一机会，请及时保存！" type="success" />
-                    <div style={{
-                      textAlign: 'center',
-                      lineHeight: '100px',
-                    }}
-                    >
-                      <h1>
-                        <Icon type="check-circle"
-                          style={{
-                            color: 'green',
-                            marginRight: '10px',
-                          }}
-                        />
-                        新建AccessKey成功！
-                      </h1>
-                    </div>
-                    <Collapse defaultActiveKey={['1']}>
-                      <Panel header="AccessKey 详情" key="1">
-                        <div style={styles.newAccessKeyDetail}>
-                          <div style={{ ...styles.item, ...styles.br }}>
-                            <p style={styles.label}>AccessKeyID:</p>
-                            <p style={styles.value}>{genAccessKeyPair.accessKeyId}</p>
-                          </div>
-                          <div style={styles.item}>
-                            <p style={styles.label}>AccessKeySecret:</p>
-                            <p style={styles.value}>{genAccessKeyPair.accessKeySecret}</p>
-                          </div>
-                        </div>
-                      </Panel>
-                    </Collapse>
-                  </div>
-                ) : (
-                  <div className="check-auth">
-                    <Form labelCol={{ span: 8 }} wrapperCol={{ span: 12 }} onSubmit={this.handleSubmit}>
-                      <Form.Item label="校验当前用户密码">
-                        {getFieldDecorator('password', {
-                          rules: [{
-                            required: true,
-                            message: '请输入当前用户密码!',
-                          }],
-                        })(
-                          <Input placeholder="请输入密码" type="password" />,
-                        )}
-                      </Form.Item>
-                      <Form.Item wrapperCol={{
-                        span: 12,
-                        offset: 8,
+        <Modal
+          maskClosable={false}
+          visible={showCreateModel}
+          title="新建用户 AccessKey"
+          onCancel={this.closeModel}
+          width={650}
+          footer={
+            generateSuccess && genAccessKeyPair ? (
+              [
+                <Button key="submit" type="primary" loading={modelLoading} onClick={this.saveAKInfo}>
+                  保存AK信息
+                </Button>,
+              ]
+            ) : (
+              [
+                <Button key="submit" type="default" onClick={this.closeModel}>
+                  取消
+                </Button>,
+              ]
+            )
+          }
+        >
+          {
+            generateSuccess && genAccessKeyPair ? (
+              <div>
+                <Alert style={{ fontSize: '12px' }} message="这是用户 AccessKey 可供下载的唯一机会，请及时保存！" type="success" />
+                <div style={{
+                  textAlign: 'center',
+                  lineHeight: '100px',
+                }}
+                >
+                  <h1>
+                    <CheckCircleOutlined
+                      style={{
+                        color: 'green',
+                        marginRight: '10px',
                       }}
-                      >
-                        <Button type="primary" htmlType="submit" loading={genLoading}>
-                          生成 AccessKey
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  </div>
-                )
-              }
-            </Modal>
-          ) : null
-        }
+                    />
+                    新建AccessKey成功！
+                  </h1>
+                </div>
+                <Collapse defaultActiveKey={['1']}>
+                  <Panel header="AccessKey 详情" key="1">
+                    <div style={styles.newAccessKeyDetail}>
+                      <div style={{ ...styles.item, ...styles.br }}>
+                        <p style={styles.label}>AccessKeyID:</p>
+                        <p style={styles.value}>{genAccessKeyPair.accessKeyId}</p>
+                      </div>
+                      <div style={styles.item}>
+                        <p style={styles.label}>AccessKeySecret:</p>
+                        <p style={styles.value}>{genAccessKeyPair.accessKeySecret}</p>
+                      </div>
+                    </div>
+                  </Panel>
+                </Collapse>
+              </div>
+            ) : (
+              <div className="check-auth">
+                <Form labelCol={{ span: 8 }} wrapperCol={{ span: 12 }} onFinish={this.handleSubmit}>
+                  <Form.Item
+                    name="password"
+                    label="校验当前用户密码"
+                    rules={[{
+                      required: true,
+                      message: '请输入当前用户密码!',
+                    }]}
+                  >
+                    <Input placeholder="请输入密码" type="password" />
+                  </Form.Item>
+                  <Form.Item
+                    wrapperCol={{
+                      span: 12,
+                      offset: 8,
+                    }}
+                  >
+                    <Button type="primary" htmlType="submit" loading={genLoading}>
+                      生成 AccessKey
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            )
+          }
+        </Modal>
       </div>
     );
   }
@@ -484,6 +447,3 @@ const styles = {
     fontWeight: 'bold',
   },
 };
-
-const WrappedSecretKey = Form.create({ name: 'coordinated' })(SecretKey);
-export default WrappedSecretKey;

@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Dropdown, Icon, Input, Menu, message, Modal, Table } from 'antd';
+import {
+  DownOutlined,
+  FolderAddOutlined,
+  ReloadOutlined,
+  SafetyCertificateOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
+import { Breadcrumb, Button, Dropdown, Input, Menu, message, Modal, Table } from 'antd';
 import copyToClipboard from 'copy-to-clipboard';
 import { getIconByFileName, getParamsFromUrl } from '../../util/stringUtils';
 import { DeleteObjectHeadApi, GenerateDownloadUrlApi, GenerateUrlWithSignedApi, ListObjectApi } from '../../api/object';
@@ -456,24 +463,15 @@ export default class FileManage extends Component {
       onChange: this.onSelectChange,
     };
     const renderFileName = (val, record) => {
-      let color = 'green';
-      if (record.isDir) {
-        color = '#ffeb3b';
-      }
       return (
         <div className="object-name">
           {
             record.isDir ? (
-              <i className="icon icon-file-m" />
+              <i className="icon-file-m" />
             ) : (
-              <Icon type={getIconByFileName(record)}
-                theme="filled"
-                style={{
-                  color,
-                  marginRight: '8px',
-                  fontSize: '24px',
-                }}
-              />
+              <svg className="icon" aria-hidden="true">
+                <use xlinkHref={`#${getIconByFileName(record)}`} />
+              </svg>
             )
           }
           <span className="list-file-name" onClick={e => this.detailDrawerShow(record, e)}>{val}</span>
@@ -509,7 +507,7 @@ export default class FileManage extends Component {
               <Dropdown overlay={moreMenu(record)} size="small">
                 <Button type="link" size="small">
                   更多
-                  <Icon type="down" />
+                  <DownOutlined />
                 </Button>
               </Dropdown>
             )
@@ -522,7 +520,13 @@ export default class FileManage extends Component {
         <div className="head">
           <div className="header-line">
             <div className="left-btn-group">
-              <Button type="primary" icon="upload" style={{ marginRight: '10px' }} onClick={this.showDrawer}>上传</Button>
+              <Button type="primary"
+                icon={<UploadOutlined />}
+                style={{ marginRight: '10px' }}
+                onClick={this.showDrawer}
+              >
+上传
+              </Button>
               {
                 visible ? (
                   <UploadFileDrawer
@@ -533,7 +537,12 @@ export default class FileManage extends Component {
                   />
                 ) : null
               }
-              <Button icon="folder-add" style={{ marginRight: '10px' }} onClick={this.showAddFolderDrawer}>新建目录</Button>
+              <Button icon={<FolderAddOutlined />}
+                style={{ marginRight: '10px' }}
+                onClick={this.showAddFolderDrawer}
+              >
+新建目录
+              </Button>
               {
                 addFolderVisible ? (
                   <AddFolderDrawer
@@ -544,7 +553,7 @@ export default class FileManage extends Component {
                   />
                 ) : null
               }
-              <Button icon="safety-certificate"
+              <Button icon={<SafetyCertificateOutlined />}
                 style={{ marginRight: '10px' }}
                 onClick={this.authDrawerOpen}
               >
@@ -563,11 +572,11 @@ export default class FileManage extends Component {
               <Dropdown overlay={this.menu}>
                 <Button style={{ marginRight: '10px' }}>
                   批量操作
-                  <Icon type="down" />
+                  <DownOutlined />
                 </Button>
               </Dropdown>
 
-              <Button icon="reload" onClick={this.initObjectList}>刷新</Button>
+              <Button icon={<ReloadOutlined />} onClick={this.initObjectList}>刷新</Button>
             </div>
 
             <div className="right-operate">

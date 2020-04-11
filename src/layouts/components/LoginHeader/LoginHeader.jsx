@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
-import { Avatar, Badge, Button, Divider, Icon, Layout, List, Popover, Tooltip } from 'antd';
+
+import {
+  BellOutlined,
+  FileSearchOutlined,
+  GithubOutlined,
+  HddOutlined,
+  KeyOutlined,
+  MoreOutlined,
+  PoweroffOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+import { Avatar, Badge, Button, Divider, Layout, List, Popover, Tooltip } from 'antd';
 import { getUserInfo, removeAll } from '../../../util/auth';
 import './index.scss';
 
@@ -73,13 +85,13 @@ export default class LoginHeader extends Component {
       <div className="personal-card-content">
         <div className="btn-group">
           <div className="item" onClick={e => this.goPage('/home/profile', e)}>
-            <Icon type="user" style={{ fontSize: '20px' }} />
+            <UserOutlined style={{ fontSize: '20px' }} />
             <div className="title">
               个人中心
             </div>
           </div>
           <div className="item" onClick={e => this.goPage('/home/secret', e)}>
-            <Icon type="key" style={{ fontSize: '20px' }} />
+            <KeyOutlined style={{ fontSize: '20px' }} />
             <div className="title">
               密钥管理
             </div>
@@ -88,7 +100,7 @@ export default class LoginHeader extends Component {
         <Divider style={{ margin: '10px 0' }} />
         <div className="footer">
           <Button type="link" style={{ color: '#ccccccc' }} onClick={this.logout}>
-            <Icon type="poweroff" />
+            <PoweroffOutlined />
             退出当前账户
           </Button>
         </div>
@@ -120,7 +132,7 @@ export default class LoginHeader extends Component {
         <Divider style={{ margin: '10px 0' }} />
         <div className="footer">
           <Button type="link" style={{ color: '#ccccccc' }} onClick={e => this.goPage('/home/notice', e)}>
-            <Icon type="more" />
+            <MoreOutlined />
             更多通知
           </Button>
         </div>
@@ -142,7 +154,7 @@ export default class LoginHeader extends Component {
       <Header className="default-header">
         <div className="left">
           <div className="logo" onClick={e => this.goPage('/', e)}>
-            <Icon type="hdd" />
+            <HddOutlined />
             <span style={{ marginLeft: '5px' }} title="返回首页">对象存储OSS</span>
           </div>
         </div>
@@ -152,7 +164,7 @@ export default class LoginHeader extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Icon type="github" />
+              <GithubOutlined />
             </a>
           </Popover>
           <Popover content="文档" className="item">
@@ -160,7 +172,7 @@ export default class LoginHeader extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Icon type="file-search" />
+              <FileSearchOutlined />
             </a>
           </Popover>
           <Popover placement="bottomRight"
@@ -174,7 +186,7 @@ export default class LoginHeader extends Component {
             <Tooltip placement="bottom">
               <div className="item">
                 <Badge dot>
-                  <Icon type="bell" />
+                  <BellOutlined />
                 </Badge>
               </div>
             </Tooltip>
