@@ -32,14 +32,20 @@ export default class Overview extends Component {
   }
 
   initData = () => {
-    console.log('get statistics data');
     StatisOverviewApi()
       .then((res) => {
-        if (res.msg === 'SUCCESS') {
-          console.log(res.data.total);
-          console.log(this.state.data)
+        const { msg, data } = res;
+        if (msg === 'SUCCESS') {
           this.setState({
-            data: res.data.total,
+            data: {
+              totalObjectCount: data.total.totalObjectCount || 0,
+              totalUsed: data.total.totalUsed || 0,
+              bucketCount: data.total.bucketCount || 0,
+              maxSize: data.total.maxSize || 0,
+              minSize: data.total.minSize || 0,
+              allAverage: data.total.allAverage || 0,
+              capacity: data.total.capacity || 0,
+            },
           });
         }
       });

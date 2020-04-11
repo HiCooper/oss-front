@@ -142,7 +142,6 @@ export function filterNonNullValue(object) {
  */
 export function formatFileSize(size) {
   if (!size || typeof size !== 'number') {
-    console.error('size type must be number!!!');
     return '0KB';
   }
   const MAGIC_NUM = 1024;
@@ -158,6 +157,5 @@ export function formatFileSize(size) {
   if (GB <= MAGIC_NUM) {
     return `${GB.toFixed(2)}GB`;
   }
-  console.warn(GB)
   throw new Error('File size too Big!!!');
 }

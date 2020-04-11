@@ -5,7 +5,7 @@ import axios from '../config';
  * @returns {Promise<AxiosResponse<any> | never>}
  * @constructor
  */
-export const StatisOverviewApi = params => axios.get('/ajax/statis/overview.json', { params })
+export const StatisOverviewApi = () => axios.get('/ajax/statis/overview.json')
   .then(res => res.data);
 
 export const StatisticsHotDataApi = params => axios.get('/ajax/statis/hot_data.json', { params })
