@@ -260,6 +260,7 @@ export default class FileManage extends Component {
     // 批量下载
     if (item.key === '1') {
       const { selectedRows } = this.state;
+      console.log(selectedRows);
       const fullPaths = [];
       for (let i = 0; i < selectedRows.length; i++) {
         const record = selectedRows[i];
@@ -276,6 +277,7 @@ export default class FileManage extends Component {
   };
 
   batchDownLoad = (fullPaths) => {
+    console.log(fullPaths);
     GenerateDownloadUrlApi({
       bucket: this.state.bucketName,
       objectPath: fullPaths,
@@ -284,11 +286,10 @@ export default class FileManage extends Component {
         if (res.msg === 'SUCCESS') {
           const downUrls = res.data;
           downUrls.forEach((url) => {
-            const downloadElement = document.createElement('a');
-            downloadElement.href = url;
-            document.body.appendChild(downloadElement);
-            downloadElement.click();
-            document.body.removeChild(downloadElement);
+            const elemIF = document.createElement('iframe');
+            elemIF.src = url;
+            elemIF.style.display = 'none';
+            document.body.appendChild(elemIF);
           });
         }
       });
@@ -459,6 +460,7 @@ export default class FileManage extends Component {
     const pathQueue = currentPath.length > 1 ? currentPath.substr(1)
       .split('/') : null;
     const rowSelection = {
+      columnWidth: 60,
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
@@ -469,9 +471,11 @@ export default class FileManage extends Component {
             record.isDir ? (
               <i className="icon-file-m" />
             ) : (
-              <svg className="icon" aria-hidden="true">
-                <use xlinkHref={`#${getIconByFileName(record)}`} />
-              </svg>
+              <div style={{ display: 'flex' }}>
+                <svg className="icon" aria-hidden="true">
+                  <use xlinkHref={`#${getIconByFileName(record)}`} />
+                </svg>
+              </div>
             )
           }
           <span className="list-file-name" onClick={e => this.detailDrawerShow(record, e)}>{val}</span>
@@ -525,7 +529,7 @@ export default class FileManage extends Component {
                 style={{ marginRight: '10px' }}
                 onClick={this.showDrawer}
               >
-上传
+                上传
               </Button>
               {
                 visible ? (
@@ -541,7 +545,7 @@ export default class FileManage extends Component {
                 style={{ marginRight: '10px' }}
                 onClick={this.showAddFolderDrawer}
               >
-新建目录
+                新建目录
               </Button>
               {
                 addFolderVisible ? (
@@ -626,7 +630,8 @@ export default class FileManage extends Component {
           </div>
 
           <div className="table">
-            <Table rowSelection={rowSelection}
+            <Table
+              rowSelection={rowSelection}
               dataSource={objectList}
               pagination={false}
               scroll={{ y: window.innerHeight - 357 }}
