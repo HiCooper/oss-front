@@ -260,7 +260,6 @@ export default class FileManage extends Component {
     // 批量下载
     if (item.key === '1') {
       const { selectedRows } = this.state;
-      console.log(selectedRows);
       const fullPaths = [];
       for (let i = 0; i < selectedRows.length; i++) {
         const record = selectedRows[i];
@@ -277,7 +276,6 @@ export default class FileManage extends Component {
   };
 
   batchDownLoad = (fullPaths) => {
-    console.log(fullPaths);
     GenerateDownloadUrlApi({
       bucket: this.state.bucketName,
       objectPath: fullPaths,

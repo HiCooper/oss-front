@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { Alert, Drawer, Input, message, Radio, Switch, Upload, Form } from 'antd';
+import { Alert, Drawer, Form, Input, message, Radio, Switch, Upload } from 'antd';
 import CryptoJS from 'crypto-js/crypto-js';
 import { CreateObjectUrl } from '../../../../api/object';
 import { getToken } from '../../../../util/auth';
@@ -350,9 +350,9 @@ const checkInput = function (value) {
           color: 'red',
         }}
       >
-          目录仅支持数字字母中文短横线下划线,中英文小括号和
+        目录仅支持数字字母中文短横线下划线,中英文小括号和
         <code>/</code>
-          字符
+        字符
       </span>
     );
   }
