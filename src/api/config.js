@@ -8,8 +8,17 @@ axios.defaults.baseURL = 'https://www.hicooer.cn:8077';
 // axios.defaults.baseURL = 'http://192.168.2.195:8077';
 axios.defaults.timeout = 6000;
 
+const blankTokenUrl = new Set(['/auth/login']);
+
 axios.interceptors.request.use((config) => {
-  config.headers.authorization = getToken();
+  const token = getToken();
+  if (!token && !blankTokenUrl.has(config.url)) {
+    removeAll();
+    localStorage.clear();
+    window.location.replace('/#/user/login');
+    return;
+  }
+  config.headers.authorization = token;
   return config;
 }, (error) => {
   return Promise.reject(error);
@@ -18,14 +27,14 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((response) => {
   const { code, msg } = response.data;
   if (response.data.size) {
-    return response;
+    return Promise.resolve(response);
   }
   if (code && code !== '200') {
     message.info(msg);
     if (code === 'TOKEN_EXPIRED') {
       removeAll();
       localStorage.clear();
-      window.location.replace(`${window.location.protocol}//${window.location.host}/#/user/login?fallback=${encodeURIComponent(window.location.href)}`);
+      window.location.replace(`/#/user/login?fallback=${encodeURIComponent(window.location.href)}`);
     }
     return Promise.reject(code);
   }
