@@ -19,7 +19,6 @@ import PolicyListDrawer from './components/PolicyDrawer';
 import { getCurrentBucket } from '../../util/Bucket';
 
 const Search = Input.Search;
-
 const confirm = Modal.confirm;
 
 export default class FileManage extends Component {

@@ -150,7 +150,7 @@ export default class BasicLayout extends Component {
                 <Search
                   placeholder="搜索存储空间"
                   onSearch={value => this.searchBucket(value)}
-                  style={{ width: 130 }}
+                  style={{ width: 160 }}
                 />
               </div>
               <div className="bucket-list-title">
