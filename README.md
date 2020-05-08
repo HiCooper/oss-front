@@ -6,7 +6,7 @@ example:
 
 ![avatar](./pic/demo.png)
 
-在线Demo 示例：https://www.hicooer.cn
+在线Demo 示例：https://www.hicooper.cn
 
 ## 相关模块
 
