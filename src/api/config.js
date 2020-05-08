@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import { getToken, removeAll } from '../util/auth';
 
-axios.defaults.baseURL = 'https://www.hicooer.cn:8077';
+axios.defaults.baseURL = 'https://www.hicooper.cn:8077';
 // axios.defaults.baseURL = 'http://127.0.0.1:8077';
 // axios.defaults.baseURL = 'http://10.50.5.28:8077';
 // axios.defaults.baseURL = 'http://192.168.2.195:8077';
