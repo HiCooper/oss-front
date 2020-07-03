@@ -20,7 +20,7 @@ export default () => {
         </span>
       </div>
       <div style={styles.copyright}>
-        <span style={styles.text}>Berry Cooper © 2019 版权所有</span>
+        <span style={styles.text}>seassoon © 2020 版权所有</span>
         <a style={styles.a}
           title="Fork me on Github"
           href="https://github.com/HiCooper/oss-backend"

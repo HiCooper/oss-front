@@ -159,38 +159,38 @@ export default class LoginHeader extends Component {
           </div>
         </div>
         <div className="right">
-          <Popover content="Fork me on Github" className="item">
-            <a href="https://github.com/HiCooper/oss-backend"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubOutlined />
-            </a>
-          </Popover>
-          <Popover content="文档" className="item">
-            <a href="https://hicooper007.gitbook.io/oss/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FileSearchOutlined />
-            </a>
-          </Popover>
-          <Popover placement="bottomRight"
-            title={<span>系统通知(5未读)</span>}
-            content={this.noticePopContent()}
-            trigger="click"
-            visible={noticePopShow}
-            className="notice-bell"
-            onVisibleChange={this.handleVisibleChange}
-          >
-            <Tooltip placement="bottom">
-              <div className="item">
-                <Badge dot>
-                  <BellOutlined />
-                </Badge>
-              </div>
-            </Tooltip>
-          </Popover>
+          {/*<Popover content="Fork me on Github" className="item">*/}
+          {/*  <a href="https://github.com/HiCooper/oss-backend"*/}
+          {/*    target="_blank"*/}
+          {/*    rel="noopener noreferrer"*/}
+          {/*  >*/}
+          {/*    <GithubOutlined />*/}
+          {/*  </a>*/}
+          {/*</Popover>*/}
+          {/*<Popover content="文档" className="item">*/}
+          {/*  <a href="https://hicooper007.gitbook.io/oss/"*/}
+          {/*    target="_blank"*/}
+          {/*    rel="noopener noreferrer"*/}
+          {/*  >*/}
+          {/*    <FileSearchOutlined />*/}
+          {/*  </a>*/}
+          {/*</Popover>*/}
+          {/*<Popover placement="bottomRight"*/}
+          {/*  title={<span>系统通知(5未读)</span>}*/}
+          {/*  content={this.noticePopContent()}*/}
+          {/*  trigger="click"*/}
+          {/*  visible={noticePopShow}*/}
+          {/*  className="notice-bell"*/}
+          {/*  onVisibleChange={this.handleVisibleChange}*/}
+          {/*>*/}
+          {/*  <Tooltip placement="bottom">*/}
+          {/*    <div className="item">*/}
+          {/*      <Badge dot>*/}
+          {/*        <BellOutlined />*/}
+          {/*      </Badge>*/}
+          {/*    </div>*/}
+          {/*  </Tooltip>*/}
+          {/*</Popover>*/}
           <Popover placement="bottomRight"
             title={this.text()}
             content={this.content()}
