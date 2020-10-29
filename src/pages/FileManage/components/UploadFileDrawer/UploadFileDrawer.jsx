@@ -22,10 +22,26 @@ const formItemLayout = {
 };
 
 const ACLMessageTable = {
-  EXTEND_BUCKET: <span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>,
-  PRIVATE: <span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>,
-  PUBLIC_READ: <span style={{ color: 'red', fontSize: '12px' }}>公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。</span>,
-  PUBLIC_READ_WRITE: <span style={{ color: 'red', fontSize: '12px' }}>公共读写：所有人都可以对文件进行读写操作。</span>,
+  EXTEND_BUCKET: (<span style={{ fontSize: '12px' }}>继承 Bucket：单个文件的读写权限按 Bucket 的读写权限为准。</span>),
+  PRIVATE: (<span style={{ fontSize: '12px' }}>私有：对文件的所有访问操作需要进行身份验证。</span>),
+  PUBLIC_READ: (
+    <span style={{
+      color: 'red',
+      fontSize: '12px',
+    }}
+    >
+      公共读：对文件写操作需要进行身份验证；可以对文件进行匿名读。
+    </span>
+  ),
+  PUBLIC_READ_WRITE: (
+    <span style={{
+      color: 'red',
+      fontSize: '12px',
+    }}
+    >
+      公共读写：所有人都可以对文件进行读写操作。
+    </span>
+  ),
 };
 
 const Dragger = Upload.Dragger;

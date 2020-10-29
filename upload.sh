@@ -12,7 +12,8 @@ echo '打包完成'
 # 远程服务器 ip
 #remote_server_ip='47.101.42.169'
 #remote_server_ip='10.50.5.28'
-remote_server_ip='192.168.2.195'
+#remote_server_ip='10.0.103.171'
+remote_server_ip='172.16.2.195'
 username='root'
 # !确保远程文件夹存在
 #store_dir='/usr/local/share/app/oss'
@@ -23,8 +24,8 @@ store_dir='/bagua/oss_service/front'
 # 脚本
 #----------------------------------------------------------------------
 
-echo '清空旧文件...'
-ssh ${username}@${remote_server_ip} rm -r ${store_dir}/*
+#echo '清空旧文件...'
+#ssh ${username}@${remote_server_ip} rm -r ${store_dir}/*
 echo "正在上传..."
 #  cp run.sh build/libs/
 scp -r build/* ${username}@${remote_server_ip}:${store_dir}
@@ -34,3 +35,4 @@ if [ $? != 0 ]; then
   exit 1
 fi
 echo "上传成功"
+read
